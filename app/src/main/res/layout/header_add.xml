@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="missingPrefix"
+    android:background="#EEEEEE">
+
+
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:scale_base_width="1080"
+        app:scale_base_height="120"
+        android:background="#EEEEEE">
+
+
+
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/header_ci"
+            app:scale_left="0"
+            app:scale_top="0"
+            app:scale_width="800"
+            app:scale_height="120">
+            <TextView
+                android:id="@+id/header_title"
+                android:layout_marginLeft="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="타이틀"
+                android:textColor="#000000"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                >
+            </TextView>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/header_add"
+            app:scale_left="830"
+            app:scale_top="0"
+            app:scale_width="250"
+            app:scale_height="120">
+
+            <com.ssomai.android.scalablelayout.ScalableLayout
+                android:id="@+id/sl_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:scale_base_width="250"
+                app:scale_base_height="120">
+
+                <ImageView
+                    android:id="@+id/add"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ok2"
+                    app:scale_height="70"
+                    app:scale_left="150"
+                    app:scale_left_baseposition="center"
+                    app:scale_top="60"
+                    app:scale_top_baseposition="center"
+                    app:scale_width="90" />
+
+
+
+            </com.ssomai.android.scalablelayout.ScalableLayout>
+
+        </RelativeLayout>
+
+    </com.ssomai.android.scalablelayout.ScalableLayout>
+</RelativeLayout>

@@ -1,0 +1,923 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".codi.recoCodi.activity_recoCodi_setting">
+
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        app:scale_base_height="120"
+        app:scale_base_width="1080"
+        tools:ignore="missingPrefix"
+        android:background="#EEEEEE"
+        >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/header_ci"
+            app:scale_left="0"
+            app:scale_top="0"
+            app:scale_width="800"
+            app:scale_height="120">
+            <TextView
+                android:id="@+id/header_title"
+                android:layout_marginLeft="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="타이틀"
+                android:textColor="#000000"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                >
+            </TextView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rl_reset"
+            app:scale_left="750"
+            app:scale_top="0"
+            app:scale_width="150"
+            app:scale_height="120">
+
+<!--        <ImageView-->
+<!--            android:id="@+id/reset"-->
+<!--            android:layout_width="27dp"-->
+<!--            android:layout_height="27dp"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:src="@drawable/ok2" />-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/와인"
+                android:layout_centerInParent="true">
+            </TextView>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rl_ok"
+            app:scale_left="920"
+            app:scale_top="0"
+            app:scale_width="130"
+            app:scale_height="120">
+
+            <ImageView
+                android:id="@+id/add"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ok2" />
+        </RelativeLayout>
+    </com.ssomai.android.scalablelayout.ScalableLayout>
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="15dp"
+        android:layout_below="@id/header"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="코디 구성"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/블랙"/>
+
+                <org.apmem.tools.layouts.FlowLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/cb_top_bottom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="상의+하의"
+                        android:checked="true"
+                        />
+
+                    <CheckBox
+                        android:id="@+id/cb_suit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:checked="true"
+                        android:text="한벌옷" />
+
+                    <CheckBox
+                        android:id="@+id/cb_outer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="외투"
+                        android:checked="true"/>
+
+
+                    <CheckBox
+                        android:id="@+id/cb_shoes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="신발"
+                        android:checked="true"/>
+
+                    <CheckBox
+                        android:id="@+id/cb_bag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="가방"
+                        android:checked="true"/>
+
+                    <CheckBox
+                        android:id="@+id/cb_accessory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="액세서리"
+                        android:checked="true"/>
+
+
+
+                </org.apmem.tools.layouts.FlowLayout>
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_margin="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="색 조합"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/블랙" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:id="@+id/ll_main_color"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/civ_main_color"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="#dddddd"
+                            app:civ_border_width="1dp"
+                            android:layout_gravity="center"
+                            />
+
+                        <TextView
+                            android:layout_marginLeft="5dp"
+                            android:id="@+id/tv_main_color"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="미설정">
+                        </TextView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_sub_color"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/civ_sub_color"
+                            android:layout_marginLeft="7dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="#dddddd"
+                            app:civ_border_width="1dp"
+                            android:layout_gravity="center"
+                            />
+                        <TextView
+                            android:layout_marginLeft="5dp"
+                            android:id="@+id/tv_sub_color"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="미설정">
+                        </TextView>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="이 카테고리 포함"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/블랙" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:minWidth="150dp"
+                        android:id="@+id/spinner_select_top"
+                        android:entries="@array/Kind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <Spinner
+                        android:id="@+id/spinner_select_top_detail"
+                        android:entries="@array/상의"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:minWidth="150dp"
+                        android:id="@+id/spinner_select_bottom"
+                        android:entries="@array/Kind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <Spinner
+                        android:id="@+id/spinner_select_bottom_detail"
+                        android:entries="@array/하의"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:minWidth="150dp"
+                        android:id="@+id/spinner_select_suit"
+                        android:entries="@array/Kind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <Spinner
+                        android:id="@+id/spinner_select_suit_detail"
+                        android:entries="@array/하의"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:minWidth="150dp"
+                        android:id="@+id/spinner_select_outer"
+                        android:entries="@array/Kind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <Spinner
+                        android:id="@+id/spinner_select_outer_detail"
+                        android:entries="@array/하의"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:minWidth="150dp"
+                        android:id="@+id/spinner_select_bag"
+                        android:entries="@array/Kind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <Spinner
+                        android:id="@+id/spinner_select_bag_detail"
+                        android:entries="@array/하의"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:minWidth="150dp"
+                        android:id="@+id/spinner_select_shoes"
+                        android:entries="@array/Kind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <Spinner
+                        android:id="@+id/spinner_select_shoes_detail"
+                        android:entries="@array/하의"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:minWidth="150dp"
+                        android:id="@+id/spinner_select_accessory"
+                        android:entries="@array/Kind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <Spinner
+                        android:id="@+id/spinner_select_accessory_detail"
+                        android:entries="@array/하의"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_margin="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="이 옷 포함"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/블랙" />
+
+                <HorizontalScrollView
+                    android:id="@+id/tab_view"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="@dimen/child_card"
+                            android:layout_height="@dimen/child_card"
+                            android:layout_margin="3dp"
+                            app:cardBackgroundColor="@color/closet"
+                            card_view:cardCornerRadius="10dp">
+
+                            <ImageView
+                                android:id="@+id/child1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/hanger_gray_small" />
+                            <TextView
+                                android:id="@+id/tv_child1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="상의 추가"
+                                android:layout_gravity="center_horizontal|bottom"/>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="@dimen/child_card"
+                            android:layout_height="@dimen/child_card"
+                            android:layout_margin="3dp"
+                            app:cardBackgroundColor="@color/closet"
+                            card_view:cardCornerRadius="10dp">
+
+                            <ImageView
+                                android:id="@+id/child2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/hanger_gray_small" />
+                            <TextView
+                                android:id="@+id/tv_child2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="하의 추가"
+                                android:layout_gravity="center_horizontal|bottom"/>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="@dimen/child_card"
+                            android:layout_height="@dimen/child_card"
+                            android:layout_margin="3dp"
+                            app:cardBackgroundColor="@color/closet"
+                            card_view:cardCornerRadius="10dp">
+
+                            <ImageView
+                                android:id="@+id/child3"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/hanger_gray_small" />
+                            <TextView
+                                android:id="@+id/tv_child3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="한벌옷 추가"
+                                android:layout_gravity="center_horizontal|bottom"/>
+                        </androidx.cardview.widget.CardView>
+
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="@dimen/child_card"
+                            android:layout_height="@dimen/child_card"
+                            android:layout_margin="3dp"
+                            app:cardBackgroundColor="@color/closet"
+                            card_view:cardCornerRadius="10dp">
+
+                            <ImageView
+                                android:id="@+id/child4"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/hanger_gray_small" />
+                            <TextView
+                                android:id="@+id/tv_child4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="외투 추가"
+                                android:layout_gravity="center_horizontal|bottom"/>
+                        </androidx.cardview.widget.CardView>
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="@dimen/child_card"
+                            android:layout_height="@dimen/child_card"
+                            android:layout_margin="3dp"
+                            app:cardBackgroundColor="@color/closet"
+                            card_view:cardCornerRadius="10dp">
+
+                            <ImageView
+                                android:id="@+id/child5"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/hanger_gray_small" />
+                            <TextView
+                                android:id="@+id/tv_child5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="신발 추가"
+                                android:layout_gravity="center_horizontal|bottom"/>
+                        </androidx.cardview.widget.CardView>
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="@dimen/child_card"
+                            android:layout_height="@dimen/child_card"
+                            android:layout_margin="3dp"
+                            app:cardBackgroundColor="@color/closet"
+                            card_view:cardCornerRadius="10dp">
+
+                            <ImageView
+                                android:id="@+id/child6"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/hanger_gray_small" />
+                            <TextView
+                                android:id="@+id/tv_child6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="가방 추가"
+                                android:layout_gravity="center_horizontal|bottom"/>
+                        </androidx.cardview.widget.CardView>
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="@dimen/child_card"
+                            android:layout_height="@dimen/child_card"
+                            android:layout_margin="3dp"
+                            app:cardBackgroundColor="@color/closet"
+                            card_view:cardCornerRadius="10dp">
+
+                            <ImageView
+                                android:id="@+id/child7"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/hanger_gray_small" />
+                            <TextView
+                                android:id="@+id/tv_child7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="액세서리 추가"
+                                android:layout_gravity="center_horizontal|bottom"/>
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                </HorizontalScrollView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_margin="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="성별"
+                    android:textColor="@color/블랙"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    >
+                </TextView>
+                <RadioGroup
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/radioButton1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="모두"
+                        android:checked="true"/>
+                    <RadioButton
+                        android:id="@+id/radioButton2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="여성" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="남성" />
+                </RadioGroup>
+
+
+
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_margin="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="날씨"
+                    android:textColor="@color/블랙"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    />
+
+                <org.apmem.tools.layouts.FlowLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RadioGroup
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <RadioButton
+                            android:id="@+id/rb_weather_none"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="적용 안 함"
+                            android:checked="true"/>
+                        <RadioButton
+                            android:id="@+id/rb_weather_now"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="현재 기온" />
+                        <RadioButton
+                            android:id="@+id/rb_weather_temper"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="기온 설정" />
+                        <RadioButton
+                            android:id="@+id/rb_weather_season"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="계절 설정" />
+                    </RadioGroup>
+
+                </org.apmem.tools.layouts.FlowLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_now_weather"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/tv_now_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="위치 수신 중..."
+                        android:textSize="15sp"
+                        >
+                    </TextView>
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/tv_now_temperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="잠시만 기다려주세요."
+                        android:textSize="15sp"
+                        >
+                    </TextView>
+                </LinearLayout>
+
+
+                <org.apmem.tools.layouts.FlowLayout
+                    android:id="@+id/fl_setting_temperature"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    >
+
+                    <CheckBox
+                        android:id="@+id/temper0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5℃ 이하"
+                        />
+
+                    <CheckBox
+                        android:id="@+id/temper1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="6℃~9℃"/>
+
+                    <CheckBox
+                        android:id="@+id/temper2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10℃~11℃"/>
+
+
+                    <CheckBox
+                        android:id="@+id/temper3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12℃~16℃"/>
+
+                    <CheckBox
+                        android:id="@+id/temper4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="17℃~19℃"/>
+
+                    <CheckBox
+                        android:id="@+id/temper5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20℃~22℃"/>
+
+                    <CheckBox
+                        android:id="@+id/temper6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="23℃~26℃"/>
+
+                    <CheckBox
+                        android:id="@+id/temper7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="27℃ 이상"/>
+
+
+
+                </org.apmem.tools.layouts.FlowLayout>
+
+                <org.apmem.tools.layouts.FlowLayout
+                    android:id="@+id/fl_setting_season"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="2dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <RadioButton
+                            android:id="@+id/spring"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="봄"
+                            />
+                        <RadioButton
+                            android:id="@+id/summer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="여름"/>
+                        <RadioButton
+                            android:id="@+id/fall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="가을"/>
+                        <RadioButton
+                            android:id="@+id/winter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="겨울"/>
+                    </RadioGroup>
+
+
+                </org.apmem.tools.layouts.FlowLayout>
+
+
+
+
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <SlidingDrawer
+        android:id="@+id/sliding_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:allowSingleTap="true"
+        android:animateOnClick="true"
+        android:bottomOffset="5dp"
+        android:content="@+id/drawer_content"
+        android:handle="@+id/handle"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/handle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#dddddd"
+            android:src="@drawable/ic_launcher_background"
+            android:text="끌어올려주세요" />
+
+        <LinearLayout
+            android:id="@+id/drawer_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="#BB000000"
+            android:orientation="vertical">
+
+
+
+            <LinearLayout
+                android:id="@+id/msgLo"
+                android:background="#EEEEEE"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                >
+                <TextView
+                    android:layout_margin="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="옷 추가"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+
+
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+
+                android:background="#bbbbbb"
+                >
+
+                <!--                <TextView-->
+                <!--                    android:id="@+id/tv_add_image"-->
+                <!--                    android:text="새로운 옷 올리기"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="56dp"-->
+                <!--                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+                <!--                    android:textColor="#000000"-->
+                <!--                    android:gravity="center"-->
+                <!--                    android:background="#ffffff"-->
+                <!--                    android:minHeight="?android:attr/listPreferredItemHeightSmall"-->
+
+                <!--                    />-->
+
+                <TextView
+                    android:id="@+id/tv_from_closet"
+                    android:layout_marginTop="0.01dp"
+                    android:text="옷장에서 가져오기"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="#000000"
+                    android:gravity="center"
+                    android:background="#ffffff"
+                    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+                    />
+                <TextView
+                    android:id="@+id/tv_cancel"
+                    android:layout_marginTop="0.01dp"
+                    android:text="취소"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="#000000"
+                    android:gravity="center"
+                    android:background="#ffffff"
+                    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </SlidingDrawer>
+
+
+
+
+</RelativeLayout>
