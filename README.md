@@ -18,11 +18,8 @@
 환경|버전
 ---|---|
 Eclipse IDE for EE Developers|20-03|
-Ubuntu Server|18.0.4|
 oracle JDK|11.0.4|
 Spring Tool Suite |4.8.0|
-Tomcat|9.0.22|
-MYSQL|5.1.48|
 MySQL Workbench |8.0 CE|
 AWS-EC2| |
-AWS-RDS| |
+Aws RDS-MY SQL|8.0.15|
