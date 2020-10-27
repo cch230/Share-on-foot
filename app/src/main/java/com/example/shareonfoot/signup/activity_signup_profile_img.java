@@ -170,17 +170,21 @@ public class activity_signup_profile_img extends AppCompatActivity {
                     joinBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            Log.i("터치","옴");
                             try {
                                 String result  = new activity_signup_profile_img.UploadTask().execute().get();
                                 if(result.equals("ok")) {
+                                    Log.i("터치","됨");
                                     Intent intent = new Intent(getApplicationContext(), activity_signup_profile_contents.class);
                                     intent.putExtra("userID", userID);
                                     startActivity(intent);
                                 }else{
+                                    Log.i("터치","오류");
                                     Toast.makeText(activity_signup_profile_img.this, result, Toast.LENGTH_SHORT).show();
                                 }
-                            }catch (Exception e) {}
+                            }catch (Exception e) {
+                                Log.i("터치",e.toString());
+                            }
                         }
                     });
 

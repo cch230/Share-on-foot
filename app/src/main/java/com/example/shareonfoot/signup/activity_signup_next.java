@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -143,8 +144,11 @@ public class activity_signup_next extends AppCompatActivity {
 
             Call<String> stringCall = UserService.getRetrofit(getApplicationContext()).modify(userInfo);
             try {
+                Log.i("터치","00");
                 return stringCall.execute().body();
             } catch (IOException e) {
+                Log.i("터치",e.toString());
+
                 e.printStackTrace();
                 return null;
             }
