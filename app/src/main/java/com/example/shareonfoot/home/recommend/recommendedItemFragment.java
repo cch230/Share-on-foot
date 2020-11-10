@@ -1,7 +1,6 @@
 package com.example.shareonfoot.home.recommend;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,26 +13,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.shareonfoot.Global;
-import com.example.shareonfoot.HTTP.Service.SocialService;
-import com.example.shareonfoot.HTTP.Session.preference.MySharedPreferences;
-import com.example.shareonfoot.HTTP.VO.DetailFeedVO;
 import com.example.shareonfoot.R;
-import com.example.shareonfoot.social.detailFeed.activity_thisFeed;
-import com.bumptech.glide.Glide;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
-import retrofit2.Call;
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link recommendedItemFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class recommendedItemFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -41,38 +23,11 @@ public class recommendedItemFragment extends Fragment {
     private static final String paramBoardNo = "boardInfo";
 
     // TODO: Rename and change types of parameters
-    private ArrayList<DetailFeedVO> selectedFeedList;
 
     public recommendedItemFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param boardInfo Parameter 1.
-     * @return A new instance of fragment recommendedItemFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static recommendedItemFragment newInstance(ArrayList<DetailFeedVO> boardInfo) {
-        recommendedItemFragment fragment = new recommendedItemFragment();
-        Bundle args = new Bundle();
-        args.putParcelableArrayList(paramBoardNo, boardInfo);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            selectedFeedList = getArguments().getParcelableArrayList(paramBoardNo);
-        }
-
-
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,7 +35,7 @@ public class recommendedItemFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_recommended_item, container, false);
 
-        DetailFeedVO feedInfo = selectedFeedList.get(0);
+
 
         FrameLayout fl_recommendedItem = v.findViewById(R.id.fl_recommended_item);
         ImageView iv_codi_image = v.findViewById(R.id.iv_codi_image);
@@ -91,31 +46,9 @@ public class recommendedItemFragment extends Fragment {
         ImageView iv_heart= v.findViewById(R.id.iv_heart);
         TextView numHeart = v.findViewById(R.id.tv_numHeart);
 
-        Glide.with(getContext()).load(Global.baseURL+feedInfo.getBoardImagePath()).into(iv_codi_image);
-
-        //하트 여부에 따라 아이콘 변경
-        String if_hearting = feedInfo.getBoard_if_hearting();
-        if(if_hearting.equals("hearting")){
-            iv_heart.setImageResource(R.drawable.heart_color);
-        }
-        else if(if_hearting.equals("not_hearting")){
-            iv_heart.setImageResource(R.drawable.heart_empty_white);
-        }
-        numHeart.setText(feedInfo.getBoard_numHeart()+"");
-
-        int childNum = selectedFeedList.size();
-        TextView tv_childs[] = {child1,child2,child3,child4};
 
 
         // 포함 옷 개수만큼 식별자 보여주기
-        for(int i=0; i<childNum; i++){
-            tv_childs[i].setVisibility(View.VISIBLE);
-            tv_childs[i].setText("#"+selectedFeedList.get(i).getCloIdentifier());
-        }
-        // 안 쓰는 텍스트 끄기
-        for(int i=3; i>childNum-1; i--){
-            tv_childs[i].setVisibility(View.GONE);
-        }
 
         BtnOnClickListener onClickListener = new BtnOnClickListener();
         fl_recommendedItem.setOnClickListener(onClickListener);
@@ -139,11 +72,7 @@ public class recommendedItemFragment extends Fragment {
 
                 case R.id.iv_heart : //하트 클릭 로직 추가해야 함
                     break;
-                case R.id.fl_recommended_item : //전체
-                    intent = new Intent(getContext(), activity_thisFeed.class);
-                    intent.putParcelableArrayListExtra("selectedFeedList", selectedFeedList);
-                    startActivity(intent);
-                    break;
+
             }
         }
     }

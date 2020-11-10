@@ -132,7 +132,7 @@
                         <TextView
                             android:layout_width="240dp"
                             android:layout_height="wrap_content"
-                            android:text="셔츠"
+                            android:text="디져트"
                             android:id="@+id/tv_info_catergory"/>
                     </LinearLayout>
                     <LinearLayout
@@ -148,7 +148,7 @@
                         <TextView
                             android:layout_width="240dp"
                             android:layout_height="wrap_content"
-                            android:text="클래식/드레스셔츠"
+                            android:text="마카롱"
                             android:id="@+id/tv_info_detailcategory"/>
                     </LinearLayout>
                     <LinearLayout
@@ -159,7 +159,7 @@
                         <TextView
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
-                            android:text="컬러"/>
+                            android:text="분위기"/>
                         <TextView
                             android:id="@+id/tv_info_color"
                             android:layout_width="240dp"
@@ -174,11 +174,11 @@
                         <TextView
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
-                            android:text="계절"/>
+                            android:text="영업시간"/>
                         <TextView
                             android:layout_width="240dp"
                             android:layout_height="wrap_content"
-                            android:text="봄"
+                            android:text="09:00 ~ 20:00"
                             android:id="@+id/tv_info_season"/>
                     </LinearLayout>
                     <LinearLayout
@@ -189,11 +189,11 @@
                         <TextView
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
-                            android:text="브랜드"/>
+                            android:text="위치"/>
                         <TextView
                             android:layout_width="240dp"
                             android:layout_height="wrap_content"
-                            android:text="폴라"
+                            android:text="인천"
                             android:id="@+id/tv_info_brand"/>
 
                         <TextView

@@ -9,100 +9,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
+        <ImageView
             android:id="@+id/layout_makecodi"
             android:layout_width="match_parent"
             android:layout_height="420dp"
-            android:background="#ffffff"
             android:gravity="center">
 
 
-            <ImageView
-                android:id="@+id/iv_top"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_centerHorizontal="true"
-                android:adjustViewBounds="true"
-                android:src="@drawable/clo"
-                android:visibility="visible"/>
 
-            <ImageView
-                android:id="@+id/iv_top_place"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_centerHorizontal="true"
-                android:visibility="invisible"/>
-
-
-            <ImageView
-                android:id="@+id/iv_bottom"
-                android:layout_width="120dp"
-                android:layout_height="180dp"
-                android:adjustViewBounds="true"
-                android:layout_centerHorizontal="true"
-                android:visibility="visible"
-                android:layout_below="@id/iv_top_place"/>
-
-            <ImageView
-                android:id="@+id/iv_bottom_place"
-                android:layout_width="120dp"
-                android:layout_height="180dp"
-                android:layout_centerHorizontal="true"
-                android:visibility="invisible"
-                android:layout_below="@id/iv_top_place"/>
-
-
-            <ImageView
-                android:id="@+id/iv_suit"
-                android:layout_width="120dp"
-                android:layout_height="300dp"
-                android:layout_centerHorizontal="true"
-                android:visibility="visible"/>
-
-
-            <ImageView
-                android:id="@+id/iv_outer"
-                android:layout_width="120dp"
-                android:layout_height="300dp"
-                android:adjustViewBounds="true"
-                android:layout_centerHorizontal="true"
-                android:visibility="visible"
-                android:layout_toLeftOf="@id/iv_top_place"
-
-                />
-            <LinearLayout
-                android:id="@+id/ll_right"
-                android:layout_width="100dp"
-                android:layout_height="300dp"
-                android:orientation="vertical"
-                android:gravity="center_vertical"
-                android:layout_toRightOf="@id/iv_bottom_place"
-                >
-
-                <ImageView
-                    android:id="@+id/iv_acc4"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:visibility="visible"
-                    />
-                <ImageView
-                    android:id="@+id/iv_bag"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:visibility="visible"
-                    />
-
-                <ImageView
-                    android:id="@+id/iv_shoes"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:visibility="visible"
-                    />
-
-
-            </LinearLayout>
-
-        </RelativeLayout>
+        </ImageView>
 
         <LinearLayout
             android:id="@+id/explain"
@@ -117,52 +32,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/civ_main_color"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@color/네이비"
-                    app:civ_border_width="1dp"
-                    android:layout_gravity="center"
-                    />
 
-                <TextView
-                    android:layout_marginLeft="5dp"
-                    android:id="@+id/tv_main_color"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="네이비 ">
-                </TextView>
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/civ_sub_color"
-                    android:layout_marginLeft="7dp"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@color/화이트"
-                    app:civ_border_width="1dp"
-                    android:layout_gravity="center"
-                    />
-                <TextView
-                    android:layout_marginLeft="5dp"
-                    android:id="@+id/tv_sub_color"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="화이트">
-                </TextView>
-                <View
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="1"/>
 
-                <ImageView
-                    android:id="@+id/iv_save"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="end"
-                    app:srcCompat="@drawable/inbox"
-                    app:tint="#aa000000" />
+
+
 
                 <!--
                 <RelativeLayout
@@ -194,6 +67,13 @@
 
 
             </LinearLayout>
+            <ImageView
+                android:id="@+id/iv_save"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                app:srcCompat="@drawable/inbox"
+                app:tint="#aa000000" />
             <TextView
                 android:id="@+id/tv_comment"
                 android:layout_marginTop="10dp"
@@ -203,26 +83,27 @@
                 android:text="강력 추천!"
                 android:textColor="@color/블랙">
             </TextView>
+
             <TextView
                 android:id="@+id/tv_mood"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="단정하면서 도시적인 세련미"
+                android:text="도시적인 세련미"
                 android:shadowColor="#444444"
                 android:shadowRadius="2.0"
                 android:shadowDx="1.0"
                 android:shadowDy="1.0"
                 android:textColor="@color/네이비">
             </TextView>
+
             <TextView
                 android:id="@+id/tv_weather_tip"
-                android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="대체로 따뜻하지만 바람이 불거나 해가 지면 확 추워지는 온도인데요.\n낮에 활동할 생각이라면 자켓, 셔츠, 가디건, 간절기 야상, 살색 스타킹 정도로 입는 것이 좋아요!\n하지만 추위를 잘타시는 분들이나, 저녁에도 활동하시는 분들은 아우터를 따로 챙겨나오는 것이 좋을 것 같습니다 :-)">
-            </TextView>
+                android:layout_marginTop="10dp"
+                android:text="너무 맛있는 디저트 \n 달달한 분위기!"></TextView>
         </LinearLayout>
 
     </RelativeLayout>

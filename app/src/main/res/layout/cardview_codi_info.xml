@@ -99,7 +99,8 @@
                     <TextView
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="계절"/>
+                        android:text="분위기
+"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -115,7 +116,7 @@
                     <TextView
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="구입 날짜"/>
+                        android:text="위치"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

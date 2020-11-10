@@ -1,6 +1,5 @@
 package com.example.shareonfoot.closet;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,10 +11,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.shareonfoot.Global;
-import com.example.shareonfoot.HTTP.Service.ClothesService;
-import com.example.shareonfoot.HTTP.Session.preference.MySharedPreferences;
-import com.example.shareonfoot.HTTP.VO.ClothesVO;
-import com.example.shareonfoot.HTTP.VO.DetailFeedVO;
 import com.example.shareonfoot.R;
 import com.bumptech.glide.Glide;
 
@@ -26,7 +21,6 @@ import retrofit2.Call;
 
 public class activity_cloInfo extends AppCompatActivity {
 
-    DetailFeedVO cloInfoVO;
     String mode;
 
     LinearLayout ll_detail;
@@ -49,7 +43,6 @@ public class activity_cloInfo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cloth_info);
-        cloInfoVO = getIntent().getExtras().getParcelable("cloInfo");
 
         ll_detail = findViewById(R.id.ll_detail);
 
@@ -86,23 +79,9 @@ public class activity_cloInfo extends AppCompatActivity {
         //iv_delete.setOnClickListener(onClickListener);
 
 
-        String ImageUrl = Global.baseURL+cloInfoVO.getCloImagePath();
 
-        Glide.with((iv_image).getContext()).load(ImageUrl).into(iv_image);
 
-        String category = cloInfoVO.getCloCategory();
-        String detailCategory = cloInfoVO.getCloDetailCategory();
-        tv_category.setText(category);
-        if(category.equals(detailCategory))
-            ll_detail.setVisibility(View.GONE);
-        else{
-            ll_detail.setVisibility(View.VISIBLE);
-            tv_detailcategory.setText(detailCategory);
-        }
-        tv_color.setText(cloInfoVO.getCloColor());
-        tv_season.setText(cloInfoVO.getCloSeason());
-        tv_brand.setText(cloInfoVO.getCloBrand());
-        tv_cloNo.setText(cloInfoVO.getCloNo());
+
 
 
         switch(mode){
@@ -118,45 +97,8 @@ public class activity_cloInfo extends AppCompatActivity {
                     public void onClick(View v) {
 
 
-                        MySharedPreferences pref = MySharedPreferences.getInstanceOf(getApplicationContext());
-                        String myID = pref.getUserID();
-
-                        String res = null;
-                        try {
-                            ClothesVO cloInfo = new ClothesVO();
-                            cloInfo.setLocation("private");
-                            cloInfo.setKind(cloInfoVO.getCloKind());
-                            cloInfo.setCategory(cloInfoVO.getCloCategory());
-                            cloInfo.setDetailCategory(cloInfoVO.getCloDetailCategory());
-
-                            cloInfo.setColor(cloInfoVO.getCloColor());
-                            cloInfo.setIdentifier(cloInfoVO.getCloIdentifier());
-                            cloInfo.setSeason(cloInfoVO.getCloSeason());
-                            cloInfo.setBrand(cloInfoVO.getCloBrand());
-
-                            cloInfo.setFilePath(cloInfoVO.getCloImagePath());
-
-                            cloInfo.setFavorite("no");
-                            cloInfo.setUserID(myID);
-                            cloInfo.setClosetName("default");
 
 
-
-
-                            res = new AddTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cloInfo).get();
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        Log.e("tag",res);
-
-                        if("ok".equals(res)){
-                            Toast.makeText(getApplicationContext(), "옷장에 추가되었습니다.", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                        else
-                            Toast.makeText(getApplicationContext(), "실패하였습니다.", Toast.LENGTH_SHORT).show();
 
 
 
@@ -168,28 +110,6 @@ public class activity_cloInfo extends AppCompatActivity {
     }
 
 
-    public class AddTask extends AsyncTask<ClothesVO, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        @Override
-        protected String doInBackground(ClothesVO... ClothesInfo) {
-
-            Call<String> stringCall = ClothesService.getRetrofit(getApplicationContext()).addClothesFrData(ClothesInfo[0]);
-            try {
-                return stringCall.execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-        }
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
-    }
 
 
 

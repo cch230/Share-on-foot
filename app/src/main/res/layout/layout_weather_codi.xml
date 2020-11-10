@@ -6,21 +6,26 @@
     android:background="#ffffff"
     android:gravity="center">
 
-
     <ImageView
         android:id="@+id/iv_top"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
-        android:visibility="visible"/>
+        android:visibility="visible"
+
+        android:layout_centerInParent="true"
+        android:layout_below="@id/iv_acc1"/>
 
     <ImageView
         android:id="@+id/iv_top_place"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+
+        android:layout_centerInParent="true"
+        android:layout_below="@id/iv_acc1"/>
 
 
 
@@ -42,14 +47,14 @@
         android:layout_marginBottom="3dp"
         android:background="#66F3F3F3"
         android:gravity="center"
-        android:text="상의"
+        android:text="서점"
         android:textColor="#000000"
         android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/iv_bottom"
         android:layout_width="120dp"
-        android:layout_height="180dp"
+        android:layout_height="120dp"
         android:adjustViewBounds="true"
         android:layout_centerHorizontal="true"
         android:visibility="visible"
@@ -58,7 +63,7 @@
     <ImageView
         android:id="@+id/iv_bottom_place"
         android:layout_width="120dp"
-        android:layout_height="180dp"
+        android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"
         android:layout_below="@id/iv_top_place"/>
@@ -74,7 +79,7 @@
         android:layout_margin="3dp"
         android:background="#66F3F3F3"
         android:gravity="center"
-        android:text="하의"
+        android:text="패션"
         android:textColor="#000000"
         android:textSize="18sp" />
 
@@ -87,7 +92,8 @@
         android:layout_width="120dp"
         android:layout_height="300dp"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:layout_below="@id/iv_acc1"/>
 
     <TextView
         android:id="@+id/tv_suit"
@@ -105,7 +111,7 @@
         android:layout_marginRight="1dp"
         android:layout_marginBottom="1dp"
         android:gravity="center"
-        android:text="한벌옷 추가"
+        android:text="한벌옷"
         android:textColor="#000000"
         android:textSize="18sp"
         android:visibility="gone"
@@ -114,15 +120,15 @@
 
 
     <ImageView
-    android:id="@+id/iv_outer"
-    android:layout_width="120dp"
-    android:layout_height="300dp"
-    android:adjustViewBounds="true"
-    android:layout_centerHorizontal="true"
-    android:visibility="visible"
-    android:layout_toLeftOf="@id/iv_top_place"
-
-    />
+        android:id="@+id/iv_outer"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:adjustViewBounds="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="visible"
+        android:layout_toLeftOf="@id/iv_top_place"
+        android:layout_below="@id/iv_acc2"
+        />
 
     <TextView
         android:id="@+id/tv_outer"
@@ -142,18 +148,18 @@
         android:layout_marginBottom="1dp"
         android:background="#66F3F3F3"
         android:gravity="center"
-        android:text="외투"
+        android:text="놀거리"
         android:textColor="#000000"
         android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/iv_shoes"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:visibility="visible"
-        android:layout_toRightOf="@id/iv_bottom_place"
-        android:layout_below="@id/iv_bag"
+        android:layout_toLeftOf="@id/tv_top"
+        android:layout_below="@id/iv_outer"
         />
 
     <TextView
@@ -173,14 +179,14 @@
         android:layout_marginBottom="1dp"
         android:background="#66F3F3F3"
         android:gravity="center"
-        android:text="신발"
+        android:text="포차"
         android:textColor="#000000"
         android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/iv_bag"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:visibility="visible"
         android:layout_toRightOf="@id/iv_bottom_place"
@@ -204,18 +210,18 @@
         android:layout_marginBottom="1dp"
         android:background="#66F3F3F3"
         android:gravity="center"
-        android:text="가방"
+        android:text="기타"
         android:textColor="#000000"
         android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/iv_acc4"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:visibility="visible"
         android:layout_toRightOf="@id/iv_bottom_place"
-
+        android:layout_below="@id/iv_acc3"
         />
 
     <TextView
@@ -235,8 +241,100 @@
         android:layout_marginBottom="1dp"
         android:background="#66F3F3F3"
         android:gravity="center"
-        android:text="액세서리"
+        android:text="미용실"
         android:textColor="#000000"
         android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/iv_acc1"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_acc1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/iv_acc1"
+        android:layout_alignTop="@id/iv_acc1"
+        android:layout_alignRight="@id/iv_acc1"
+        android:layout_alignBottom="@id/iv_acc1"
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="3dp"
+        android:background="#66F3F3F3"
+        android:gravity="center"
+        android:text="카페"
+        android:textColor="#000000"
+        android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/iv_acc2"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="visible"
+        android:layout_toLeftOf="@id/iv_bottom_place"/>
+
+    <TextView
+        android:id="@+id/tv_acc2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/iv_acc2"
+        android:layout_alignTop="@id/iv_acc2"
+        android:layout_alignRight="@id/iv_acc2"
+        android:layout_alignBottom="@id/iv_acc2"
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="1dp"
+        android:background="#66F3F3F3"
+        android:gravity="center"
+        android:text="음식"
+        android:textColor="#000000"
+        android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/iv_acc3"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/iv_bottom_place"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_acc3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/iv_acc3"
+        android:layout_alignTop="@id/iv_acc3"
+        android:layout_alignRight="@id/iv_acc3"
+        android:layout_alignBottom="@id/iv_acc3"
+        android:layout_margin="3dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="#66F3F3F3"
+        android:gravity="center"
+        android:text="디져트"
+        android:textColor="#000000"
+        android:textSize="18sp" />
+
+
+
+
+
+
+
+  =
 
 </RelativeLayout>

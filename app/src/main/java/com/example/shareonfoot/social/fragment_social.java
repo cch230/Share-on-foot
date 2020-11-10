@@ -17,7 +17,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.shareonfoot.R;
 import com.example.shareonfoot.home.activity_home;
-import com.example.shareonfoot.social.addFeed.activity_addBoard;
 import com.example.shareonfoot.util.OnBackPressedListener;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -37,7 +36,6 @@ public class fragment_social extends Fragment implements OnBackPressedListener {
     Activity activity;
 
     private TabLayout tabLayout;
-    public TabPagerAdapter_social pagerAdapter;
     private ViewPager finalPager;
 
     //RelativeLayout filterButton;
@@ -149,8 +147,7 @@ public class fragment_social extends Fragment implements OnBackPressedListener {
 
             //탭 페이저 설정 (탭 클릭시 바뀌는 화면)
             finalPager = (ViewPager) getView().findViewById(R.id.tab_Pager);
-            pagerAdapter = new TabPagerAdapter_social(getChildFragmentManager(), tabLayout.getTabCount());
-            finalPager.setAdapter(pagerAdapter);
+
             finalPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
@@ -196,8 +193,7 @@ public class fragment_social extends Fragment implements OnBackPressedListener {
         fam.setOnMenuButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), activity_addBoard.class);
-                startActivityForResult(intent,ADD_BOARD);
+
             }
         });
 

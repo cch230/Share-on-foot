@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -26,24 +25,14 @@ import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.shareonfoot.Global;
-import com.example.shareonfoot.HTTP.Service.ClothesService;
-import com.example.shareonfoot.HTTP.Service.SocialService;
-import com.example.shareonfoot.HTTP.Session.preference.MySharedPreferences;
-import com.example.shareonfoot.HTTP.VO.BoardVO;
-import com.example.shareonfoot.HTTP.VO.ClothesVO;
-import com.example.shareonfoot.HTTP.VO.DetailFeedVO;
+
 import com.example.shareonfoot.R;
-import com.example.shareonfoot.closet.TabFragment_Clothes_inCloset;
-import com.example.shareonfoot.closet.addClothes.activity_addClothes;
-import com.example.shareonfoot.codi.addCodi.MyPagerAdapter;
 import com.example.shareonfoot.home.recommend.recommendPagerFragment;
 import com.example.shareonfoot.util.OnBackPressedListener;
 import com.bumptech.glide.Glide;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
@@ -66,7 +55,6 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
     Activity activity;
 
     private ViewPager finalPager_recommend;
-    private MyPagerAdapter pagerAdapter_recommend;
 
     private TabLayout tabLayout_favorite;
     public TabPagerAdapter_home pagerAdapter_favorite;
@@ -130,8 +118,7 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
             ((activity_home)activity).setOnBackPressedListener(this);
         }
 
-        if(pagerAdapter_recommend!=null)
-        pagerAdapter_recommend.notifyDataSetChanged();
+
     }
 
 
@@ -139,8 +126,7 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
     public void onStart() {
         super.onStart();
 
-        MySharedPreferences pref = MySharedPreferences.getInstanceOf(getContext());
-        String userID = pref.getUserID();
+
 
         //addButton = getView().findViewById(R.id.header_add);
         //filterButton = getView().findViewById(R.id.header_search);
@@ -160,7 +146,6 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
         tv_color = (TextView) getView().findViewById(R.id.tv_info_color);
         tv_season = (TextView) getView().findViewById(R.id.tv_info_season);
         tv_brand = (TextView) getView().findViewById(R.id.tv_info_brand);
-        tv_size = (TextView) getView().findViewById(R.id.tv_info_size);
         tv_buyDate = (TextView) getView().findViewById(R.id.tv_info_date);
 
         iv_heart = (ImageView) getView().findViewById(R.id.iv_heart);
@@ -178,13 +163,13 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
         tv_edit_category = (TextView) getView().findViewById(R.id.tv_edit_catergory);
         tv_edit_season = (TextView) getView().findViewById(R.id.tv_edit_season);
         tv_edit_date = (TextView) getView().findViewById(R.id.tv_edit_date);
-        tv_edit_date.setOnClickListener(new View.OnClickListener() {
+        /*tv_edit_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePickerDialog dialog = new DatePickerDialog(activity, listener, 2020, 6, 30);
                 dialog.show();
             }
-        });
+        });*/
 
         BtnOnClickListener onClickListener = new BtnOnClickListener();
         iv_heart.setOnClickListener(onClickListener);
@@ -392,27 +377,6 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
 
 
 
-        //탭 페이저 설정 (탭 클릭시 바뀌는 화면)
-        finalPager_recommend = (ViewPager) getView().findViewById(R.id.recommend_tab_Pager);
-        pagerAdapter_recommend = new MyPagerAdapter(getChildFragmentManager());
-
-        List<DetailFeedVO> recommendedList = null;
-        try {
-            recommendedList = new RecommendTask().execute(userID).get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if(recommendedList!=null && recommendedList.size()!=0){
-            Log.e("fragment_home","pagerAdapter 아이템 추가 전");
-            pagerAdapter_recommend.addItem(recommendPagerFragment.newInstance((ArrayList<DetailFeedVO>) recommendedList));
-            Log.e("fragment_home","pagerAdapter 아이템 추가 후");
-        }
-        else
-            Toast.makeText(getContext(), "추천할 아이템이 없습니다.", Toast.LENGTH_SHORT).show();
-
-        finalPager_recommend.setAdapter(pagerAdapter_recommend);
 
 
         /*
@@ -471,76 +435,7 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
 
     }
 
-    public class RecommendTask extends AsyncTask<String, Void, List<DetailFeedVO>> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        @Override
-        protected List<DetailFeedVO> doInBackground(String... params) {
 
-            Call<List<DetailFeedVO>> boardListCall = SocialService.getRetrofit(getContext()).recommendFull(params[0],null);
-            //params : userID
-            try {
-                return boardListCall.execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-        }
-        @Override
-        protected void onPostExecute(List<DetailFeedVO> boardList) {
-            super.onPostExecute(boardList);
-        }
-    }
-
-
-    public class FavoriteTask extends AsyncTask<ClothesVO, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        @Override
-        protected String doInBackground(ClothesVO... ClothesFilter) {
-
-            Call<String> stringCall = ClothesService.getRetrofit(getContext()).modifyClothes(ClothesFilter[0]);
-            try {
-                return stringCall.execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-        }
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
-    }
-
-    public class DeleteTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        @Override
-        protected String doInBackground(String... cloNo) {
-
-            Call<String> stringCall = ClothesService.getRetrofit(getContext()).deleteClothes(cloNo[0]);
-            try {
-                return stringCall.execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-        }
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
-    }
 
 
     //클릭 리스너
@@ -558,42 +453,9 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
 //                    break;
                 case R.id.iv_heart : //즐겨찾기
                     //필터가 될 vo 설정
-                    ClothesVO clothesFilter = new ClothesVO();
-                    clothesFilter.setCloNo(Integer.parseInt(tv_cloNo.getText().toString()));
-                    boolean reverted_favorite;
-                    //즐겨찾기 여부 불러와서 반대값으로 설정
-                    if("yes".equals(tv_cloFavorite.getText().toString())){
-                        clothesFilter.setFavorite("no");
-                        reverted_favorite = false;
-                    }
-                    else{
-                        clothesFilter.setFavorite("yes");
-                        reverted_favorite = true;
-                    }
 
-                    try {
-                        res = new FavoriteTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, clothesFilter).get();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Log.e("tag",res);
-                    if("ok".equals(res)){
-                        if(reverted_favorite){
-                            Toast.makeText(getContext(), "즐겨찾기를 등록했습니다.", Toast.LENGTH_SHORT).show();
-                            iv_heart.setImageResource(R.drawable.star_color);
-                            tv_cloFavorite.setText("yes");
-                        }else{
-                            Toast.makeText(getContext(), "즐겨찾기를 해제했습니다.", Toast.LENGTH_SHORT).show();
-                            iv_heart.setImageResource(R.drawable.star_empty);
-                            tv_cloFavorite.setText("no");
-                        }
-                        ((activity_home)activity).refresh_home();
-                    }
-                    else
-                        Toast.makeText(getContext(), "즐겨찾기 실패", Toast.LENGTH_SHORT).show();
-                    break;
+
+
                 case R.id.iv_modify : //수정 버튼
                     //Cloth_Info.setVisibility(View.GONE);
                     Cloth_Info_edit.setVisibility(View.VISIBLE);
@@ -601,23 +463,7 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
                     break;
                 case R.id.iv_delete : //삭제 버튼
                     //확인 Alert 다이얼로그
-                    try {
-                        res = new DeleteTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tv_cloNo.getText().toString()).get();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
 
-                    if("ok".equals(res)){
-                        Toast.makeText(getContext(), "옷을 삭제했습니다.", Toast.LENGTH_SHORT).show();
-                        Cloth_Info.setVisibility(View.GONE);
-                        //pagerAdapter.notifyDataSetChanged();
-                        ((activity_home)activity).refresh_clothes(fragment_home.this);
-
-                    }else{
-                        Toast.makeText(getContext(), "삭제 실패", Toast.LENGTH_SHORT).show();
-                    }
                     break;
             }
         }
@@ -631,39 +477,4 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
     }
 
     //커스텀 함수
-    public void setInfo(ClothesVO cloInfo){
-
-        Cloth_Info.setVisibility(View.VISIBLE);
-        String ImageUrl = Global.baseURL+cloInfo.getFilePath();
-
-
-
-        Glide.with((iv_image).getContext()).load(ImageUrl).into(iv_image);
-        Glide.with((iv_edit_image).getContext()).load(ImageUrl).into(iv_edit_image);
-
-        String category = cloInfo.getCategory();
-        String detailCategory = cloInfo.getDetailCategory();
-        tv_category.setText(category);
-        if(category.equals(detailCategory))
-            ll_detail.setVisibility(View.GONE);
-        else{
-            ll_detail.setVisibility(View.VISIBLE);
-            tv_detailcategory.setText(detailCategory);
-        }
-        tv_color.setText(cloInfo.getColor());
-        tv_season.setText(cloInfo.getSeason());
-        tv_brand.setText(cloInfo.getBrand());
-        tv_size.setText(cloInfo.getCloSize());
-        tv_buyDate.setText(cloInfo.getBuyDate());
-        tv_cloNo.setText(Integer.toString(cloInfo.getCloNo()));
-
-        if("yes".equals(cloInfo.getFavorite())){
-            iv_heart.setImageResource(R.drawable.star_color);
-            tv_cloFavorite.setText("yes");
-        }
-        else{
-            iv_heart.setImageResource(R.drawable.heart_empty);
-            tv_cloFavorite.setText("no");
-        }
-    }
 }

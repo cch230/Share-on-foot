@@ -91,7 +91,8 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <Button
+                android:id="@+id/bt_join1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="다른 위치로 할래요"

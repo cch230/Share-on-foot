@@ -113,7 +113,7 @@
                     <TextView
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="컬러"/>
+                        android:text="분위기"/>
                     <TextView
                         android:id="@+id/tv_info_color"
                         android:layout_width="wrap_content"
@@ -128,7 +128,7 @@
                     <TextView
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="계절"/>
+                        android:text="영업시간"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -143,65 +143,14 @@
                     <TextView
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="브랜드"/>
+                        android:text="위치"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
                         android:id="@+id/tv_info_brand"/>
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_margin="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:text="사이즈"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:id="@+id/tv_info_size"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_margin="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:text="구입 날짜"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:id="@+id/tv_info_date"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:id="@+id/tv_clothes_no"
-                        android:visibility="invisible"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:id="@+id/tv_clothes_favorite"
-                        android:visibility="invisible"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:id="@+id/tv_clothes_position"
-                        android:visibility="invisible"
-                        />
-                </LinearLayout>
+
                 <LinearLayout
                     android:layout_margin="5dp"
                     android:layout_width="wrap_content"

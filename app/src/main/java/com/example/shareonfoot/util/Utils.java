@@ -22,25 +22,28 @@ public class Utils {
 
     public static class Kind {
         //final static int ALL = 0;
-        public final static int TOP = 0;
-        public final static int BOTTOM = 1;
-        public final static int SUIT = 2;
-        public final static int OUTER = 3;
-        public final static int SHOES = 4;
-        public final static int BAG = 5;
-        public final static int ACCESSORY = 6;
-
-        public static final List<Integer> kindList = new ArrayList<Integer>(Arrays.asList(TOP,BOTTOM,SUIT,OUTER,SHOES,BAG,ACCESSORY));
+        public final static int FOOD = 0;
+        public final static int CAFE = 1;
+        public final static int DESERT = 2;
+        public final static int PLAY = 3;
+        public final static int BOOKSTORE = 4;
+        public final static int SALON = 5;
+        public final static int BAR = 6;
+        public final static int FASHION = 7;
+        public final static int OTHER = 8;
+        public static final List<Integer> kindList = new ArrayList<Integer>(Arrays.asList(FOOD,CAFE,DESERT,PLAY,BOOKSTORE,SALON,BAR,FASHION,OTHER));
 
         public static final HashMap<String,Integer> kindNumMap = new HashMap<>();
         static {
-            kindNumMap.put("상의", TOP);
-            kindNumMap.put("하의", BOTTOM);
-            kindNumMap.put("한벌옷", SUIT);
-            kindNumMap.put("외투", OUTER);
-            kindNumMap.put("신발", SHOES);
-            kindNumMap.put("가방", BAG);
-            kindNumMap.put("액세서리", ACCESSORY);
+            kindNumMap.put("음식", FOOD);
+            kindNumMap.put("카페", CAFE);
+            kindNumMap.put("디저트", DESERT);
+            kindNumMap.put("놀거리", PLAY);
+            kindNumMap.put("서점", BOOKSTORE);
+            kindNumMap.put("미용실", SALON);
+            kindNumMap.put("포차", BAR);
+            kindNumMap.put("패선", FASHION);
+            kindNumMap.put("기타", OTHER);
         }
     }
 
@@ -191,20 +194,24 @@ public class Utils {
     public static String convertKor(String korean){
         String english="";
         switch(korean){
-            case "상의" :
-                english = "top";
-            case "하의" :
-                english = "bottom";
-            case "한벌옷" :
-                english = "suit";
-            case "외투" :
-                english = "outer";
-            case "신발" :
-                english = "shoes";
-            case "가방" :
-                english = "top";
-            case "액세서리" :
-                english = "accessory";
+            case "음식" :
+                english = "food";
+            case "카페" :
+                english = "cafe";
+            case "디저트" :
+                english = "dessert";
+            case "놀거리" :
+                english = "play";
+            case "서점" :
+                english = "bookstore";
+            case "미용실" :
+                english = "Salon";
+            case "포차" :
+                english = "bar";
+            case "패션" :
+                english = "fashion";
+            case "기타" :
+                english = "other";
         }
         if(!english.isEmpty())
             return english;
@@ -215,20 +222,24 @@ public class Utils {
     public static String convertEng(String english){
         String korean="";
         switch(english){
-            case "top" :
-                korean = "상의";
-            case "bottom" :
-                korean = "하의";
-            case "suit" :
-                korean = "한벌옷";
-            case "outer" :
-                korean = "외투";
-            case "shoes" :
-                korean = "신발";
-            case "bag" :
-                korean = "가방";
-            case "accessory" :
-                korean = "액세서리";
+            case "food" :
+                korean = "음식";
+            case "cafe" :
+                korean = "카페";
+            case "dessert" :
+                korean = "디저트";
+            case "play" :
+                korean = "놀거리";
+            case "bookstore" :
+                korean = "서점";
+            case "Salon" :
+                korean = "미용실";
+            case "bar" :
+                korean = "포차";
+            case "fashion" :
+                korean = "패션";
+            case "other" :
+                korean = "기타";
         }
         if(!korean.isEmpty())
             return korean;

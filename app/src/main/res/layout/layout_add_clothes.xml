@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:id="@+id/layout"
-    tools:context=".closet.addClothes.activity_addClothes"
+    tools:context=".closet.addClothes.activity_addStore"
     android:orientation="vertical">
 
     <com.ssomai.android.scalablelayout.ScalableLayout
@@ -114,7 +114,7 @@
 
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="컬러"/>
+                android:text="분위기"/>
             <TextView
                 android:layout_marginLeft="3dp"
                 android:id="@+id/tv_info_color"
@@ -141,7 +141,7 @@
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="계절"/>
+                android:text="영업시간"/>
             <TextView
                 android:layout_marginLeft="3dp"
                 android:layout_width="wrap_content"
@@ -159,7 +159,7 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="브랜드"/>
+                android:text="위치"/>
             <EditText
                 android:layout_width="150dp"
                 android:layout_height="40dp"
@@ -168,41 +168,7 @@
                 android:imeOptions="actionNext"
                 android:inputType="text"/>
         </LinearLayout>
-        <LinearLayout
-            android:layout_margin="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="사이즈"/>
-            <EditText
-                android:layout_width="150dp"
-                android:layout_height="40dp"
-                android:text=""
-                android:id="@+id/tv_edit_size"
-                android:imeOptions="actionDone"
-                android:inputType="text"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_margin="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="구입 날짜"/>
-            <TextView
-                android:layout_marginLeft="3dp"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:textSize="15dp"
-                android:text="선택"
-                android:id="@+id/tv_edit_date"/>
-        </LinearLayout>
+
 
 
 

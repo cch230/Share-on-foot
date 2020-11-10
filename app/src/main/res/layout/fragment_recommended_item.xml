@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="380dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/codi"
         android:layout_gravity="fill_vertical"
         />
     <RelativeLayout
@@ -36,7 +35,7 @@
                 android:id="@+id/child1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="#블랙_크롭티"
+                android:text="#맛있는_디저트"
                 android:textSize="16dp"
                 android:textColor="@color/화이트"
                 />
@@ -44,7 +43,7 @@
                 android:id="@+id/child2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="#스카이블루_핫팬츠"
+                android:text="#마카롱"
                 android:textSize="16dp"
                 android:textColor="@color/화이트"
                 />
@@ -59,7 +58,7 @@
                 android:id="@+id/child4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="#블랙_초커"
+                android:text="#분위기_달달"
                 android:textSize="16dp"
                 android:textColor="@color/화이트"/>
         </LinearLayout>

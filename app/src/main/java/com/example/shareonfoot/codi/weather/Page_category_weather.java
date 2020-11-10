@@ -20,17 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.shareonfoot.Global;
-import com.example.shareonfoot.HTTP.Service.ClothesService;
-import com.example.shareonfoot.HTTP.Session.preference.MySharedPreferences;
-import com.example.shareonfoot.HTTP.VO.ClothesVO;
+
 import com.example.shareonfoot.R;
 import com.example.shareonfoot.closet.fragment_closet;
-import com.example.shareonfoot.util.ClothesListAdapter;
 import com.bumptech.glide.Glide;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,10 +52,7 @@ public class Page_category_weather extends Fragment {
 
     int page=0;
     RecyclerView rv_clothes;
-    ArrayList<ClothesVO> clothesList = new ArrayList<ClothesVO>();
 
-    ClothesListAdapter clothesListAdapter;
-    Call<List<ClothesVO>> cloListCall; // 옷 VO 리스트를 응답으로 받는 http 요청
 
 
     public static Page_category_weather newInstance(String identifier, String size, String[] recommendedDCate) {
@@ -122,17 +114,7 @@ public class Page_category_weather extends Fragment {
 
         pagesize="12"; //임의 설정..
 
-        clothesListAdapter = new ClothesListAdapter(getActivity(),clothesList, R.layout.fragment_recyclerview, "small");
 
-        clothesListAdapter.setOnItemClickListener(new ClothesListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position, ImageView iv_Clothes, ClothesVO cloInfo) {
-                Bitmap selectedImage = ((BitmapDrawable)iv_Clothes.getDrawable()).getBitmap();
-                if(mFragListener != null){
-                    mFragListener.ReceivedData(selectedImage);
-                }
-            }
-        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -140,13 +122,11 @@ public class Page_category_weather extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //현재 페이지수와 함께 웹서버에 옷 데이터 요청
-        new networkTask().execute(Integer.toString(page));
 
         //리사이클러 뷰 설정하기
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
         rv_clothes = (RecyclerView) view.findViewById(R.id.tab_clothes_rv);
         rv_clothes.setLayoutManager(new GridLayoutManager(getContext(), gridsize)); //그리드 사이즈 설정
-        rv_clothes.setAdapter(clothesListAdapter);
         rv_clothes.setNestedScrollingEnabled(true);
         rv_clothes.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
@@ -159,7 +139,6 @@ public class Page_category_weather extends Fragment {
                 }
                 else if (!rv_clothes.canScrollVertically(1)) {
                     //스크롤이 최하단이면 웹서버에 다음 페이지 옷 데이터 요청
-                    new networkTask().execute(Integer.toString(++page));
                     Log.e("test","페이지 수 증가");
                 }
                 else {
@@ -172,10 +151,8 @@ public class Page_category_weather extends Fragment {
             @Override
             public void onRefresh() {
                 //스크롤이 최상단이면 데이터를 갱신한다
-                clothesList.clear();
+
                 page=0;
-                new networkTask().execute(Integer.toString(page));
-                clothesListAdapter.notifyDataSetChanged();
                 Log.e("test","데이터 갱신");
                 mSwipeRefreshLayout.setRefreshing(false);
             }
@@ -185,128 +162,7 @@ public class Page_category_weather extends Fragment {
         return view;
     }
 
-    public class networkTask extends AsyncTask<String, Void, List<ClothesVO>> {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-//            startTime = Util.getCurrentTime();
-        }
-
-        @Override
-        protected List<ClothesVO> doInBackground(String... params) {
-            String userID = MySharedPreferences.getInstanceOf(getContext()).getUserID();
-            HashMap map = new HashMap();
-            Log.e("message",recommendedDCate.toString());
-            for(String str : recommendedDCate){
-                Log.e("message",str);
-            }
-
-//            String encodeResult=null;
-//            try {
-//                encodeResult = URLEncoder.encode(dCateString, "UTF-8");
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
-//            }
-
-            //Log.e("message",encodeResult);
-
-            switch(identifier){
-                case "share" : //모든 옷 조회
-                    //cloListCall = ClothesService.getRetrofit(getActivity()).searchClothesByList(
-                    //        clothesFilter, userID, params[0], pagesize,"detailCategory",encodeResult);
-                    break;
-                case "상의" : //카테고리 top 조회
-                case "하의" : //카테고리 bottom 조회
-                case "한벌옷" : //카테고리 suit 조회
-                case "외투" : //카테고리 outer 조회
-                case "신발" : //카테고리 shoes 조회
-                case "가방" : //카테고리 bag 조회
-                case "액세서리" : //카테고리 accessory 조회
-                    map.put("kind",identifier);
-                    map.put("location","private");
-                    map.put("list",recommendedDCate);
-                    cloListCall = ClothesService.getRetrofit(getActivity()).searchClothesByList(
-                            map, userID, params[0], pagesize,"detailCategory");
-                    break;
-                case "favorite" : //즐겨찾기 여부가 "yes"인 옷 가져오기
-                    //clothesFilter.setFavorite("yes");
-                    cloListCall = ClothesService.getRetrofit(getActivity()).searchClothesByList(
-                            map, userID, params[0], pagesize,"detailCategory");
-                    break;
-            }
-            //인자 param[0]은 page.
-
-            try {
-
-                return cloListCall.execute().body();
-
-                // Do something with the response.
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(List<ClothesVO> clolist) {
-            super.onPostExecute(clolist);
-            if(clolist!=null) {
-                for(ClothesVO e:clolist) {
-                    //옷 데이터를 받아온 후 이미지 url 리스트를 갱신
-                    clothesList.add(e);
-                    Log.e("item", e.getFilePath());
-                    clothesListAdapter.notifyDataSetChanged();
-                }
-                if(is_first && clothesList.size()!=0){
-                    String randomPath = clothesList.get(new Random().nextInt(clothesList.size())).getFilePath();
-                    activity_weatherCodi activity = (activity_weatherCodi)getActivity();
-                    switch(identifier){
-                        case "상의" : //카테고리 top 조회
-                            Glide.with(getContext()).load(Global.baseURL+randomPath).into(activity.ivTop);
-                            activity.tvTop.setVisibility(View.GONE);
-                            activity.is_selected_once[activity_weatherCodi.Category.TOP]=true;
-                            break;
-                        case "하의" : //카테고리 bottom 조회
-                            Glide.with(getContext()).load(Global.baseURL+randomPath).into(activity.ivBottom);
-                            activity.tvBottom.setVisibility(View.GONE);
-                            activity.is_selected_once[activity_weatherCodi.Category.BOTTOM]=true;
-                            break;
-                        case "한벌옷" : //카테고리 suit 조회
-                            Glide.with(getContext()).load(Global.baseURL+randomPath).into(activity.ivSuit);
-                            activity.tvSuit.setVisibility(View.GONE);
-                            activity.is_selected_once[activity_weatherCodi.Category.SUIT]=true;
-                            activity.is_checked_suit=true;
-                            break;
-                        case "외투" : //카테고리 outer 조회
-                            Glide.with(getContext()).load(Global.baseURL+randomPath).into(activity.ivOuter);
-                            activity.tvOuter.setVisibility(View.GONE);
-                            activity.is_selected_once[activity_weatherCodi.Category.OUTER]=true;
-                            break;
-                        case "신발" : //카테고리 shoes 조회
-                            Glide.with(getContext()).load(Global.baseURL+randomPath).into(activity.ivShoes);
-                            activity.tvShoes.setVisibility(View.GONE);
-                            activity.is_selected_once[activity_weatherCodi.Category.SHOES]=true;
-                            break;
-                        case "가방" : //카테고리 bag 조회
-                            Glide.with(getContext()).load(Global.baseURL+randomPath).into(activity.ivBag);
-                            activity.tvBag.setVisibility(View.GONE);
-                            activity.is_selected_once[activity_weatherCodi.Category.BAG]=true;
-                            break;
-                        case "액세서리" : //카테고리 accessory 조회
-                            Glide.with(getContext()).load(Global.baseURL+randomPath).into(activity.ivAccessory4);
-                            activity.tvAccessory4.setVisibility(View.GONE);
-                            activity.is_selected_once[activity_weatherCodi.Category.ACCESSORY4]=true;
-                            break;
-
-                }
-                is_first=false;
-            }
-
-
-        }
-    }
-    }
 
     //프래그먼트 갱신
     private void refresh(){

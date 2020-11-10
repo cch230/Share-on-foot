@@ -1,34 +1,6 @@
 package com.example.shareonfoot.social.space;
 
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.shareonfoot.Global;
-import com.example.shareonfoot.HTTP.Service.SocialService;
-import com.example.shareonfoot.HTTP.Session.preference.MySharedPreferences;
-import com.example.shareonfoot.HTTP.VO.FeedVO;
-import com.example.shareonfoot.R;
-import com.example.shareonfoot.social.fragment_social;
-import com.example.shareonfoot.social.subfragment.FeedRecyclerAdapter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
 
 /* 그리드 사이즈 조절 방법 :
 어댑터 변경, 그리드 사이즈 변경, 페이지사이즈 변경

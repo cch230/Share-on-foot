@@ -49,12 +49,7 @@
             app:scale_width="150"
             app:scale_height="120">
 
-<!--        <ImageView-->
-<!--            android:id="@+id/reset"-->
-<!--            android:layout_width="27dp"-->
-<!--            android:layout_height="27dp"-->
-<!--            android:layout_centerInParent="true"-->
-<!--            android:src="@drawable/ok2" />-->
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -83,7 +78,7 @@
                 android:src="@drawable/ok2" />
         </RelativeLayout>
     </com.ssomai.android.scalablelayout.ScalableLayout>
-    <ScrollView
+  <!--  <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -813,7 +808,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </ScrollView>-->
 
 
     <SlidingDrawer
@@ -856,7 +851,7 @@
                 android:gravity="center_vertical"
                 android:clickable="true"
                 >
-                <TextView
+              <!--  <TextView
                     android:layout_margin="12dp"
                     android:layout_marginLeft="8dp"
                     android:text="옷 추가"
@@ -866,7 +861,7 @@
 
 
 
-                    />
+                    />-->
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -876,20 +871,8 @@
                 android:background="#bbbbbb"
                 >
 
-                <!--                <TextView-->
-                <!--                    android:id="@+id/tv_add_image"-->
-                <!--                    android:text="새로운 옷 올리기"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="56dp"-->
-                <!--                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
-                <!--                    android:textColor="#000000"-->
-                <!--                    android:gravity="center"-->
-                <!--                    android:background="#ffffff"-->
-                <!--                    android:minHeight="?android:attr/listPreferredItemHeightSmall"-->
 
-                <!--                    />-->
-
-                <TextView
+           <!--     <TextView
                     android:id="@+id/tv_from_closet"
                     android:layout_marginTop="0.01dp"
                     android:text="옷장에서 가져오기"
@@ -900,7 +883,7 @@
                     android:gravity="center"
                     android:background="#ffffff"
                     android:minHeight="?android:attr/listPreferredItemHeightSmall"
-                    />
+                    />-->
                 <TextView
                     android:id="@+id/tv_cancel"
                     android:layout_marginTop="0.01dp"

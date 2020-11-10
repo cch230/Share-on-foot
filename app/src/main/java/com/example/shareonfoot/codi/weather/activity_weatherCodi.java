@@ -13,7 +13,6 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -26,18 +25,11 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.shareonfoot.Global;
-import com.example.shareonfoot.HTTP.Service.CodiService;
-import com.example.shareonfoot.HTTP.Service.SocialService;
-import com.example.shareonfoot.HTTP.Session.preference.MySharedPreferences;
-import com.example.shareonfoot.HTTP.VO.HeartVO;
-import com.example.shareonfoot.HTTP.weather.vo.ApiInterface;
-import com.example.shareonfoot.HTTP.weather.vo.Repo;
+
 import com.example.shareonfoot.R;
-import com.example.shareonfoot.social.detailFeed.activity_thisFeed;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -54,8 +46,6 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -158,13 +148,7 @@ public class activity_weatherCodi extends AppCompatActivity implements Page_cate
         else{
             String address = getAddress(getBaseContext(), latitude, longitude);//나라 도 시 구 동 번지
 
-            try {
-                temper = new weatherTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, latitude,longitude).get();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
 
 
             //getWeather(latitude, longitude); //변수 temper에 온도(섭씨) 저장
@@ -438,13 +422,7 @@ public class activity_weatherCodi extends AppCompatActivity implements Page_cate
             e.printStackTrace();
         }
 
-        try {
-            res = new UploadTask().execute().get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
 
         Intent intent = new Intent();
         try {
@@ -504,46 +482,7 @@ public class activity_weatherCodi extends AppCompatActivity implements Page_cate
         }
     }
 
-    public class UploadTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
 
-        @Override
-        protected String doInBackground(String... params) {
-            OkHttpClient client = new OkHttpClient();
-
-            RequestBody requestBody;
-            MultipartBody.Part body;
-            File file = new File(path);
-            LinkedHashMap<String, RequestBody> mapRequestBody = new LinkedHashMap<String, RequestBody>();
-            List<MultipartBody.Part> arrBody = new ArrayList<>();
-
-
-            requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            mapRequestBody.put("userID", RequestBody.create(MediaType.parse("text/plain"), MySharedPreferences.getInstanceOf(getApplicationContext()).getUserID()));
-            mapRequestBody.put("file\"; filename=\"" + file.getName(), requestBody);
-            mapRequestBody.put("closetName", RequestBody.create(MediaType.parse("text/plain"), "default"));
-            body = MultipartBody.Part.createFormData("fileName", file.getName(), requestBody);
-            arrBody.add(body);
-
-
-            Call<String> stringCall = CodiService.getRetrofit(getApplicationContext()).addCodi(mapRequestBody, arrBody);
-            try {
-                return stringCall.execute().body(); //웹서버에 이미지 보내고 응답 받기
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
-    }
 
     //뒤로 가기 버튼이 눌렸을 경우 드로워(메뉴)를 닫는다.
     @Override
@@ -615,39 +554,7 @@ public class activity_weatherCodi extends AppCompatActivity implements Page_cate
 
 
 
-    public class weatherTask extends AsyncTask<Double, Void, Double> {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-//            startTime = Util.getCurrentTime();
-        }
-
-
-        @Override
-        protected Double doInBackground(Double... params)  {
-
-            Retrofit client = new Retrofit.Builder().baseUrl("http://api.openweathermap.org").addConverterFactory(GsonConverterFactory.create()).build();
-            ApiInterface service = client.create(ApiInterface.class);
-            Call<Repo> call = service.repo(API_KEY, params[0], params[1]); //lat,lon
-            Repo repo = null;
-            try {
-                repo = call.execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(activity_weatherCodi.this, "날씨 정보 받아오기 실패", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-            double temper = repo.getMain().getTemp()- 273.15;
-            return temper;
-
-        }
-
-        @Override
-        protected void onPostExecute(Double res) {
-            super.onPostExecute(res);
-        }
-    }
 
 
 }

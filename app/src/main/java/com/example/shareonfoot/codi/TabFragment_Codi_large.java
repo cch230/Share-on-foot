@@ -1,9 +1,7 @@
 package com.example.shareonfoot.codi;
 
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +13,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.shareonfoot.Global;
-import com.example.shareonfoot.HTTP.Service.CodiService;
-import com.example.shareonfoot.HTTP.Session.preference.MySharedPreferences;
-import com.example.shareonfoot.HTTP.VO.CodiVO;
 import com.example.shareonfoot.R;
-import com.example.shareonfoot.codi.addCodi.Page_category;
-import com.example.shareonfoot.util.ClothesListAdapter_large;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
 
 /* 그리드 사이즈 조절 방법 :
 어댑터 변경, 그리드 사이즈 변경, 페이지사이즈 변경
@@ -41,11 +29,8 @@ public class TabFragment_Codi_large extends Fragment {
     int page=0;
     RecyclerView rv_clothes;
     ArrayList<String> ImageUrlList = new ArrayList<String>();
-    ArrayList<CodiVO> codiVOList = new ArrayList<CodiVO>();
     //리사이클러뷰 어댑터 초기화
-    ClothesListAdapter_large clothesListAdapter = new ClothesListAdapter_large(getActivity(),codiVOList, R.layout.fragment_recyclerview);
 
-    Call<List<CodiVO>> codiListCall; //코디 VO 리스트를 응답으로 받는 http 요청
 
     public static TabFragment_Codi_large newInstance(String identifier) {
 
@@ -74,14 +59,12 @@ public class TabFragment_Codi_large extends Fragment {
         }
 
 
-        //현재 페이지수와 함께 웹서버에 옷 데이터 요청
-        new networkTask().execute(Integer.toString(page));
+
 
         //리사이클러 뷰 설정하기
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
         rv_clothes = (RecyclerView) view.findViewById(R.id.tab_clothes_rv);
         rv_clothes.setLayoutManager(new GridLayoutManager(getContext(), 2)); //그리드 사이즈 설정
-        rv_clothes.setAdapter(clothesListAdapter);
         rv_clothes.setNestedScrollingEnabled(true);
         rv_clothes.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
@@ -92,11 +75,7 @@ public class TabFragment_Codi_large extends Fragment {
                     //new networkTask().execute(Integer.toString(page));
                     //Log.e("test","데이터 갱신");
                 }
-                else if (!rv_clothes.canScrollVertically(1)) {
-                    //스크롤이 최하단이면 웹서버에 다음 페이지 옷 데이터 요청
-                    new networkTask().execute(Integer.toString(++page));
-                    Log.e("test","페이지 수 증가");
-                }
+
                 else {
                 }
             }
@@ -106,13 +85,7 @@ public class TabFragment_Codi_large extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //스크롤이 최상단이면 데이터를 갱신한다
-                codiVOList.clear();
-                page=0;
-                new networkTask().execute(Integer.toString(page));
-                clothesListAdapter.notifyDataSetChanged();
-                Log.e("test","데이터 갱신");
-                mSwipeRefreshLayout.setRefreshing(false);
+
             }
         });
 
@@ -120,74 +93,6 @@ public class TabFragment_Codi_large extends Fragment {
         return view;
     }
 
-    public class networkTask extends AsyncTask<String, Void, List<CodiVO>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-//            startTime = Util.getCurrentTime();
-        }
-
-        @Override
-        protected List<CodiVO> doInBackground(String... params) {
-
-
-            String userID = MySharedPreferences.getInstanceOf(getContext()).getUserID();
-            CodiVO codiFilter = new CodiVO();
-
-            switch (identifier){
-                case "share" : //모든 코디 조회
-                    codiListCall = CodiService.getRetrofit(getActivity()).myAllCodi(userID,params[0], "7");
-                    break;
-//                case "봄" : //봄 코디 조회
-//                case "여름" : //여름 코디 조회
-//                case "가을" : //가을 코디 조회
-//                case "겨울" : //겨울 코디 조회
-//                    codiFilter.setSeason(identifier);
-//                    codiListCall = CodiService.getRetrofit(getActivity()).searchCodi(codiFilter,userID,params[0], "7");
-//                    break;
-                case "캐주얼" : //캐주얼 코디 조회
-                case "세미포멀" : //세미포멀 코디 조회
-                case "포멀" : //포멀 코디 조회
-                case "특수" : //특수 코디 조회
-                    codiFilter.setPlace(identifier);
-                    codiListCall = CodiService.getRetrofit(getActivity()).searchCodi(codiFilter,userID,params[0], "7");
-                    break;
-                case "favorite" : //즐겨찾기한 코디 조회
-                    codiFilter.setFavorite("yes");
-                    codiListCall = CodiService.getRetrofit(getActivity()).searchCodi(codiFilter,userID,params[0], "7");
-            }
-
-
-
-
-            //페이지 사이즈 설정
-            //인자 page, pageSize
-            //pageSize는 최소 21?이어야 함. (화면 갱신되려면)
-            try {
-                return codiListCall.execute().body();
-
-                // Do something with the response.
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(List<CodiVO> codiList) {
-            super.onPostExecute(codiList);
-            if(codiList!=null) {
-                for(CodiVO e: codiList) {
-                    //옷 데이터를 받아온 후 이미지 url 리스트를 갱신
-                    ImageUrlList.add(new String(Global.baseURL+e.getFilePath()));
-                    codiVOList.add(e);
-                    Log.e("item", e.getFilePath());
-                }
-                clothesListAdapter.notifyDataSetChanged();
-            }
-        }
-    }
 
     //프래그먼트 갱신
     private void refresh(){

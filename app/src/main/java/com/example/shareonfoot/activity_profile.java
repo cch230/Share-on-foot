@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.shareonfoot.HTTP.Session.preference.MySharedPreferences;
-
 public class activity_profile extends AppCompatActivity {
 
     @Override
@@ -22,8 +20,7 @@ public class activity_profile extends AppCompatActivity {
         bt_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MySharedPreferences pref = MySharedPreferences.getInstanceOf(getApplicationContext());
-                pref.setUserID("");
+
                 startActivity(new Intent(activity_profile.this,activity_login.class));
                 ActivityCompat.finishAffinity(activity_profile.this);
             }

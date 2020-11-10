@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,11 +31,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.shareonfoot.HTTP.Service.ClothesService;
-import com.example.shareonfoot.HTTP.VO.ClothesVO;
+
 import com.example.shareonfoot.R;
-import com.example.shareonfoot.codi.addCodi.activity_addCodi;
-import com.example.shareonfoot.codi.recoCodi.activity_recoCodi_setting;
 import com.example.shareonfoot.codi.weather.PermissionActivity;
 import com.example.shareonfoot.codi.weather.activity_weatherCodi;
 import com.example.shareonfoot.home.activity_home;
@@ -149,7 +145,6 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
         tv_detailcategory = (TextView) getView().findViewById(R.id.tv_info_detailcategory);
         tv_season = (TextView) getView().findViewById(R.id.tv_info_season);
         tv_brand = (TextView) getView().findViewById(R.id.tv_info_brand);
-        tv_size = (TextView) getView().findViewById(R.id.tv_info_size);
         tv_date = (TextView) getView().findViewById(R.id.tv_info_date);
 
         iv_heart = (ImageView) getView().findViewById(R.id.iv_heart);
@@ -462,51 +457,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
     }
 
 
-    public class FavoriteTask extends AsyncTask<ClothesVO, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        @Override
-        protected String doInBackground(ClothesVO... ClothesFilter) {
 
-            Call<String> stringCall = ClothesService.getRetrofit(getContext()).modifyClothes(ClothesFilter[0]);
-            try {
-                return stringCall.execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-        }
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
-    }
-
-    public class DeleteTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        @Override
-        protected String doInBackground(String... cloNo) {
-
-            Call<String> stringCall = ClothesService.getRetrofit(getContext()).deleteClothes(cloNo[0]);
-            try {
-                return stringCall.execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-        }
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
-    }
 
 
     //클릭 리스너
@@ -517,82 +468,6 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
         public void onClick(View view) {
 
             Intent intent;
-            switch (view.getId()) {
-                //case R.id.fab_add_photo : //헤더- 추가 버튼
-                    // 사진으로 코디 추가
-                    //break;
-                case R.id.fab_make_codi:
-                    intent = new Intent(getContext(), activity_addCodi.class);
-                    startActivityForResult(intent, MAKE_CODI);
-                    break;
-                case R.id.fab_recommend_codi:
-                    intent = new Intent(getContext(), activity_recoCodi_setting.class);
-                    startActivityForResult(intent, RECO_CODI);
-                    break;
-                case R.id.iv_heart : //즐겨찾기
-                    //필터가 될 vo 설정
-                    ClothesVO clothesFilter = new ClothesVO();
-                    clothesFilter.setCloNo(Integer.parseInt(tv_cloNo.getText().toString()));
-                    boolean reverted_favorite;
-                    //즐겨찾기 여부 불러와서 반대값으로 설정
-                    if("yes".equals(tv_cloFavorite.getText().toString())){
-                        clothesFilter.setFavorite("no");
-                        reverted_favorite = false;
-                    }
-                    else{
-                        clothesFilter.setFavorite("yes");
-                        reverted_favorite = true;
-                    }
-
-                    try {
-                        res = new FavoriteTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, clothesFilter).get();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Log.e("tag",res);
-                    if("ok".equals(res)){
-                        if(reverted_favorite){
-                            Toast.makeText(getContext(), "즐겨찾기를 등록했습니다.", Toast.LENGTH_SHORT).show();
-                            iv_heart.setImageResource(R.drawable.star_color);
-                            tv_cloFavorite.setText("yes");
-                        }else{
-                            Toast.makeText(getContext(), "즐겨찾기를 해제했습니다.", Toast.LENGTH_SHORT).show();
-                            iv_heart.setImageResource(R.drawable.star_empty);
-                            tv_cloFavorite.setText("no");
-                        }
-                        ((activity_home)activity).notify_home_changed();
-                    }
-                    else
-                        Toast.makeText(getContext(), "즐겨찾기 실패", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.iv_modify : //수정 버튼
-                    //Cloth_Info.setVisibility(View.GONE);
-                    Cloth_Info_edit.setVisibility(View.VISIBLE);
-                    tv_edit_date.setText(tv_date.getText());
-                    break;
-                case R.id.iv_delete : //삭제 버튼
-                    //확인 Alert 다이얼로그
-                    try {
-                        res = new DeleteTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tv_cloNo.getText().toString()).get();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    if("ok".equals(res)){
-                        Toast.makeText(getContext(), "옷을 삭제했습니다.", Toast.LENGTH_SHORT).show();
-                        Cloth_Info.setVisibility(View.GONE);
-                        //pagerAdapter.notifyDataSetChanged();
-                        ((activity_home)activity).refresh_clothes(fragment_codi.this);
-
-                    }else{
-                        Toast.makeText(getContext(), "삭제 실패", Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-            }
         }
     }
 
@@ -608,29 +483,4 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
     }
 
     //커스텀 함수
-    public void setInfo(ClothesVO cloInfo){
-
-        /*Cloth_Info.setVisibility(View.VISIBLE);
-        String ImageUrl = Global.baseURL+cloInfo.getFilePath();
-
-        Glide.with((iv_image).getContext()).load(ImageUrl).into(iv_image);
-        Glide.with((iv_edit_image).getContext()).load(ImageUrl).into(iv_edit_image);
-        tv_name.setText(cloInfo.getName());
-        tv_category.setText(cloInfo.getClosetName());
-        tv_detailcategory.setText(cloInfo.getCategory());
-        tv_season.setText(cloInfo.getSeason());
-        tv_brand.setText(cloInfo.getBrand());
-        tv_size.setText(cloInfo.getCloSize());
-        tv_date.setText(cloInfo.getDate());
-        tv_cloNo.setText(Integer.toString(cloInfo.getNo()));
-
-        if("yes".equals(cloInfo.getLike())){
-            iv_heart.setImageResource(R.drawable.heart_color);
-            tv_cloFavorite.setText("yes");
-        }
-        else{
-            iv_heart.setImageResource(R.drawable.heart_empty);
-            tv_cloFavorite.setText("no");
-        }*/
-    }
 }

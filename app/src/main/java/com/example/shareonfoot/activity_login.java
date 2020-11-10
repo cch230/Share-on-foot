@@ -2,6 +2,7 @@ package com.example.shareonfoot;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -17,10 +18,6 @@ import java.io.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.shareonfoot.HTTP.Service.UserService;
-import com.example.shareonfoot.HTTP.Session.preference.CookieSharedPreferences;
-import com.example.shareonfoot.HTTP.Session.preference.MySharedPreferences;
-import com.example.shareonfoot.HTTP.VO.UserVO;
 import com.example.shareonfoot.home.activity_home;
 import com.example.shareonfoot.signup.activity_signup;
 
@@ -57,29 +54,7 @@ public class activity_login extends AppCompatActivity {
     }
 
 
-    public class LoginTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        @Override
-        protected String doInBackground(String... params) {
 
-            UserVO userVO = new UserVO(params[0], params[1]);//id, pwd
-            Call<String> stringCall = UserService.getRetrofit(getApplicationContext()).login(userVO);
-            try {
-                return stringCall.execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
-    }
 
 
     class BtnOnClickListener implements Button.OnClickListener {
@@ -90,31 +65,21 @@ public class activity_login extends AppCompatActivity {
                 case R.id.bt_login: // 로그인 버튼 눌렀을 경우
                     String loginid = userId.getText().toString();
                     String loginpwd = userPwd.getText().toString();
-
-                    finish();
-                    try {
-                        String result = new LoginTask().execute(loginid, loginpwd, "login").get();
-                        if (result.contains("true")) {
-                            Toast.makeText(activity_login.this, "로그인", Toast.LENGTH_SHORT).show();
-                            MySharedPreferences pref = MySharedPreferences.getInstanceOf(getApplicationContext());
-                            pref.setUserID(loginid);
-                            Intent intent = new Intent(activity_login.this, activity_home.class);
-                            startActivity(intent);
-                            finish();
-                        } else if (result.contains("false")) {
-                            Toast.makeText(activity_login.this, "아이디 또는 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show();
-                            userId.setText("");
-                            userPwd.setText("");
-                        } else if (result.contains("email")) {
-                            Toast.makeText(activity_login.this, "잘못된 이메일 형식입니다.", Toast.LENGTH_SHORT).show();
-                            userId.setText("");
-                            userPwd.setText("");
-                        }
-                    } catch (Exception ignored) {
+                    SharedPreferences sharedPreferences=getSharedPreferences("pref",0);
+                    String text = sharedPreferences.getString("userID","");
+                    if(text.equals("")){
+                        Toast.makeText(activity_login.this,"회원정보가 없습니다.",Toast.LENGTH_SHORT).show();
+                    }else if(!text.equals(loginid)){
+                        Toast.makeText(activity_login.this,"로그인 정보가 틀립니다.",Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Intent intent = new Intent(activity_login.this, activity_home.class);
+                        startActivity(intent);
+                        finish();
                     }
                     break;
                 case R.id.bt_signup: // 회원가입
-                     Intent intent = new Intent(getApplicationContext(), activity_signup.class);
+                    Intent intent = new Intent(activity_login.this, activity_signup.class);
                     startActivity(intent);
                     break;
             }

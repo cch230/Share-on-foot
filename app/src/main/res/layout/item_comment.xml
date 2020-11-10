@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_comment"
-                android:text="코디 정말 잘하셨네요!"/>
+                android:text="너무 맛있어보여요ㅠㅠ"/>
 
         </LinearLayout>
 

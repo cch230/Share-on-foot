@@ -125,7 +125,7 @@
                     <TextView
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="계절" />
+                        android:text="분위기" />
 
                     <TextView
                         android:id="@+id/tv_edit_season"
@@ -144,7 +144,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="가격" />
+                        android:text="영업시간" />
 
                     <EditText
                         android:id="@+id/tv_edit_brand"
@@ -167,7 +167,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="사이즈" />
+                        android:text="위치" />
 
                     <EditText
                         android:id="@+id/tv_edit_size"
@@ -177,40 +177,6 @@
                         android:inputType="text"
                         android:text=""
                         android:textSize="13dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="15dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:text="구입 날짜" />
-
-                    <TextView
-                        android:id="@+id/tv_edit_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="선택" />
-
-                    <TextView
-                        android:id="@+id/tv_clothes_no"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:visibility="invisible" />
-
-                    <TextView
-                        android:id="@+id/tv_clothes_favorite"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:visibility="invisible" />
                 </LinearLayout>
 
             </LinearLayout>
