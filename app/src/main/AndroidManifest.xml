@@ -39,5 +39,4 @@
         <activity android:name=".home.activity_home" />
         <activity android:name=".social.space.activity_space" />
     </application>
-
 </manifest>
