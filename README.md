@@ -18,9 +18,12 @@
 # 개발환경 (Development environment)
 환경|버전
 ---|---|
-Eclipse IDE for EE Developers|20-03|
-oracle JDK|11.0.4|
+Eclipse IDE for EE Developers |20-03|
+Adroid Studio |4.1.0|
+compileSdkVersion |28|
+buildToolsVersion|28.0.3|
+oracle JDK |11.0.4|
 Spring Tool Suite |4.8.0|
 MySQL Workbench |8.0 CE|
-AWS-EC2| |
-Aws RDS-MY SQL|8.0.15|
+AWS-EC2 | |
+Aws RDS-MY SQL |8.0.15|
