@@ -148,6 +148,7 @@ public class fragment_closet extends Fragment implements OnBackPressedListener {
         tv_edit_category = (TextView) viewGroup.findViewById(R.id.tv_edit_catergory);
         tv_edit_season = (TextView) viewGroup.findViewById(R.id.tv_edit_season);
         tv_edit_date = (TextView) viewGroup.findViewById(R.id.tv_edit_date);
+/*
         tv_edit_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,6 +163,7 @@ public class fragment_closet extends Fragment implements OnBackPressedListener {
                 dialog.show();
             }
         });
+*/
 
         BtnOnClickListener onClickListener = new BtnOnClickListener();
         //iv_heart.setOnClickListener(onClickListener);
