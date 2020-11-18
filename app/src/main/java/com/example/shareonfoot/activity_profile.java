@@ -14,7 +14,6 @@ public class activity_profile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_profile);
-
         Button bt_logout = findViewById(R.id.bt_logout);
         bt_logout.setOnClickListener(new View.OnClickListener() {
             @Override
