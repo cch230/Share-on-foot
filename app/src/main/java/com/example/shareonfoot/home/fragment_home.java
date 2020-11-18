@@ -51,9 +51,7 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
     private TabLayout tabLayout_favorite;
     public TabPagerAdapter_home pagerAdapter_favorite;
     private ViewPager finalPager_favorite;
-
     DrawerLayout drawer;
-
     LinearLayout ll_detail;
     public RelativeLayout Cloth_Info;
     public RelativeLayout Cloth_Info_edit;
