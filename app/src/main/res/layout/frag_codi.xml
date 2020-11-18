@@ -166,32 +166,32 @@
             android:id="@+id/fab_add_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_add_photo"
+            android:src="@drawable/icon_reco"
             app:fab_colorNormal="#000000"
             app:fab_colorPressed="#F2AB00"
             app:fab_colorRipple="#99FFFFFF"
-            fab:fab_label="사진 올리기"
+            fab:fab_label="내 포인트 확인"
             fab:fab_size="normal" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_make_codi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_make"
+            android:src="@drawable/icon_footer_store"
             app:fab_colorNormal="#000000"
             app:fab_colorPressed="#F2AB00"
             app:fab_colorRipple="#99FFFFFF"
-            fab:fab_label="코디 직접 만들기"
+            fab:fab_label="쿠폰 교환"
             fab:fab_size="normal" />
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_recommend_codi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_reco"
+            android:src="@drawable/icon_recommend"
             app:fab_colorNormal="#000000"
             app:fab_colorPressed="#F2AB00"
             app:fab_colorRipple="#99FFFFFF"
-            fab:fab_label="코디 추천받기"
+            fab:fab_label="기부현황 확인"
             fab:fab_size="normal"
             />
 
