@@ -50,12 +50,7 @@ public class NumFormat {
         return msg;
     }
 
-
-
-
-
-
-
+    
     private static class NUM_UNIT{
         public static final double K = 1000.0;
         public static final double K10 = 10000.0;
