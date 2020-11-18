@@ -29,12 +29,8 @@ public class fragment_social extends Fragment implements OnBackPressedListener {
     ViewGroup viewGroup;
     Toast toast;
     long backKeyPressedTime;
-
     int ADD_BOARD = 8080;
-
-
     Activity activity;
-
     private TabLayout tabLayout;
     private ViewPager finalPager;
 

@@ -25,11 +25,8 @@ public class activity_home extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     Fragment f_closet, f_codi, f_home, f_share, f_my;
-
     OnBackPressedListener listener;
-
     int ADD_CLOTHES = 11;
-
     public boolean is_home_changed=false;
 
     @Override
