@@ -37,7 +37,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'petrov.kristiyan:colorpicker-library:1.1.10'
 
-
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
     implementation 'com.ssomai:android.scalablelayout:2.1.6'
     implementation 'com.android.support:design:29.1.0'
