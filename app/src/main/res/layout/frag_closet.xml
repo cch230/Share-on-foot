@@ -166,11 +166,11 @@
             android:id="@+id/fab_add_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_add_photo"
+            android:src="@drawable/icon_footer_map"
             app:fab_colorNormal="#000000"
             app:fab_colorPressed="#F2AB00"
             app:fab_colorRipple="#99FFFFFF"
-            fab:fab_label="사진 올리기"
+            fab:fab_label="거리순 보기"
             fab:fab_size="normal" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -181,7 +181,7 @@
             app:fab_colorNormal="#000000"
             app:fab_colorPressed="#F2AB00"
             app:fab_colorRipple="#99FFFFFF"
-            fab:fab_label="기본템 가져오기"
+            fab:fab_label="리뷰순 보기"
             fab:fab_size="normal" />
 
 
