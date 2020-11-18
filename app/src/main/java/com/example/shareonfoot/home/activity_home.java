@@ -34,20 +34,16 @@ public class activity_home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_home);
 
-
         fragmentManager = getSupportFragmentManager();
         f_home = fragment_home.newInstance();
         fragmentManager.beginTransaction().replace(fragment_place, f_home,"home").commit();
-
-
 
         //옷장 아이콘 클릭
         ScalableLayout MyCloset = (ScalableLayout) findViewById(R.id.icon_footer_Closet);
         MyCloset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
+                
                 if(f_closet == null) {
                     f_closet = fragment_closet.newInstance();
                     fragmentManager.beginTransaction().add(fragment_place, f_closet,"closet").commit();
