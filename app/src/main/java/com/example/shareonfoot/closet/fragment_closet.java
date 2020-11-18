@@ -94,8 +94,7 @@ public class fragment_closet extends Fragment implements OnBackPressedListener {
 
     private FloatingActionMenu fam;
     private FloatingActionButton fabAdd, fabBring;
-
-
+    
     public static fragment_closet newInstance() {
 
         Bundle args = new Bundle();

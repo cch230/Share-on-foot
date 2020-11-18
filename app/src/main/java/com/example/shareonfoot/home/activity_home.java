@@ -43,7 +43,7 @@ public class activity_home extends AppCompatActivity {
         MyCloset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+
                 if(f_closet == null) {
                     f_closet = fragment_closet.newInstance();
                     fragmentManager.beginTransaction().add(fragment_place, f_closet,"closet").commit();
