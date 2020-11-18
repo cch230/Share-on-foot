@@ -3,6 +3,7 @@ package com.example.shareonfoot.home.mySpace;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -87,11 +88,8 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_space, container,false);
         toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
-
-
-
-
-
+        SharedPreferences pref= getContext().getSharedPreferences("pref",0);
+        targetID = pref.getString("userID","");
 
         //프사 설정
         ImageView iv_profileImage = v.findViewById(R.id.iv_profileImage);
@@ -112,7 +110,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
 
         //팔로우 여부 설정
         bt_follow = v.findViewById(R.id.bt_follow);
-        if(myID.equals(targetID)){
+     /*   if(myID.equals(targetID)){
             bt_follow.setVisibility(View.GONE);
             ll_following_friends.setVisibility(View.GONE);
         }
@@ -124,8 +122,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
                 }
             });
             // 내가 팔로우한 사용자 중 현재 페이지 사용자를 팔로우한 사용자가 있는지.
-
-        }
+        }*/
 
 
 
