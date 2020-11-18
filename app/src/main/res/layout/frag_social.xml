@@ -51,6 +51,7 @@
                 </com.google.android.material.appbar.AppBarLayout>
 
                 <androidx.core.widget.NestedScrollView
+                    android:id="@+id/nestedScrollView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -63,15 +64,17 @@
                         <com.google.android.material.tabs.TabLayout
                             android:id="@+id/tabLayout"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
-                        <androidx.viewpager.widget.ViewPager
-                            android:id="@+id/tab_Pager"
-                            android:layout_width="match_parent"
-                            android:layout_height="600dp"
-                            android:layout_below="@+id/tabLayout" />
                     </RelativeLayout>
                 </androidx.core.widget.NestedScrollView>
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/tab_Pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="600dp"
+                    app:layout_anchor="@+id/nestedScrollView"
+                    app:layout_anchorGravity="center" />
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
@@ -88,61 +91,7 @@
 
 
 
-    <com.github.clans.fab.FloatingActionMenu
 
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/fab_menu"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:paddingBottom="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        fab:menu_backgroundColor="#ccffffff"
-
-        fab:menu_colorNormal="#FFB805"
-        fab:menu_colorPressed="#F2AB00"
-        fab:menu_colorRipple="#99FFFFFF"
-        fab:fab_shadowColor="#444"
-        fab:fab_showShadow="true"
-
-        fab:menu_labels_colorNormal="#333333"
-        fab:menu_labels_colorPressed="#444444"
-        fab:menu_labels_colorRipple="#66FFFFFF"
-        fab:menu_labels_showShadow="true"
-        fab:menu_labels_maxLines="-1"
-        fab:menu_labels_position="left"
-        fab:menu_openDirection="up"
-
-        fab:menu_labels_ellipsize="end"
-        fab:menu_labels_singleLine="true"
-
-        >
-
-<!--        <com.github.clans.fab.FloatingActionButton-->
-<!--            android:id="@+id/fab_add_photo"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/icon_add_photo"-->
-<!--            app:fab_colorNormal="#000000"-->
-<!--            app:fab_colorPressed="#F2AB00"-->
-<!--            app:fab_colorRipple="#99FFFFFF"-->
-<!--            fab:fab_label="사진 올리기"-->
-<!--            fab:fab_size="normal" />-->
-
-<!--        <com.github.clans.fab.FloatingActionButton-->
-<!--            android:id="@+id/fab_bring_codibook"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/icon_make"-->
-<!--            app:fab_colorNormal="#000000"-->
-<!--            app:fab_colorPressed="#F2AB00"-->
-<!--            app:fab_colorRipple="#99FFFFFF"-->
-<!--            fab:fab_label="코디북에서 가져오기"-->
-<!--            fab:fab_size="normal" />-->
-
-
-    </com.github.clans.fab.FloatingActionMenu>
 
 
 
