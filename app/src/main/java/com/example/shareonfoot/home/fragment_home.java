@@ -336,8 +336,8 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
         if(tabLayout_favorite == null){
             //탭 목록 설정
             tabLayout_favorite = (TabLayout) getView().findViewById(R.id.favorite_tabLayout);
-            tabLayout_favorite.addTab(tabLayout_favorite.newTab().setText("즐겨찾는 옷"));
-            tabLayout_favorite.addTab(tabLayout_favorite.newTab().setText("즐겨찾는 코디"));
+            tabLayout_favorite.addTab(tabLayout_favorite.newTab().setText("즐겨찾는 상점"));
+            tabLayout_favorite.addTab(tabLayout_favorite.newTab().setText("즐겨찾는 동네"));
             tabLayout_favorite.setTabGravity(TabLayout.GRAVITY_CENTER);
 
             //탭 페이저 설정 (탭 클릭시 바뀌는 화면)
