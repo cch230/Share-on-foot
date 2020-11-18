@@ -12,16 +12,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.os.AsyncTask;
-
-import java.io.*;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.shareonfoot.home.activity_home;
 import com.example.shareonfoot.signup.activity_signup;
-
-import retrofit2.Call;
 
 public class activity_login extends AppCompatActivity {
 

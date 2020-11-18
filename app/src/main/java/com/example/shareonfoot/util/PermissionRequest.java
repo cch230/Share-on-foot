@@ -2,12 +2,10 @@ package com.example.shareonfoot.util;
 
 import android.content.pm.PackageManager;
 import android.os.Build;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
