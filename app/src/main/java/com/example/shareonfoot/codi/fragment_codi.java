@@ -162,12 +162,9 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
         tv_edit_category = (TextView) getView().findViewById(R.id.tv_edit_catergory);
         tv_edit_season = (TextView) getView().findViewById(R.id.tv_edit_season);
         tv_edit_date = (TextView) getView().findViewById(R.id.tv_edit_date);
-        tv_edit_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog dialog = new DatePickerDialog(activity, listener, 2020, 6, 30);
-                dialog.show();
-            }
+        tv_edit_date.setOnClickListener(v -> {
+            DatePickerDialog dialog = new DatePickerDialog(activity, listener, 2020, 6, 30);
+            dialog.show();
         });
 
         BtnOnClickListener onClickListener = new BtnOnClickListener();
@@ -176,129 +173,104 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
         //iv_delete.setOnClickListener(onClickListener);
 
 
-        iv_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(tv_edit_name.getText()!=null)
-                    tv_name.setText(tv_edit_name.getText());
-                if(tv_edit_category.getText()!="카테고리를 선택해주세요.")
-                    tv_category.setText(tv_edit_category.getText());
-                if(tv_edit_detailcategory.getText()!=null)
-                    tv_detailcategory.setText(tv_edit_detailcategory.getText());
-                if(tv_edit_season.getText()!="계절을 선택해주세요.")
-                    tv_season.setText(tv_edit_season.getText());
-                if(tv_edit_brand.getText()!=null)
-                    tv_brand.setText(tv_edit_brand.getText());
-                if(tv_edit_size.getText()!=null)
-                    tv_size.setText(tv_edit_size.getText());
-                if(tv_edit_date.getText()!=null)
-                    tv_date.setText(tv_edit_date.getText());
+        iv_save.setOnClickListener(v -> {
+            if(tv_edit_name.getText()!=null)
+                tv_name.setText(tv_edit_name.getText());
+            if(tv_edit_category.getText()!="카테고리를 선택해주세요.")
+                tv_category.setText(tv_edit_category.getText());
+            if(tv_edit_detailcategory.getText()!=null)
+                tv_detailcategory.setText(tv_edit_detailcategory.getText());
+            if(tv_edit_season.getText()!="계절을 선택해주세요.")
+                tv_season.setText(tv_edit_season.getText());
+            if(tv_edit_brand.getText()!=null)
+                tv_brand.setText(tv_edit_brand.getText());
+            if(tv_edit_size.getText()!=null)
+                tv_size.setText(tv_edit_size.getText());
+            if(tv_edit_date.getText()!=null)
+                tv_date.setText(tv_edit_date.getText());
 
-                Cloth_Info_edit.setVisibility(View.GONE);
-            }
+            Cloth_Info_edit.setVisibility(View.GONE);
         });
         final String[] Season = {""};
-        tv_edit_season.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                final String[] items = getResources().getStringArray(R.array.Season);
-                final ArrayList<String> selectedItem  = new ArrayList<String>();
-                selectedItem.add(items[0]);
+        tv_edit_season.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            final String[] items = getResources().getStringArray(R.array.Season);
+            final ArrayList<String> selectedItem  = new ArrayList<String>();
+            selectedItem.add(items[0]);
 
-                builder.setTitle("카테고리 선택");
+            builder.setTitle("카테고리 선택");
 
-                builder.setSingleChoiceItems(R.array.Season, 0, new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        selectedItem.clear();
-                        selectedItem.add(items[pos]);
-                    }
-                });
+            builder.setSingleChoiceItems(R.array.Season, 0, (dialog, pos) -> {
+                selectedItem.clear();
+                selectedItem.add(items[pos]);
+            });
 
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        Season[0] = selectedItem.get(0);
+            builder.setPositiveButton("OK", (dialog, pos) -> {
+                Season[0] = selectedItem.get(0);
 
-                        switch(Season[0]){
-                            case "봄":
-                                tv_edit_season.setText("봄");
-                                break;
-                            case "여름":
-                                tv_edit_season.setText("여름");
-                                break;
-                            case "가을":
-                                tv_edit_season.setText("가을");
-                                break;
-                            case "겨울":
-                                tv_edit_season.setText("겨울");
-                                break;
-                        }
-                    }
-                });
+                switch(Season[0]){
+                    case "봄":
+                        tv_edit_season.setText("봄");
+                        break;
+                    case "여름":
+                        tv_edit_season.setText("여름");
+                        break;
+                    case "가을":
+                        tv_edit_season.setText("가을");
+                        break;
+                    case "겨울":
+                        tv_edit_season.setText("겨울");
+                        break;
+                }
+            });
 
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         });
         final String[] Category = {""};
-        tv_edit_category.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                final String[] items = getResources().getStringArray(R.array.Kind);
-                final ArrayList<String> selectedItem  = new ArrayList<String>();
-                selectedItem.add(items[0]);
+        tv_edit_category.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            final String[] items = getResources().getStringArray(R.array.Kind);
+            final ArrayList<String> selectedItem  = new ArrayList<String>();
+            selectedItem.add(items[0]);
 
-                builder.setTitle("카테고리 선택");
+            builder.setTitle("카테고리 선택");
 
-                builder.setSingleChoiceItems(R.array.Kind, 0, new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        selectedItem.clear();
-                        selectedItem.add(items[pos]);
-                    }
-                });
+            builder.setSingleChoiceItems(R.array.Kind, 0, (dialog, pos) -> {
+                selectedItem.clear();
+                selectedItem.add(items[pos]);
+            });
 
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        Category[0] = selectedItem.get(0);
+            builder.setPositiveButton("OK", (dialog, pos) -> {
+                Category[0] = selectedItem.get(0);
 
-                        switch(Category[0]){
-                            case "상의":
-                                tv_edit_category.setText("상의");
-                                break;
-                            case "하의":
-                                tv_edit_category.setText("하의");
-                                break;
-                            case "한벌옷":
-                                tv_edit_category.setText("한벌옷");
-                                break;
-                            case "외투":
-                                tv_edit_category.setText("외투");
-                                break;
-                            case "신발":
-                                tv_edit_category.setText("신발");
-                                break;
-                            case "가방":
-                                tv_edit_category.setText("가방");
-                                break;
-                            case "액세서리":
-                                tv_edit_category.setText("액세서리");
-                                break;
-                        }
-                    }
-                });
+                switch(Category[0]){
+                    case "상의":
+                        tv_edit_category.setText("상의");
+                        break;
+                    case "하의":
+                        tv_edit_category.setText("하의");
+                        break;
+                    case "한벌옷":
+                        tv_edit_category.setText("한벌옷");
+                        break;
+                    case "외투":
+                        tv_edit_category.setText("외투");
+                        break;
+                    case "신발":
+                        tv_edit_category.setText("신발");
+                        break;
+                    case "가방":
+                        tv_edit_category.setText("가방");
+                        break;
+                    case "액세서리":
+                        tv_edit_category.setText("액세서리");
+                        break;
+                }
+            });
 
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         });
 
         //NavigationView navigationView = (NavigationView) getView().findViewById(R.id.final_nav_view); //드로워 뷰
