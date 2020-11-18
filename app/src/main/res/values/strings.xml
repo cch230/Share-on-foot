@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name"> 걸어서 나눔나눔</string>
 
+    
     <string-array name="Kind">
         <item>"상의"</item>
         <item>"하의"</item>
