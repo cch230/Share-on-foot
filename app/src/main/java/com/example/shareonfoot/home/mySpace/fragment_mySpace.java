@@ -56,15 +56,13 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
     private TabLayout tabLayout;
     public TabPagerAdapter_mySpace pagerAdapter;
     private ViewPager finalPager;
-
     LinearLayout drawer;
-
+    private TextView tv_nickname;
 
 
 
     String myID;
-    public String targetID;
-
+    public String targetID,targetNAME;
     Button bt_follow;
 
     TextView tv_numFollower;
@@ -90,14 +88,15 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
         SharedPreferences pref= getContext().getSharedPreferences("pref",0);
         targetID = pref.getString("login","");
-
+        targetNAME= pref.getString(targetID+"NAME","");
         //프사 설정
         ImageView iv_profileImage = v.findViewById(R.id.iv_profileImage);
         //아이디 설정
         TextView tv_id = v.findViewById(R.id.tv_id);
         tv_id.setText("@"+targetID);
         //닉네임 설정
-        TextView tv_nickname = v.findViewById(R.id.tv_nickname);
+        tv_nickname = v.findViewById(R.id.tv_nickname);
+        tv_nickname.setText(targetNAME);
         //게시물, 팔로워, 팔로잉 수 설정
         TextView tv_numBoard = v.findViewById(R.id.tv_numBoard);
         tv_numFollower = v.findViewById(R.id.tv_numFollower);

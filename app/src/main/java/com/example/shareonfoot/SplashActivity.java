@@ -15,8 +15,6 @@ public class SplashActivity extends AppCompatActivity {
         SharedPreferences pref= getSharedPreferences("pref",0);
 
         SharedPreferences.Editor editor=pref.edit();
-        editor.putString("login","ccc");
-        editor.commit();
         String login = pref.getString("login","");
 
         if(!login.equals(""))

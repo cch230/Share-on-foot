@@ -142,6 +142,7 @@ public class activity_signup_next extends AppCompatActivity {
                             Intent intent = new Intent(getApplicationContext(), activity_signup_profile_contents.class);
                             intent.putExtra("userID", userID);
                             intent.putExtra("userPW", userPW);
+                            intent.putExtra("nickname", userPW);
                             startActivity(intent);
                             finish();
                         }catch (Exception e) {}

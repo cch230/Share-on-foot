@@ -79,7 +79,7 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/bt_join"
+                android:id="@+id/bt_join1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="0dp"
@@ -91,7 +91,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/bt_join1"
+                android:id="@+id/bt_join2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="다른 위치로 할래요"
