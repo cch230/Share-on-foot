@@ -89,7 +89,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         View v = inflater.inflate(R.layout.activity_space, container,false);
         toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
         SharedPreferences pref= getContext().getSharedPreferences("pref",0);
-        targetID = pref.getString("userID","");
+        targetID = pref.getString("login","");
 
         //프사 설정
         ImageView iv_profileImage = v.findViewById(R.id.iv_profileImage);
@@ -173,7 +173,10 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         bt_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                SharedPreferences sharedPreferences=getContext().getSharedPreferences("pref",0);
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.putString("login","");
+                editor.commit();
                 startActivity(new Intent(getContext(), activity_login.class));
                 ActivityCompat.finishAffinity(getActivity());
             }

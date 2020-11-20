@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.shareonfoot.home.activity_home;
 import com.example.shareonfoot.signup.activity_signup;
+import com.example.shareonfoot.signup.activity_signup_next;
 
 public class activity_login extends AppCompatActivity {
 
@@ -50,7 +51,7 @@ public class activity_login extends AppCompatActivity {
 
 
 
-    class BtnOnClickListener implements Button.OnClickListener {
+    public class BtnOnClickListener implements Button.OnClickListener {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
@@ -59,13 +60,21 @@ public class activity_login extends AppCompatActivity {
                     String loginid = userId.getText().toString();
                     String loginpwd = userPwd.getText().toString();
                     SharedPreferences sharedPreferences=getSharedPreferences("pref",0);
-                    String text = sharedPreferences.getString("userID","");
-                    if(text.equals("")){
-                        Toast.makeText(activity_login.this,"회원정보가 없습니다.",Toast.LENGTH_SHORT).show();
-                    }else if(!text.equals(loginid)){
-                        Toast.makeText(activity_login.this,"로그인 정보가 틀립니다.",Toast.LENGTH_SHORT).show();
+                    if (loginid.length() == 0||loginpwd.length()==0) {
+                        Toast.makeText(activity_login.this, "회원정보를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    }
+                    String userID = sharedPreferences.getString(loginid,"");
+                    String userPW = sharedPreferences.getString(loginid+"PW","");
+                    if(userID.equals("")){
+                        Toast.makeText(activity_login.this,"회원정보가 없어요.",Toast.LENGTH_SHORT).show();
+                    }else if(!userID.equals(loginid)||!userPW.equals(loginpwd)){
+                        Toast.makeText(activity_login.this,"회원정보를 확인해주세요.",Toast.LENGTH_SHORT).show();
                     }
                     else{
+                        SharedPreferences pref= getSharedPreferences("pref",0);
+                        SharedPreferences.Editor editor=pref.edit();
+                        editor.putString("login",loginid);
+                        editor.commit();
                         Intent intent = new Intent(activity_login.this, activity_home.class);
                         startActivity(intent);
                         finish();

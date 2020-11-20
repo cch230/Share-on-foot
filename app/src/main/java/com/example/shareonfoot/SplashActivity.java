@@ -13,12 +13,17 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         SharedPreferences pref= getSharedPreferences("pref",0);
-        String loginecheck = pref.getString("userID","");
 
-        if(!loginecheck.equals(""))
+        SharedPreferences.Editor editor=pref.edit();
+        editor.putString("login","ccc");
+        editor.commit();
+        String login = pref.getString("login","");
+
+        if(!login.equals(""))
             startActivity(new Intent(this, activity_home.class));
         else
             startActivity(new Intent(this,activity_login.class));
         finish();
+
     }
 }

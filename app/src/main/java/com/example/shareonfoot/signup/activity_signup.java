@@ -2,6 +2,7 @@ package com.example.shareonfoot.signup;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -132,7 +133,7 @@ public class activity_signup extends AppCompatActivity {
                     String userID = et_userID.getText().toString();
                     String pwd = et_pwd.getText().toString();
                     String pwdConfirm = et_pwdConfirm.getText().toString();
-
+                    SharedPreferences pref=getSharedPreferences("pref",0);
 
                     //임시
 
@@ -145,7 +146,11 @@ public class activity_signup extends AppCompatActivity {
                         Toast.makeText(activity_signup.this,"필요한 항목이 모두 입력되지 않았습니다.",Toast.LENGTH_SHORT).show();
                     } else if(!pwd.equals(pwdConfirm)){
                         Toast.makeText(activity_signup.this,"비밀번호가 서로 일치하지 않습니다.",Toast.LENGTH_SHORT).show();
-                    } else {
+                    }
+                    else if(userID.equals(pref.getString(userID,""))){
+                        Toast.makeText(activity_signup.this,"사용할 수 없는 아이디 입니다.",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
                         Intent intent = new Intent(getApplicationContext(), activity_signup_next.class);
                         intent.putExtra("userID", userID);
                         intent.putExtra("userPW", pwd);
