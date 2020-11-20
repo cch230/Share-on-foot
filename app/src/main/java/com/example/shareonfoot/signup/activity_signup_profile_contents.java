@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.shareonfoot.R;
 import com.example.shareonfoot.activity_login;
+import com.example.shareonfoot.home.activity_home;
 import com.google.android.material.textfield.TextInputLayout;
 
 
@@ -30,9 +31,12 @@ public class activity_signup_profile_contents extends AppCompatActivity {
     Button joinBtn, joinBtn1;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        joinBtn = (Button) findViewById(R.id.bt_join);
+        joinBtn1 = (Button) findViewById(R.id.bt_join1);
         setContentView(R.layout.layout_signup_profile_contents);
         userID = getIntent().getExtras().getString("userID");
         userPW = getIntent().getExtras().getString("userPW");
+
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,7 +51,7 @@ public class activity_signup_profile_contents extends AppCompatActivity {
                     try {
                         Toast.makeText(activity_signup_profile_contents.this,"회원가입이 완료되었습니다!",Toast.LENGTH_SHORT).show();
                         finishAffinity();
-                        Intent intent = new Intent(getApplicationContext(), activity_login.class); //로그인 자동으로
+                        Intent intent = new Intent(getApplicationContext(), activity_home.class); //로그인 자동으로
                         startActivity(intent);
                         finish();
                     }catch (Exception e) { Log.i("Exception",e.toString());}
@@ -62,17 +66,21 @@ public class activity_signup_profile_contents extends AppCompatActivity {
                     try {
                         Toast.makeText(activity_signup_profile_contents.this,"회원가입이 완료되었습니다!",Toast.LENGTH_SHORT).show();
                         finishAffinity();
-                        Intent intent = new Intent(getApplicationContext(), activity_login.class); //로그인 자동으로
+                        Intent intent = new Intent(getApplicationContext(), activity_home.class); //로그인 자동으로
                         startActivity(intent);
                         finish();
                     }catch (Exception e) {}
                 }
             }
         };
-        joinBtn = (Button) findViewById(R.id.bt_join);
-        joinBtn1 = (Button) findViewById(R.id.bt_join1);
+
 
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        finish();
+    }
 
 }
