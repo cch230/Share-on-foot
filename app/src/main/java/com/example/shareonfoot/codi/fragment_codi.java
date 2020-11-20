@@ -44,7 +44,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import retrofit2.Call;
@@ -347,17 +350,76 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
 
         if(tabLayout == null){
             //탭 목록 설정
-            tabLayout = (TabLayout) getView().findViewById(R.id.tabLayout);
-            tabLayout.addTab(tabLayout.newTab().setText("모두"));
-            tabLayout.addTab(tabLayout.newTab().setText("월요일"));
-            tabLayout.addTab(tabLayout.newTab().setText("화요일"));
-//            tabLayout.addTab(tabLayout.newTab().setText("가을"));
-            tabLayout.addTab(tabLayout.newTab().setText("수요일"));
-            tabLayout.addTab(tabLayout.newTab().setText("목요일"));
-            tabLayout.addTab(tabLayout.newTab().setText("금요일"));
-            tabLayout.addTab(tabLayout.newTab().setText("토요일"));
-            tabLayout.addTab(tabLayout.newTab().setText("일요일"));
+            String weekDay;
 
+            // SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US); // 특정 언어로 출력하고 싶은 경우
+            SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+
+            Calendar calendar = Calendar.getInstance();
+            weekDay = dayFormat.format(calendar.getTime());
+
+            Toast.makeText(getContext(), weekDay, Toast.LENGTH_SHORT ).show();
+
+            tabLayout = (TabLayout) getView().findViewById(R.id.tabLayout);
+            tabLayout.addTab(tabLayout.newTab().setText(weekDay));
+            switch (day_return(weekDay)) {
+                case 1:
+                    tabLayout.addTab(tabLayout.newTab().setText("화요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("수요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("목요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("금요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("토요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("일요일"));
+                    break;
+                case 2:
+                    tabLayout.addTab(tabLayout.newTab().setText("월요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("수요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("목요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("금요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("토요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("일요일"));
+                    break;
+                case 3:
+                    tabLayout.addTab(tabLayout.newTab().setText("월요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("화요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("목요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("금요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("토요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("일요일"));
+                    break;
+                case 4:
+                    tabLayout.addTab(tabLayout.newTab().setText("월요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("화요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("수요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("금요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("토요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("일요일"));
+                    break;
+                case 5:
+                    tabLayout.addTab(tabLayout.newTab().setText("월요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("화요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("수요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("목요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("토요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("일요일"));
+                    break;
+                case 6:
+                    tabLayout.addTab(tabLayout.newTab().setText("월요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("화요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("수요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("목요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("금요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("일요일"));
+                    break;
+                case 7:
+                    tabLayout.addTab(tabLayout.newTab().setText("월요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("화요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("수요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("목요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("금요일"));
+                    tabLayout.addTab(tabLayout.newTab().setText("토요일"));
+                    break;
+            }
             tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
 
             //탭 페이저 설정 (탭 클릭시 바뀌는 화면)
@@ -425,6 +487,16 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
         fam.setClosedOnTouchOutside(true);
         fam.getMenuIconView().setColorFilter(Color.parseColor("#000000"));
 
+    }
+
+    public int day_return(String day){
+        if(day.equals("월요일")) return 1;
+        else if(day.equals("화요일")) return 2;
+        else if(day.equals("수요일")) return 3;
+        else if(day.equals("목요일")) return 4;
+        else if(day.equals("금요일")) return 5;
+        else if(day.equals("토요일")) return 6;
+        else return 7;
     }
 
     private DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
