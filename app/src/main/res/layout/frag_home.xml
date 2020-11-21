@@ -109,16 +109,6 @@
                                 android:layout_height="wrap_content">
                                 <Button
                                     android:layout_marginRight="10dp"
-                                    android:id="@+id/bt_reco_select"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="29dp"
-                                    android:text="음식 조합"
-                                    android:background="@drawable/oval"
-                                    android:visibility="gone"
-                                    >
-                                </Button>
-                                <Button
-                                    android:layout_marginRight="10dp"
                                     android:id="@+id/bt_reco_hot"
                                     android:layout_width="wrap_content"
                                     android:layout_height="29dp"
