@@ -73,15 +73,16 @@
                             >
                             <TextView
                                 android:id="@+id/tabLayout"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="50dp"
                                 android:text="요일"
-                                android:textSize="25sp"
+                                android:textSize="20sp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginLeft="20dp"
+                                android:padding="10dp"
                                 android:textAlignment="center"
-                                android:background="@drawable/oval"
                                 />
-
-                        </HorizontalScrollView>
+                            </HorizontalScrollView>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -98,7 +99,7 @@
                         <com.google.android.gms.maps.MapView
                             xmlns:android="http://schemas.android.com/apk/res/android"
                             android:name="com.google.android.gms.maps.MapFragment"
-                            android:layout_marginTop="1dp"
+                            android:layout_marginTop="10dp"
                             android:layout_width="match_parent"
                             android:layout_height="380dp"
                             android:id="@+id/map"

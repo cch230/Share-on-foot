@@ -2,17 +2,12 @@ package com.example.shareonfoot.codi;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.CycleInterpolator;
@@ -25,7 +20,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -33,8 +27,6 @@ import androidx.viewpager.widget.ViewPager;
 
 
 import com.example.shareonfoot.R;
-import com.example.shareonfoot.codi.weather.PermissionActivity;
-import com.example.shareonfoot.codi.weather.activity_weatherCodi;
 import com.example.shareonfoot.home.activity_home;
 import com.example.shareonfoot.util.OnBackPressedListener;
 import com.github.clans.fab.FloatingActionMenu;
@@ -46,33 +38,31 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
-
-import retrofit2.Call;
 
 import static android.app.Activity.RESULT_OK;
 
-public class fragment_codi extends Fragment implements OnBackPressedListener, OnMapReadyCallback {
+public class fragment_codi extends Fragment implements OnBackPressedListener, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
 
     ViewGroup viewGroup;
     Toast toast;
     long backKeyPressedTime;
+    private GoogleMap mMap;
 
     int MAKE_CODI = 120;
     int WEATHER_CODI = 191;
     int RECO_CODI = 255;
 
     Activity activity;
-
+    private PolylineOptions polylineOptions;
+    private ArrayList<LatLng> arrayPoints;
+    private ArrayList<MarkerOptions> arrayMarkerOptions;
     private ViewPager finalPager;
 
     DrawerLayout drawer;
@@ -103,8 +93,11 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     public TextView tv_edit_brand;
     public TextView weekday;
     private MapView mapView=null;
+    private GpsTracker gpsTracker;
 
-
+    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
+    private static final int PERMISSIONS_REQUEST_CODE = 100;
+    String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     private FloatingActionMenu fam;
     private FloatingActionButton fabMake, fabRecommend;
 
@@ -183,7 +176,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         MapsInitializer.initialize(requireActivity());
         mapView = (MapView)getView().findViewById(R.id.map);
         mapView.getMapAsync(this);
-
+        arrayPoints = new ArrayList<LatLng>();
             //탭 목록 설정
             String weekDay;
 
@@ -223,7 +216,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
                     break;
             }
-            
+
 
 
         //플로팅 액션 버튼 설정
@@ -328,7 +321,21 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     }
 
 
+    @Override
+    public void onMapClick(LatLng latLng) {
+        MarkerOptions markerOptions = new MarkerOptions();
 
+        //add marker
+        markerOptions.position(latLng);
+        mMap.addMarker(markerOptions);
+        polylineOptions = new PolylineOptions();
+        polylineOptions.color(R.color.button2);
+        polylineOptions.width(5);
+        // 맵셋팅
+        arrayPoints.add(latLng);
+        polylineOptions.addAll(arrayPoints);
+        mMap.addPolyline(polylineOptions);
+    }
 
     //클릭 리스너
     class BtnOnClickListener implements Button.OnClickListener {
@@ -350,37 +357,34 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
             ((activity_home)activity).refresh_codi(fragment_codi.this);
         else if(requestCode == RECO_CODI && resultCode == RESULT_OK)
             ((activity_home)activity).refresh_codi(fragment_codi.this);
+
     }
 
     //커스텀 함수
     //커스텀 함수
     @Override
-    public void onMapReady(final GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap map) {
 
-
-
-
+        mMap = map;
 
 
         String coordinates[] = {"37.566", "126.978"};
-
         double lat = Double.parseDouble(coordinates[0]);
-
         double lng = Double.parseDouble(coordinates[1]);
-
-
-
         LatLng position = new LatLng(lat, lng);
-
         GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
 
 
 
         // 맵 위치이동.
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
 
+        mMap.setOnMapClickListener((GoogleMap.OnMapClickListener) this);
 
+        mMap.setOnMapLongClickListener((GoogleMap.OnMapLongClickListener) this);
+
+      //  mMap.setOnInfoWindowClickListener((GoogleMap.OnInfoWindowClickListener) this); //정보창 클릭 리스너(마커 삭제 이벤트)
 
     }
     @Override
@@ -412,4 +416,32 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         super.onDestroy();
         mapView.onLowMemory();
     }
+
+// polyline 생성
+
+    public void drawPolyline(){
+
+        polylineOptions = new PolylineOptions();
+
+        polylineOptions.color(Color.RED);
+
+        polylineOptions.width(5);
+
+        polylineOptions.addAll(arrayPoints);
+
+        mMap.addPolyline(polylineOptions);
+
+    }
+
+    @Override
+
+    public void onMapLongClick(LatLng latLng) {
+
+        mMap.clear();
+        arrayPoints.clear();
+
+
+    }
+
+
 }
