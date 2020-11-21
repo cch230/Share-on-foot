@@ -37,6 +37,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -326,9 +327,10 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
         //add marker
         markerOptions.position(latLng);
+       // markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ok2));
         mMap.addMarker(markerOptions);
         polylineOptions = new PolylineOptions();
-        polylineOptions.color(Color.CYAN);
+        polylineOptions.color(Color.YELLOW);
         polylineOptions.width(8);
         // 맵셋팅
         arrayPoints.add(latLng);
