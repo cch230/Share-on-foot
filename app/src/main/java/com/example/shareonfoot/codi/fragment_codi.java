@@ -93,7 +93,6 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     public TextView tv_edit_brand;
     public TextView weekday;
     private MapView mapView=null;
-    private GpsTracker gpsTracker;
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
@@ -329,8 +328,8 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         markerOptions.position(latLng);
         mMap.addMarker(markerOptions);
         polylineOptions = new PolylineOptions();
-        polylineOptions.color(R.color.button2);
-        polylineOptions.width(5);
+        polylineOptions.color(Color.CYAN);
+        polylineOptions.width(8);
         // 맵셋팅
         arrayPoints.add(latLng);
         polylineOptions.addAll(arrayPoints);
