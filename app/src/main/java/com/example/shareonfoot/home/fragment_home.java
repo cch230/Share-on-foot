@@ -27,10 +27,23 @@ import com.example.shareonfoot.R;
 import com.example.shareonfoot.home.recommend.recommendPagerFragment;
 import com.example.shareonfoot.util.OnBackPressedListener;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.tabs.TabLayout;
+import com.ssomai.android.scalablelayout.ScalableLayout;
+
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import retrofit2.Call;
 
@@ -41,43 +54,16 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
     ViewGroup viewGroup;
     Toast toast;
     long backKeyPressedTime;
-
     int ADD_CLOTHES = 100;
-
     Activity activity;
-
-    private ViewPager finalPager_recommend;
-
     private TabLayout tabLayout_favorite;
     public TabPagerAdapter_home pagerAdapter_favorite;
     private ViewPager finalPager_favorite;
     DrawerLayout drawer;
-    LinearLayout ll_detail;
     public RelativeLayout Cloth_Info;
     public RelativeLayout Cloth_Info_edit;
-    public ImageView iv_image;
-    public ImageView iv_edit_image;
-    public TextView tv_category;
-    public TextView tv_detailcategory;
-    public TextView tv_color;
-    public TextView tv_season;
-    public TextView tv_brand;
-    public TextView tv_size;
-    public TextView tv_buyDate;
-
     public ImageView iv_heart;
-    public ImageView iv_modify;
-    public ImageView iv_delete;
-    public ImageView iv_save;
-    public TextView tv_cloNo;
-    public TextView tv_cloFavorite;
-    public TextView tv_edit_category;
-    public TextView tv_edit_season;
-    public TextView tv_edit_date;
-    public TextView tv_edit_name;
-    public TextView tv_edit_detailcategory;
-    public TextView tv_edit_brand;
-    public TextView tv_edit_size;
+    public TextView weekday_text;
 
     public static fragment_home newInstance() {
 
@@ -93,8 +79,10 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
                              Bundle savedInstanceState) {
         viewGroup = (ViewGroup) inflater.inflate(R.layout.frag_home,container,false);
         toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
+
         return viewGroup;
     }
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -112,224 +100,6 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
     @Override
     public void onStart() {
         super.onStart();
-
-
-
-        //addButton = getView().findViewById(R.id.header_add);
-        //filterButton = getView().findViewById(R.id.header_search);
-        ll_detail = getView().findViewById(R.id.ll_detail);
-
-        drawer = getView().findViewById(R.id.final_drawer_layout);
-
-        Cloth_Info = (RelativeLayout) getView().findViewById(R.id.cloth_info);
-        Cloth_Info.setVisibility(View.GONE);
-        Cloth_Info_edit = (RelativeLayout) getView().findViewById(R.id.cloth_info_edit);
-        Cloth_Info_edit.setVisibility(View.GONE);
-
-        iv_image = (ImageView) getView().findViewById(R.id.iv_image);
-        iv_edit_image = (ImageView) getView().findViewById(R.id.iv_edit_image);
-        tv_category = (TextView) getView().findViewById(R.id.tv_info_catergory);
-        tv_detailcategory = (TextView) getView().findViewById(R.id.tv_info_detailcategory);
-        tv_color = (TextView) getView().findViewById(R.id.tv_info_color);
-        tv_season = (TextView) getView().findViewById(R.id.tv_info_season);
-        tv_brand = (TextView) getView().findViewById(R.id.tv_info_brand);
-        tv_buyDate = (TextView) getView().findViewById(R.id.tv_info_date);
-
-        iv_heart = (ImageView) getView().findViewById(R.id.iv_heart);
-        iv_modify = (ImageView) getView().findViewById(R.id.iv_modify);
-        iv_delete = (ImageView) getView().findViewById(R.id.iv_delete);
-        iv_save = (ImageView) getView().findViewById(R.id.iv_save);
-
-        tv_cloNo = (TextView) getView().findViewById(R.id.tv_clothes_no);
-        tv_cloFavorite = (TextView) getView().findViewById(R.id.tv_clothes_favorite);
-        tv_edit_name = (TextView) getView().findViewById(R.id.tv_info_color);
-        tv_edit_detailcategory = (TextView) getView().findViewById(R.id.tv_edit_detailcategory);
-        tv_edit_brand = (TextView) getView().findViewById(R.id.tv_edit_brand);
-        tv_edit_size = (TextView) getView().findViewById(R.id.tv_edit_size);
-
-        tv_edit_category = (TextView) getView().findViewById(R.id.tv_edit_catergory);
-        tv_edit_season = (TextView) getView().findViewById(R.id.tv_edit_season);
-        tv_edit_date = (TextView) getView().findViewById(R.id.tv_edit_date);
-        /*tv_edit_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog dialog = new DatePickerDialog(activity, listener, 2020, 6, 30);
-                dialog.show();
-            }
-        });*/
-
-        BtnOnClickListener onClickListener = new BtnOnClickListener();
-        iv_heart.setOnClickListener(onClickListener);
-        iv_modify.setOnClickListener(onClickListener);
-        iv_delete.setOnClickListener(onClickListener);
-        //addButton.setOnClickListener(onClickListener);
-
-
-        iv_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(tv_edit_category.getText()!="카테고리를 선택해주세요.")
-                    tv_category.setText(tv_edit_category.getText());
-                if(tv_edit_detailcategory.getText()!=null)
-                    tv_detailcategory.setText(tv_edit_detailcategory.getText());
-                if(tv_edit_season.getText()!="계절을 선택해주세요.")
-                    tv_season.setText(tv_edit_season.getText());
-                if(tv_edit_brand.getText()!=null)
-                    tv_brand.setText(tv_edit_brand.getText());
-                if(tv_edit_size.getText()!=null)
-                    tv_size.setText(tv_edit_size.getText());
-                if(tv_edit_date.getText()!=null)
-                    tv_buyDate.setText(tv_edit_date.getText());
-
-                Cloth_Info_edit.setVisibility(View.GONE);
-            }
-        });
-        final String[] Season = {""};
-        tv_edit_season.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                final String[] items = getResources().getStringArray(R.array.Season);
-                final ArrayList<String> selectedItem  = new ArrayList<String>();
-                selectedItem.add(items[0]);
-
-                builder.setTitle("카테고리 선택");
-
-                builder.setSingleChoiceItems(R.array.Season, 0, new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        selectedItem.clear();
-                        selectedItem.add(items[pos]);
-                    }
-                });
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        Season[0] = selectedItem.get(0);
-
-                        switch(Season[0]){
-                            case "봄":
-                                tv_edit_season.setText("봄");
-                                break;
-                            case "여름":
-                                tv_edit_season.setText("여름");
-                                break;
-                            case "가을":
-                                tv_edit_season.setText("가을");
-                                break;
-                            case "겨울":
-                                tv_edit_season.setText("겨울");
-                                break;
-                        }
-                    }
-                });
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }
-        });
-        final String[] Category = {""};
-        tv_edit_category.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                final String[] items = getResources().getStringArray(R.array.Kind);
-                final ArrayList<String> selectedItem  = new ArrayList<String>();
-                selectedItem.add(items[0]);
-
-                builder.setTitle("카테고리 선택");
-
-                builder.setSingleChoiceItems(R.array.Kind, 0, new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        selectedItem.clear();
-                        selectedItem.add(items[pos]);
-                    }
-                });
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        Category[0] = selectedItem.get(0);
-
-                        switch(Category[0]){
-                            case "상의":
-                                tv_edit_category.setText("상의");
-                                break;
-                            case "하의":
-                                tv_edit_category.setText("하의");
-                                break;
-                            case "한벌옷":
-                                tv_edit_category.setText("한벌옷");
-                                break;
-                            case "외투":
-                                tv_edit_category.setText("외투");
-                                break;
-                            case "신발":
-                                tv_edit_category.setText("신발");
-                                break;
-                            case "가방":
-                                tv_edit_category.setText("가방");
-                                break;
-                            case "액세서리":
-                                tv_edit_category.setText("액세서리");
-                                break;
-                        }
-                    }
-                });
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }
-        });
-
-        //NavigationView navigationView = (NavigationView) getView().findViewById(R.id.final_nav_view); //드로워 뷰
-
-
-        //필터 버튼 클릭하면 드로워 열고 닫기
-
-//        filterButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if(drawer.isDrawerOpen(GravityCompat.START)) {
-//                    drawer.closeDrawer(GravityCompat.START);
-//                } else {
-//                    drawer.openDrawer(GravityCompat.START);
-//                }
-//            }
-//        });
-
-        //필터(메뉴) 아이템 선택
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-//                switch (menuItem.getItemId())
-//                {
-//                    case R.id.menuitem1:
-//                        Toast.makeText(getContext(), "SelectedItem 1", Toast.LENGTH_SHORT).show();
-//                    case R.id.menuitem2:
-//                        Toast.makeText(getContext(), "SelectedItem 2", Toast.LENGTH_SHORT).show();
-//                    case R.id.menuitem3:
-//                        Toast.makeText(getContext(), "SelectedItem 3", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                DrawerLayout drawer = getView().findViewById(R.id.final_drawer_layout);
-//                //drawer.closeDrawer(GravityCompat.START);
-//                return true;
-//            }
-//        });
-
-
-
-
-
-
-
 
         if(tabLayout_favorite == null){
             //탭 목록 설정
@@ -359,47 +129,11 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
                 }
             });
         }
-
-
-
-
-
-
-
-        /*
-        final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipe_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //스크롤이 최상단이면 데이터를 갱신한다
-                //clothesList.clear();
-                //page=0;
-                //new TabFragment_Clothes_inCloset.networkTask().execute(Integer.toString(page));
-                //clothesListAdapter.notifyDataSetChanged();
-                Log.e("test","데이터 갱신");
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
-
-         */
-
     }
 
-    private DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            tv_edit_date.setText(year + "년" + monthOfYear + "월" + dayOfMonth +"일");
-            Toast.makeText(getContext(), year + "년" + monthOfYear + "월" + dayOfMonth +"일", Toast.LENGTH_SHORT).show();
-        }
-    };
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //activity.setOnBackPressedListener(this);
-    }
+
 
     //뒤로 가기 버튼이 눌렸을 경우 드로워(메뉴)를 닫는다.
     @Override
@@ -422,40 +156,6 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
 
     }
 
-
-
-
-    //클릭 리스너
-    class BtnOnClickListener implements Button.OnClickListener {
-        String res="";
-
-        @Override
-        public void onClick(View view) {
-
-            switch (view.getId()) {
-//                case R.id.header_add : //헤더- 추가 버튼
-//                    Intent intent = new Intent(getContext(), activity_addClothes.class);
-//                    intent.putExtra("location","private");
-//                    startActivityForResult(intent,ADD_CLOTHES);
-//                    break;
-                case R.id.iv_heart : //즐겨찾기
-                    //필터가 될 vo 설정
-
-
-
-                case R.id.iv_modify : //수정 버튼
-                    //Cloth_Info.setVisibility(View.GONE);
-                    Cloth_Info_edit.setVisibility(View.VISIBLE);
-                    tv_edit_date.setText(tv_buyDate.getText());
-                    break;
-                case R.id.iv_delete : //삭제 버튼
-                    //확인 Alert 다이얼로그
-
-                    break;
-            }
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -463,5 +163,6 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
             ((activity_home)activity).refresh_clothes(fragment_home.this);
     }
 
-    //커스텀 함수
+
+
 }

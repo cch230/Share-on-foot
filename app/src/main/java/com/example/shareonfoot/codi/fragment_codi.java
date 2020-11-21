@@ -39,6 +39,13 @@ import com.example.shareonfoot.home.activity_home;
 import com.example.shareonfoot.util.OnBackPressedListener;
 import com.github.clans.fab.FloatingActionMenu;
 import com.github.clans.fab.FloatingActionButton;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -54,7 +61,7 @@ import retrofit2.Call;
 
 import static android.app.Activity.RESULT_OK;
 
-public class fragment_codi extends Fragment implements OnBackPressedListener {
+public class fragment_codi extends Fragment implements OnBackPressedListener, OnMapReadyCallback {
 
     ViewGroup viewGroup;
     Toast toast;
@@ -66,8 +73,6 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
 
     Activity activity;
 
-    private TabLayout tabLayout;
-    public TabPagerAdapter_codi pagerAdapter;
     private ViewPager finalPager;
 
     DrawerLayout drawer;
@@ -76,7 +81,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
     public RelativeLayout Cloth_Info_edit;
     public ImageView iv_image;
     public ImageView iv_edit_image;
-    public TextView tv_name;
+    public TextView theme;
     public TextView tv_category;
     public TextView tv_detailcategory;
     public TextView tv_season;
@@ -96,7 +101,8 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
     public TextView tv_edit_name;
     public TextView tv_edit_detailcategory;
     public TextView tv_edit_brand;
-    public TextView tv_edit_size;
+    public TextView weekday;
+    private MapView mapView=null;
 
 
     private FloatingActionMenu fam;
@@ -116,6 +122,8 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
                              Bundle savedInstanceState) {
         viewGroup = (ViewGroup) inflater.inflate(R.layout.frag_codi,container,false);
         toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
+        mapView = (MapView)viewGroup.findViewById(R.id.map);
+        mapView.getMapAsync(this);
         return viewGroup;
     }
 
@@ -160,195 +168,22 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
         tv_edit_name = (TextView) getView().findViewById(R.id.tv_info_color);
         tv_edit_detailcategory = (TextView) getView().findViewById(R.id.tv_edit_detailcategory);
         tv_edit_brand = (TextView) getView().findViewById(R.id.tv_edit_brand);
-        tv_edit_size = (TextView) getView().findViewById(R.id.tv_edit_size);
+        weekday = (TextView) getView().findViewById(R.id.tabLayout);
 
         tv_edit_category = (TextView) getView().findViewById(R.id.tv_edit_catergory);
         tv_edit_season = (TextView) getView().findViewById(R.id.tv_edit_season);
         tv_edit_date = (TextView) getView().findViewById(R.id.tv_edit_date);
-/*
-        tv_edit_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog dialog = new DatePickerDialog(activity, listener, 2020, 6, 30);
-                dialog.show();
-            }
-        });
-*/
+        theme = (TextView) getView().findViewById(R.id.day_theme);
 
-        BtnOnClickListener onClickListener = new BtnOnClickListener();
-        //iv_heart.setOnClickListener(onClickListener);
-        //iv_modify.setOnClickListener(onClickListener);
-        //iv_delete.setOnClickListener(onClickListener);
-
-
-/*
-        iv_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(tv_edit_name.getText()!=null)
-                    tv_name.setText(tv_edit_name.getText());
-                if(tv_edit_category.getText()!="카테고리를 선택해주세요.")
-                    tv_category.setText(tv_edit_category.getText());
-                if(tv_edit_detailcategory.getText()!=null)
-                    tv_detailcategory.setText(tv_edit_detailcategory.getText());
-                if(tv_edit_season.getText()!="계절을 선택해주세요.")
-                    tv_season.setText(tv_edit_season.getText());
-                if(tv_edit_brand.getText()!=null)
-                    tv_brand.setText(tv_edit_brand.getText());
-                if(tv_edit_size.getText()!=null)
-                    tv_size.setText(tv_edit_size.getText());
-                if(tv_edit_date.getText()!=null)
-                    tv_date.setText(tv_edit_date.getText());
-
-                Cloth_Info_edit.setVisibility(View.GONE);
-            }
-        });
-*/
-        final String[] Season = {""};
-/*
-        tv_edit_season.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                final String[] items = getResources().getStringArray(R.array.Season);
-                final ArrayList<String> selectedItem  = new ArrayList<String>();
-                selectedItem.add(items[0]);
-
-                builder.setTitle("카테고리 선택");
-
-                builder.setSingleChoiceItems(R.array.Season, 0, new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        selectedItem.clear();
-                        selectedItem.add(items[pos]);
-                    }
-                });
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        Season[0] = selectedItem.get(0);
-
-                        switch(Season[0]){
-                            case "봄":
-                                tv_edit_season.setText("봄");
-                                break;
-                            case "여름":
-                                tv_edit_season.setText("여름");
-                                break;
-                            case "가을":
-                                tv_edit_season.setText("가을");
-                                break;
-                            case "겨울":
-                                tv_edit_season.setText("겨울");
-                                break;
-                        }
-                    }
-                });
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }
-        });
-*/
         final String[] Category = {""};
-/*
-        tv_edit_category.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                final String[] items = getResources().getStringArray(R.array.Kind);
-                final ArrayList<String> selectedItem  = new ArrayList<String>();
-                selectedItem.add(items[0]);
-
-                builder.setTitle("카테고리 선택");
-
-                builder.setSingleChoiceItems(R.array.Kind, 0, new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        selectedItem.clear();
-                        selectedItem.add(items[pos]);
-                    }
-                });
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        Category[0] = selectedItem.get(0);
-
-                        switch(Category[0]){
-                            case "상의":
-                                tv_edit_category.setText("상의");
-                                break;
-                            case "하의":
-                                tv_edit_category.setText("하의");
-                                break;
-                            case "한벌옷":
-                                tv_edit_category.setText("한벌옷");
-                                break;
-                            case "외투":
-                                tv_edit_category.setText("외투");
-                                break;
-                            case "신발":
-                                tv_edit_category.setText("신발");
-                                break;
-                            case "가방":
-                                tv_edit_category.setText("가방");
-                                break;
-                            case "액세서리":
-                                tv_edit_category.setText("액세서리");
-                                break;
-                        }
-                    }
-                });
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }
-        });
-*/
-
-        //NavigationView navigationView = (NavigationView) getView().findViewById(R.id.final_nav_view); //드로워 뷰
 
 
-        //필터 버튼 클릭하면 드로워 열고 닫기
+        // BitmapDescriptorFactory 생성하기 위한 소스
 
-//        filterButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if(drawer.isDrawerOpen(GravityCompat.START)) {
-//                    drawer.closeDrawer(GravityCompat.START);
-//                } else {
-//                    drawer.openDrawer(GravityCompat.START);
-//                }
-//            }
-//        });
+        MapsInitializer.initialize(requireActivity());
+        mapView = (MapView)getView().findViewById(R.id.map);
+        mapView.getMapAsync(this);
 
-        //필터(메뉴) 아이템 선택
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-//                switch (menuItem.getItemId())
-//                {
-//                    case R.id.menuitem1:
-//                        Toast.makeText(getContext(), "SelectedItem 1", Toast.LENGTH_SHORT).show();
-//                    case R.id.menuitem2:
-//                        Toast.makeText(getContext(), "SelectedItem 2", Toast.LENGTH_SHORT).show();
-//                    case R.id.menuitem3:
-//                        Toast.makeText(getContext(), "SelectedItem 3", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                DrawerLayout drawer = getView().findViewById(R.id.final_drawer_layout);
-//                //drawer.closeDrawer(GravityCompat.START);
-//                return true;
-//            }
-//        });
-
-        if(tabLayout == null){
             //탭 목록 설정
             String weekDay;
 
@@ -360,89 +195,35 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
 
             Toast.makeText(getContext(), weekDay, Toast.LENGTH_SHORT ).show();
 
-            tabLayout = (TabLayout) getView().findViewById(R.id.tabLayout);
-            tabLayout.addTab(tabLayout.newTab().setText(weekDay));
+            weekday.setText(weekDay);
             switch (day_return(weekDay)) {
                 case 1:
-                    tabLayout.addTab(tabLayout.newTab().setText("화요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("수요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("목요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("금요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("토요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("일요일"));
+                    theme.setText("오늘은 카페랑 디저트!!");
+
                     break;
                 case 2:
-                    tabLayout.addTab(tabLayout.newTab().setText("월요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("수요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("목요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("금요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("토요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("일요일"));
+                    theme.setText("오늘은 맛집이야!!");
+
                     break;
                 case 3:
-                    tabLayout.addTab(tabLayout.newTab().setText("월요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("화요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("목요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("금요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("토요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("일요일"));
+                    theme.setText("오늘은 디저트 먹으러!!");
+
+
                     break;
                 case 4:
-                    tabLayout.addTab(tabLayout.newTab().setText("월요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("화요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("수요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("금요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("토요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("일요일"));
-                    break;
-                case 5:
-                    tabLayout.addTab(tabLayout.newTab().setText("월요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("화요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("수요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("목요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("토요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("일요일"));
+                    theme.setText("오늘은 마음의 양식!!");
+
                     break;
                 case 6:
-                    tabLayout.addTab(tabLayout.newTab().setText("월요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("화요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("수요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("목요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("금요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("일요일"));
+                    theme.setText("오늘은 머리하러 가자!!");
+
                     break;
                 case 7:
-                    tabLayout.addTab(tabLayout.newTab().setText("월요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("화요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("수요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("목요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("금요일"));
-                    tabLayout.addTab(tabLayout.newTab().setText("토요일"));
+                    theme.setText("오늘은 전부 다!!");
+
                     break;
             }
-            tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
-
-            //탭 페이저 설정 (탭 클릭시 바뀌는 화면)
-            finalPager = (ViewPager) getView().findViewById(R.id.tab_Pager);
-            pagerAdapter = new TabPagerAdapter_codi(getChildFragmentManager(), tabLayout.getTabCount());
-            finalPager.setAdapter(pagerAdapter);
-            finalPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    finalPager.setCurrentItem(tab.getPosition());
-                }
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-
-                }
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-
-                }
-            });
-        }
+            
 
 
         //플로팅 액션 버튼 설정
@@ -466,8 +247,6 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
 
         //handling each floating action button clicked
         //fabAdd.setOnClickListener(onClickListener);
-        fabMake.setOnClickListener(onClickListener);
-        fabRecommend.setOnClickListener(onClickListener);
 
 
         fam.setOnMenuButtonClickListener(new View.OnClickListener() {
@@ -511,7 +290,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
     @Override
     public void onResume() {
         super.onResume();
-        //activity.setOnBackPressedListener(this);
+        mapView.onResume();
     }
 
     //뒤로 가기 버튼이 눌렸을 경우 드로워(메뉴)를 닫는다.
@@ -536,6 +315,17 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
         }
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+//액티비티가 처음 생성될 때 실행되는 함수
+
+        if(mapView != null)
+        {
+            mapView.onCreate(savedInstanceState);
+        }
+    }
 
 
 
@@ -563,4 +353,63 @@ public class fragment_codi extends Fragment implements OnBackPressedListener {
     }
 
     //커스텀 함수
+    //커스텀 함수
+    @Override
+    public void onMapReady(final GoogleMap googleMap) {
+
+
+
+
+
+
+        String coordinates[] = {"37.566", "126.978"};
+
+        double lat = Double.parseDouble(coordinates[0]);
+
+        double lng = Double.parseDouble(coordinates[1]);
+
+
+
+        LatLng position = new LatLng(lat, lng);
+
+        GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
+
+
+
+        // 맵 위치이동.
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+
+
+
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onLowMemory();
+    }
 }

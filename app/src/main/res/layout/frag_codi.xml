@@ -71,28 +71,40 @@
                             android:background="@color/화이트"
                             android:scrollbars="none"
                             >
-                            <com.google.android.material.tabs.TabLayout
+                            <TextView
                                 android:id="@+id/tabLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="50dp"
-                                app:tabMode="fixed"
-                                app:tabTextAppearance="@style/tab_text"
+                                android:text="요일"
+                                android:textSize="25sp"
+                                android:textAlignment="center"
+                                android:background="@drawable/oval"
                                 />
 
                         </HorizontalScrollView>
 
-
-                        <androidx.viewpager.widget.ViewPager
-                            android:id="@+id/tab_Pager"
-                            android:layout_marginTop="0.1dp"
-                            android:padding="10dp"
+                        <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="600dp"
-                            android:background="@color/closet"
-                            android:layout_below="@+id/tab_view" >
+                            android:layout_height="wrap_content"
+                            android:id="@+id/day_theme"
+                            android:text="오늘은 카페랑 디저트!!"
+                            android:textSize="20sp"
+                            android:textColor="@color/teal"
+                            android:textAlignment="center"
+                            android:background="@color/화이트"
+                            android:layout_marginTop="1dp"
+                            android:layout_below="@+id/tab_view"/>
+
+                        <com.google.android.gms.maps.MapView
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:name="com.google.android.gms.maps.MapFragment"
+                            android:layout_marginTop="1dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="380dp"
+                            android:id="@+id/map"
+                            android:layout_below="@+id/day_theme"/>
 
 
-                        </androidx.viewpager.widget.ViewPager>
 
                     </RelativeLayout>
                 </androidx.core.widget.NestedScrollView>

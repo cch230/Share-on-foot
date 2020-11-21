@@ -95,43 +95,43 @@
                         </TextView>
 
                         <HorizontalScrollView
-                            android:layout_below="@+id/reco_title"
+                            android:id="@+id/recommend_tab_view"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_below="@+id/reco_title"
+                            android:layout_marginTop="3dp"
+                            android:background="@color/화이트"
                             android:padding="10dp"
                             android:paddingRight="10dp"
-                            android:id="@+id/recommend_tab_view"
-                            android:background="@color/화이트"
-                            android:scrollbars="none"
-                            >
+                            android:scrollbars="none">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
+
                                 <Button
-                                    android:layout_marginRight="10dp"
                                     android:id="@+id/bt_reco_hot"
                                     android:layout_width="wrap_content"
                                     android:layout_height="29dp"
-                                    android:text="오늘의 추천"
+                                    android:layout_marginRight="10dp"
                                     android:background="@drawable/oval"
-                                    >
-                                </Button>
-                            </LinearLayout>
+                                    android:text="오늘의 추천" />
 
+
+                            </LinearLayout>
 
 
                         </HorizontalScrollView>
 
-
                         <com.example.shareonfoot.util.NoneSwipeableViewPager
-                            android:id="@+id/recommend_tab_Pager"
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:name="com."
                             android:layout_marginTop="0.1dp"
                             android:layout_width="match_parent"
-                            android:layout_height="380dp"
                             android:background="@color/closet"
-                            android:layout_below="@+id/recommend_tab_view" >
-
-                        </com.example.shareonfoot.util.NoneSwipeableViewPager>
+                            android:layout_height="380dp"
+                            android:id="@+id/map"
+                            android:layout_below="@+id/recommend_tab_view"/>
                     </RelativeLayout>
 
 
