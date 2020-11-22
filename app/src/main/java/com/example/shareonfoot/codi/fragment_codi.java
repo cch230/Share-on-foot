@@ -329,6 +329,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         markerOptions.position(latLng);
        // markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ok2));
         mMap.addMarker(markerOptions);
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
         polylineOptions = new PolylineOptions();
         polylineOptions.color(Color.YELLOW);
         polylineOptions.width(8);
@@ -425,7 +426,6 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         polylineOptions = new PolylineOptions();
 
         polylineOptions.color(Color.RED);
-
         polylineOptions.width(5);
 
         polylineOptions.addAll(arrayPoints);
