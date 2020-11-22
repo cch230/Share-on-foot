@@ -572,8 +572,8 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         polylineOptions.addAll(runningPoints);
         mMap.addPolyline(polylineOptions);
     }
-*/
 
+*/
 
 
 }
