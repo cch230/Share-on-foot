@@ -5,8 +5,12 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -38,6 +43,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -45,7 +51,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+
+import io.reactivex.Maybe;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -444,6 +453,127 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
 
     }
+/*
+
+    */
+/**
+     * 현재 위치정보 조회.
+     *
+     * @return
+     *//*
+
+    public Maybe<Location> get_현재위치정보() {
+        try {
+            // 권한 체크.
+            CheckUtil.Check(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED, "[ACCESS_FINE_LOCATION] 권한체크 에러", Exception.class);
+            CheckUtil.Check(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED, "[ACCESS_COARSE_LOCATION] 권한체크 에러", Exception.class);
+
+            // 위치정보 조회.
+            LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
+            // 위치 정보 사용여부 조회.
+            {
+                CheckUtil.Check(get_위치정보_요청가능_여부(locationManager), "위치정보 사용불가능 상태", Exception.class);
+            }
+
+            // 네트워크 정보로부터 데이터 조회.
+            {
+                // 네트워크 정보로 부터 위치값 가져오기
+                if (isNetworkEnabled) {
+                    locationManager.requestLocationUpdates(
+                            LocationManager.NETWORK_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES
+                            , this
+                    );
+
+                    if (locationManager != null) {
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    }
+                }
+            }
+
+            // GPS 정보로부터 데이터 조회.
+            {
+                if (isGPSEnabled) {
+                    if (location == null) {
+                        locationManager.requestLocationUpdates(
+                                LocationManager.GPS_PROVIDER,
+                                MIN_TIME_BW_UPDATES,
+                                MIN_DISTANCE_CHANGE_FOR_UPDATES,
+                                this
+                        );
+
+                        if (locationManager != null) {
+                            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            Log.e(MiRunConstDefinition.LOG_NAME, "위치정보 획득 실패", e);
+        }
+
+        return MaybeUtil.JustNullable(location);
+    }
+
+    */
+/**
+     * 마커 그리기
+     *
+     * @param myLocationMaybe
+     *//*
+
+    public void setDrawMaker(Maybe<Location> myLocationMaybe) {
+
+        MaybeUtil.Subscribe(myLocationMaybe,
+
+                location -> {
+
+                    // Creating a LatLng object for the current location
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                    CameraPosition cp = new CameraPosition.Builder().target((latLng)).
+                            zoom(17).
+                            build();
+
+                    // Showing the current location in Google Map
+                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cp));
+
+                    // 기존 마커 삭제.
+                    if (marker != null) {
+                        marker.remove();
+                    }
+
+                    // 마커 설정.
+                    MarkerOptions optFirst = new MarkerOptions().
+                            position(latLng).
+                            icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).
+                            title(MiRunResourceUtil.GetString(R.string.label_record_current_position));
+
+                    marker = mMap.addMarker(optFirst);
+                },
+                () -> MiRunViewUtil.ShowToast(R.string.label_emergency_request_location_fail));
+    }
+    */
+/**
+     * 달리는 경로 polyline 생성(pink)
+     *
+     * @param runningPoints
+     *//*
+
+    public void drawRunningPolyline(List<LatLng> runningPoints){
+        PolylineOptions polylineOptions = new PolylineOptions();
+        polylineOptions.color(MiRunResourceUtil.GetColor(R.drawable.marker));
+        polylineOptions.width(7);
+        polylineOptions.addAll(runningPoints);
+        mMap.addPolyline(polylineOptions);
+    }
+*/
+
 
 
 }
