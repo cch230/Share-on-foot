@@ -68,7 +68,6 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
     public static fragment_home newInstance() {
 
         Bundle args = new Bundle();
-
         fragment_home fragment = new fragment_home();
         fragment.setArguments(args);
         return fragment;
@@ -162,7 +161,5 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
         if(requestCode == ADD_CLOTHES && resultCode == RESULT_OK)
             ((activity_home)activity).refresh_clothes(fragment_home.this);
     }
-
-
-
+    
 }
