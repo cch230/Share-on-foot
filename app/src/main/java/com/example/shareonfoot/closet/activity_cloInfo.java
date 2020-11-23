@@ -30,10 +30,6 @@ public class activity_cloInfo extends AppCompatActivity {
     public TextView tv_color;
     public TextView tv_season;
     public TextView tv_brand;
-
-    //public ImageView iv_heart;
-    //public ImageView iv_modify;
-    //public ImageView iv_delete;
     public TextView tv_cloNo;
     public TextView tv_cloFavorite;
 
