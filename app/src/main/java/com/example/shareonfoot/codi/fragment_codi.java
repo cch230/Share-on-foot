@@ -355,6 +355,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
         @Override
         public void onClick(View view) {
+            
             Intent intent;
         }
     }
