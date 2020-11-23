@@ -25,7 +25,6 @@ public class activity_cloInfo extends AppCompatActivity {
 
     LinearLayout ll_detail;
     public ImageView iv_image;
-
     public TextView tv_category;
     public TextView tv_detailcategory;
     public TextView tv_color;
