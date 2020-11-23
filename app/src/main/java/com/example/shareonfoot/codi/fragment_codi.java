@@ -346,6 +346,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         // 맵셋팅
         arrayPoints.add(latLng);
         polylineOptions.addAll(arrayPoints);
+        
         mMap.addPolyline(polylineOptions);
     }
 
@@ -355,7 +356,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
         @Override
         public void onClick(View view) {
-            
+
             Intent intent;
         }
     }
