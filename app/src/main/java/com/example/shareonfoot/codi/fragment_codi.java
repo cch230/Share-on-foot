@@ -7,9 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.shareonfoot.R;
 import com.example.shareonfoot.home.activity_home;
 import com.example.shareonfoot.util.OnBackPressedListener;
+import com.example.shareonfoot.util.Location;
 import com.github.clans.fab.FloatingActionMenu;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -48,10 +50,25 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.nio.Buffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 
 import io.reactivex.Maybe;
@@ -75,8 +92,9 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     private ArrayList<MarkerOptions> arrayMarkerOptions;
     private ViewPager finalPager;
 
-    DrawerLayout drawer;
+    List<Location> locationList = new ArrayList<Location>();
 
+    DrawerLayout drawer;
     public RelativeLayout Cloth_Info;
     public RelativeLayout Cloth_Info_edit;
     public ImageView iv_image;
@@ -103,7 +121,8 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     public TextView tv_edit_brand;
     public TextView weekday;
     private MapView mapView=null;
-
+    public static String ErrMag="ErrMag";
+    public String err;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -137,7 +156,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
             activity = (Activity) context;
             ((activity_home)activity).setOnBackPressedListener(this);
         }
-        
+
     }
 
 
@@ -333,15 +352,14 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     @Override
     public void onMapClick(LatLng latLng) {
         MarkerOptions markerOptions = new MarkerOptions();
-
+        mMap.addMarker(markerOptions);
         //add marker
         markerOptions.position(latLng);
-       // markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ok2));
         mMap.addMarker(markerOptions);
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
         polylineOptions = new PolylineOptions();
         polylineOptions.color(Color.YELLOW);
-        polylineOptions.color(Color.argb(0,88,138,138));
+
         polylineOptions.width(8);
         // 맵셋팅
         arrayPoints.add(latLng);
@@ -379,25 +397,24 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     public void onMapReady(final GoogleMap map) {
 
         mMap = map;
-
-
-        String coordinates[] = {"37.566", "126.978"};
+        MarkerOptions markerOptions = new MarkerOptions();
+        String coordinates[] = {"37.375280717973304", "126.63289979777781"};
         double lat = Double.parseDouble(coordinates[0]);
         double lng = Double.parseDouble(coordinates[1]);
         LatLng position = new LatLng(lat, lng);
         GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
-
-
-
+        markerOptions.position(position);
+        mMap.addMarker(markerOptions);
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2));
         // 맵 위치이동.
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
-
         mMap.setOnMapClickListener((GoogleMap.OnMapClickListener) this);
-
         mMap.setOnMapLongClickListener((GoogleMap.OnMapLongClickListener) this);
 
       //  mMap.setOnInfoWindowClickListener((GoogleMap.OnInfoWindowClickListener) this); //정보창 클릭 리스너(마커 삭제 이벤트)
+        new NearestTask().execute(coordinates);
+
 
     }
     @Override
@@ -454,9 +471,147 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
 
     }
-/*
 
-    */
+    class NearestTask extends AsyncTask<String, String, String> {
+        String sendMsg, receiveMsg;
+        StringBuffer Buffer = new StringBuffer();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String get_json = "";
+            URL url;
+            try {
+                url = new URL("http://49.50.172.215:8080/shareonfoot/data.jsp");
+
+                HttpURLConnection conn = null;
+                try {
+                    conn = (HttpURLConnection) url.openConnection();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                    err = ioException.toString();
+                    Log.i(ErrMag, "1");
+                }
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                try {
+                    conn.setRequestMethod("POST");
+                } catch (ProtocolException protocolException) {
+                    protocolException.printStackTrace();
+                    err = protocolException.toString();
+                    Log.i(ErrMag, "2");
+                }
+                OutputStreamWriter osw = null;
+                try {
+                    osw = new OutputStreamWriter(conn.getOutputStream());
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                    err = ioException.toString();
+                    Log.i(ErrMag, "3");
+                }
+                Float lng = Float.valueOf(strings[0]);
+                Float lat = Float.valueOf(strings[0]);
+                sendMsg = "lng=" + lng + "&lat=" + lat;
+                osw.write(sendMsg);
+                try {
+                    osw.flush();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                    err = ioException.toString();
+                    Log.i(ErrMag, "4");
+                }
+                if (conn != null) {
+                    conn.setConnectTimeout(20000);
+                  //  conn.setUseCaches(false);
+                    if (conn.getResponseCode() == conn.HTTP_OK) {
+                        // 서버에서 읽어오기 위한 스트림 객체
+                        InputStreamReader isr = new InputStreamReader(
+                                conn.getInputStream());
+                        // 줄단위로 읽어오기 위해 BufferReader로 감싼다.
+                        BufferedReader br = new BufferedReader(isr);
+                        // 반복문 돌면서읽어오기
+                        while (true) {
+                            String line = br.readLine();
+                            if (line == null) {
+                                break;
+                            }
+                            Buffer.append(line);
+                        }
+                        br.close();
+                        conn.disconnect();
+                    }
+                }
+                get_json = Buffer.toString();
+                Log.d("msg", "get_json: " + get_json);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                err = e.toString();
+                Log.i(ErrMag, "5");
+            } catch (IOException e) {
+                e.printStackTrace();
+                err = e.toString();
+                Log.i(ErrMag, "6");
+            }
+            return get_json;
+        }
+
+
+        public void onPostExecute(String result) {
+            super.onPostExecute(result);
+            List<Location> list = new ArrayList<>();
+            int i=0;
+            Log.d("onPostExecute:  ", " <<<<<onPostExecute>>>> ");
+            try {
+                JSONArray jarray = new JSONObject(result).getJSONArray("store_data");
+                 Location location = new Location();
+                if(jarray!=null){
+                    while (jarray != null) {
+                        JSONObject jsonObject = jarray.getJSONObject(i);
+                        String name = jsonObject.getString("store_name");
+                        Float lng = Float.valueOf(jsonObject.getString("store_lng"));
+                        Float lat = Float.valueOf(jsonObject.getString("store_lat"));
+                        location.setname(name);
+                        location.setlng(lng);
+                        location.setlat(lat);
+                        // null을 가끔 못 읽어오는 때가 있다고 하기에 써봄
+                        //String Start = jsonObject.optString("START_TIME", "text on no value");
+                        //String Stop = jsonObject.optString("STOP_TIME", "text on no value");
+                        //String REG = jsonObject.optString("REG_TIME", "text on no value");
+                        Log.i("qw", name + "/" + lng.toString() + "/" + lat.toString());
+                        locationList.addAll(list);
+                        i++;
+                    }
+                }
+                else {
+                    Toast.makeText(getContext(), "가까운 곳 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+                locationList.addAll(list);
+            } catch (Exception e) {
+                Log.e(ErrMag, "7");
+            }
+            if(!locationList.isEmpty()){
+                MarkerOptions markerOptions = new MarkerOptions();
+
+                for(Location location : locationList){
+                    Float lat;
+                    Float lng;
+                    lat=location.getlat();
+                    lng=location.getlng();
+                    LatLng position=new LatLng(lat,lng);
+                    markerOptions.position(position);
+                    mMap.addMarker(markerOptions);
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2));
+                }
+            }
+        }
+    }
+
+
+
+
 /**
      * 현재 위치정보 조회.
      *
@@ -575,6 +730,5 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     }
 
 */
-
 
 }
