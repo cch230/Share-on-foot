@@ -38,7 +38,7 @@ public class ConnectDB {
 			conn = DriverManager.getConnection(
 					jdbcUrl, dbId,
 					dbPw);
-
+			
 		} catch (SQLException e) {
 
 			System.out.println("데이터베이스 연결에 실패했습니다.");

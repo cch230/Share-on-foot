@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
     <%@ page import="shareonfoot.ConnectDB" %>
     <%@ page import="shareonfoot.Location"%>
     <%@ page import= "java.util.*"%>
@@ -13,11 +13,12 @@
 	JSONArray jArray = new JSONArray();
 	JSONObject jObject = new JSONObject();
     try{
-		//½Ì±ÛÅæ ¹æ½ÄÀ¸·Î ÀÚ¹Ù Å¬·¡½º¸¦ ºÒ·¯¿É´Ï´Ù.
-		ConnectDB connectDB = ConnectDB.getInstance();
+		//ì‹±ê¸€í†¤ ë°©ì‹ìœ¼ë¡œ ìë°” í´ë˜ìŠ¤ë¥¼ ë¶ˆëŸ¬ì˜µë‹ˆë‹¤.
+		ConnectDB tmp = ConnectDB.getInstance();
 		Float lng = Float.valueOf(request.getParameter("lng"));
 		Float lat = Float.valueOf(request.getParameter("lat"));
-		List<Location>list  = connectDB.recommend(lng, lat);
+		List<Location>list= new ArrayList<Location>();
+		list.addAll(tmp.recommend(lng, lat));
 		if(!list.isEmpty()){
 			for (Location location : list) {
 				HashMapObject = new HashMap<String, Object>();
@@ -26,11 +27,11 @@
 				HashMapObject.put("store_lat", location.getlat());
 				HashMapObject.put("store_dst", location.getdst());	
 				jObject = new JSONObject(HashMapObject);
-			    // À§¿¡¼­ ¸¸µç °¢°¢ÀÇ °´Ã¼¸¦ ÇÏ³ªÀÇ ¹è¿­ ÇüÅÂ·Î ¸¸µë
+			    // ìœ„ì—ì„œ ë§Œë“  ê°ê°ì˜ ê°ì²´ë¥¼ í•˜ë‚˜ì˜ ë°°ì—´ í˜•íƒœë¡œ ë§Œë“¬
 			    HashMapArray = new ArrayList<JSONObject>();
 			  	HashMapArray.add(jObject);
 			    jArray=(JSONArray)HashMapArray.clone();	
-			    // ÃÖÁ¾ÀûÀ¸·Î ¹è¿­À» ÇÏ³ª·Î ¹­À½
+			    // ìµœì¢…ì ìœ¼ë¡œ ë°°ì—´ì„ í•˜ë‚˜ë¡œ ë¬¶ìŒ
 			}
 		}
 		HashMapObject = new HashMap<String, Object>();
@@ -38,7 +39,7 @@
 		jObject = new JSONObject(HashMapObject);
 		out.println(jsonMain.toJSONString()); 
 	}catch(Exception ex){
-		application.log("[Select_Time_info.jsp-·Î±×] ex="+ex.getMessage());
+		application.log("[Select_Time_info.jsp-ë¡œê·¸] ex="+ex.getMessage());
 	}finally{
 		
 	}
