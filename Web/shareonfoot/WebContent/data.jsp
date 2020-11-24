@@ -7,7 +7,8 @@
 	<%@page import="java.sql.SQLException"%>
 	
 <%
-	
+	HashMap<String, Object> HashMapObject = new HashMap<String, Object>();
+	ArrayList<JSONObject> HashMapArray = new ArrayList<JSONObject>();
 	JSONObject jsonMain = new JSONObject();
 	JSONArray jArray = new JSONArray();
 	JSONObject jObject = new JSONObject();
@@ -19,18 +20,22 @@
 		List<Location>list  = connectDB.recommend(lng, lat);
 		if(!list.isEmpty()){
 			for (Location location : list) {
-				jObject.put("store_name", location.getname());
-				jObject.put("store_lng", location.getlng());
-				jObject.put("store_lat", location.getlat());		
+				HashMapObject = new HashMap<String, Object>();
+				HashMapObject.put("store_name", location.getname());
+				HashMapObject.put("store_lng", location.getlng());
+				HashMapObject.put("store_lat", location.getlat());
+				HashMapObject.put("store_dst", location.getdst());	
+				jObject = new JSONObject(HashMapObject);
 			    // 위에서 만든 각각의 객체를 하나의 배열 형태로 만듬
-			    jArray.add(0, jObject);   			
+			    HashMapArray = new ArrayList<JSONObject>();
+			  	HashMapArray.add(jObject);
+			    jArray=(JSONArray)HashMapArray.clone();	
 			    // 최종적으로 배열을 하나로 묶음
 			}
-		}else{
-			jObject=null;
-			jArray.add(0, jObject);
 		}
-		jsonMain.put("store_data", jArray);   
+		HashMapObject = new HashMap<String, Object>();
+		HashMapObject.put("store_data", jArray);
+		jObject = new JSONObject(HashMapObject);
 		out.println(jsonMain.toJSONString()); 
 	}catch(Exception ex){
 		application.log("[Select_Time_info.jsp-로그] ex="+ex.getMessage());

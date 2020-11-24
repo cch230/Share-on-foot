@@ -70,6 +70,8 @@ public class ConnectDB {
 				location.setname(rs.getString("name"));
 				location.setlng(rs.getString("lng"));
 				location.setlat(rs.getString("lat"));
+				location.setdst(rs.getString("dst"));
+
 				list.add(location);
 			} 
 			conn.close();
