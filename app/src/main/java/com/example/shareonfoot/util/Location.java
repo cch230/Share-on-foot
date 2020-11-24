@@ -4,16 +4,17 @@ public class Location {
     private String name;
     private Float lng;
     private Float lat;
+    private Float dst;
 
     public Location() {
         super();
     }
-    public Location(String name,Float lng, Float lat) {
+    public Location(String name,Float lng, Float lat, Float dst) {
         super();
         this.name = name;
         this.lng = lng;
         this.lat = lat;
-
+        this.dst = dst;
     }
 
     public String getname() {
@@ -35,7 +36,17 @@ public class Location {
     public Float getlat() {
         return lat;
     }
+
     public void setlat(Float lat) {
         this.lat = lat;
     }
+
+    public Float getdst() {
+        return dst;
+    }
+
+    public void setdst(Float dst) {
+        this.dst = dst;
+    }
+
 }
