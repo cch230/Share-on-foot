@@ -54,9 +54,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -352,11 +358,12 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     @Override
     public void onMapClick(LatLng latLng) {
         MarkerOptions markerOptions = new MarkerOptions();
-        mMap.addMarker(markerOptions);
+
         //add marker
         markerOptions.position(latLng);
+
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2));
         mMap.addMarker(markerOptions);
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
         polylineOptions = new PolylineOptions();
         polylineOptions.color(Color.YELLOW);
 
@@ -403,8 +410,9 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         LatLng position = new LatLng(lat, lng);
         GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
         markerOptions.position(position);
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
         mMap.addMarker(markerOptions);
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2));
+
         // 맵 위치이동.
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
@@ -481,12 +489,12 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         }
 
         @Override
-        protected String doInBackground(String... strings) {
-            String get_json = "";
+        protected String doInBackground(String[] strings) {
+            CookieHandler.setDefault( new CookieManager( null, CookiePolicy.ACCEPT_ALL ) );
+            String get_json = "",tmp;
             URL url;
             try {
-                url = new URL("http://49.50.172.215:8080/shareonfoot/data.jsp");
-
+                url = new URL("http://localhost/shareonfoot/data.jsp");
                 HttpURLConnection conn = null;
                 try {
                     conn = (HttpURLConnection) url.openConnection();
@@ -495,56 +503,38 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
                     err = ioException.toString();
                     Log.i(ErrMag, "1");
                 }
-                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                try {
-                    conn.setRequestMethod("POST");
-                } catch (ProtocolException protocolException) {
-                    protocolException.printStackTrace();
-                    err = protocolException.toString();
-                    Log.i(ErrMag, "2");
-                }
-                OutputStreamWriter osw = null;
-                try {
-                    osw = new OutputStreamWriter(conn.getOutputStream());
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                    err = ioException.toString();
-                    Log.i(ErrMag, "3");
-                }
-                Float lng = Float.valueOf(strings[0]);
-                Float lat = Float.valueOf(strings[0]);
-                sendMsg = "lng=" + lng + "&lat=" + lat;
-                osw.write(sendMsg);
-                try {
-                    osw.flush();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                    err = ioException.toString();
-                    Log.i(ErrMag, "4");
-                }
-                if (conn != null) {
-                    conn.setConnectTimeout(20000);
-                  //  conn.setUseCaches(false);
-                    if (conn.getResponseCode() == conn.HTTP_OK) {
-                        // 서버에서 읽어오기 위한 스트림 객체
-                        InputStreamReader isr = new InputStreamReader(
-                                conn.getInputStream());
-                        // 줄단위로 읽어오기 위해 BufferReader로 감싼다.
-                        BufferedReader br = new BufferedReader(isr);
-                        // 반복문 돌면서읽어오기
-                        while (true) {
-                            String line = br.readLine();
-                            if (line == null) {
-                                break;
-                            }
-                            Buffer.append(line);
+                conn.setRequestMethod("POST"); // URL 요청에 대한 메소드 설정 : POST.
+                conn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset 설정.
+                conn.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;cahrset=UTF-8");
+
+                // 서버에서 읽어오기 위한 스트림 객체
+                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                sendMsg = "lng=" + strings[0]+ "&lat=" + strings[1];
+                wr.write(sendMsg);
+                wr.flush();
+                wr.close();
+
+                if (conn.getResponseCode() == conn.HTTP_OK) {
+
+                    // 서버에서 읽어오기 위한 스트림 객체
+                    InputStreamReader isr = new InputStreamReader(
+                            conn.getInputStream());
+                    // 줄단위로 읽어오기 위해 BufferReader로 감싼다.
+                    BufferedReader br = new BufferedReader(isr);
+                    // 반복문 돌면서읽어오기
+                    while (true) {
+                        String line = br.readLine();
+                        if (line == null) {
+                            Log.i("msg", "get_json: " + get_json);
+                            break;
                         }
-                        br.close();
-                        conn.disconnect();
+                        Buffer.append(line);
                     }
+                    br.close();
+                    conn.disconnect();
                 }
                 get_json = Buffer.toString();
-                Log.d("msg", "get_json: " + get_json);
+                Log.i("msg", "get_json: " + get_json);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 err = e.toString();
@@ -552,7 +542,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
             } catch (IOException e) {
                 e.printStackTrace();
                 err = e.toString();
-                Log.i(ErrMag, "6");
+                Log.i(ErrMag, err);
             }
             return get_json;
         }
@@ -565,26 +555,28 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
             Log.d("onPostExecute:  ", " <<<<<onPostExecute>>>> ");
             try {
                 JSONArray jarray = new JSONObject(result).getJSONArray("store_data");
-                 Location location = new Location();
+                Location location = new Location();
                 if(jarray!=null){
                     while (jarray != null) {
                         JSONObject jsonObject = jarray.getJSONObject(i);
                         String name = jsonObject.getString("store_name");
-                        Float lng = Float.valueOf(jsonObject.getString("store_lng"));
-                        Float lat = Float.valueOf(jsonObject.getString("store_lat"));
+                        float lng = Float.parseFloat(jsonObject.getString("store_lng"));
+                        float lat = Float.parseFloat(jsonObject.getString("store_lat"));
+                        float dst = Float.parseFloat(jsonObject.getString("store_dst"));
+
                         location.setname(name);
                         location.setlng(lng);
                         location.setlat(lat);
+                        location.setdst(dst);
                         // null을 가끔 못 읽어오는 때가 있다고 하기에 써봄
                         //String Start = jsonObject.optString("START_TIME", "text on no value");
                         //String Stop = jsonObject.optString("STOP_TIME", "text on no value");
                         //String REG = jsonObject.optString("REG_TIME", "text on no value");
-                        Log.i("qw", name + "/" + lng.toString() + "/" + lat.toString());
+                        Log.i("qw", name + "/" + lng+ "/" + lat);
                         locationList.addAll(list);
                         i++;
                     }
-                }
-                else {
+                } else {
                     Toast.makeText(getContext(), "가까운 곳 없습니다.", Toast.LENGTH_SHORT).show();
                 }
                 locationList.addAll(list);
