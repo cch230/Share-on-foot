@@ -494,7 +494,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
             String get_json = "",tmp;
             URL url;
             try {
-                url = new URL("http://localhost/shareonfoot/data.jsp");
+                url = new URL("http://49.50.172.215:8080/shareonfoot/data.jsp");
                 HttpURLConnection conn = null;
                 try {
                     conn = (HttpURLConnection) url.openConnection();
@@ -509,7 +509,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
                 // 서버에서 읽어오기 위한 스트림 객체
                 OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                sendMsg = "lng=" + strings[0]+ "&lat=" + strings[1];
+                sendMsg = "lat=" + strings[0]+ "&lng=" + strings[1];
                 wr.write(sendMsg);
                 wr.flush();
                 wr.close();
@@ -525,7 +525,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
                     while (true) {
                         String line = br.readLine();
                         if (line == null) {
-                            Log.i("msg", "get_json: " + get_json);
+
                             break;
                         }
                         Buffer.append(line);
@@ -535,6 +535,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
                 }
                 get_json = Buffer.toString();
                 Log.i("msg", "get_json: " + get_json);
+
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 err = e.toString();
@@ -555,7 +556,6 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
             Log.d("onPostExecute:  ", " <<<<<onPostExecute>>>> ");
             try {
                 JSONArray jarray = new JSONObject(result).getJSONArray("store_data");
-                Location location = new Location();
                 if(jarray!=null){
                     while (jarray != null) {
                         JSONObject jsonObject = jarray.getJSONObject(i);
@@ -563,39 +563,34 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
                         float lng = Float.parseFloat(jsonObject.getString("store_lng"));
                         float lat = Float.parseFloat(jsonObject.getString("store_lat"));
                         float dst = Float.parseFloat(jsonObject.getString("store_dst"));
+                        Toast.makeText(getContext(), String.valueOf(dst), Toast.LENGTH_SHORT).show();
+                        LatLng position=new LatLng(lat,lng);
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(position);
+                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2));
+                        mMap.addMarker(markerOptions);
+                        polylineOptions = new PolylineOptions();
+                        polylineOptions.color(Color.YELLOW);
 
-                        location.setname(name);
-                        location.setlng(lng);
-                        location.setlat(lat);
-                        location.setdst(dst);
+                        polylineOptions.width(8);
+                        // 맵셋팅
+                        arrayPoints.add(position);
+                        polylineOptions.addAll(arrayPoints);
+
+                        mMap.addPolyline(polylineOptions);
                         // null을 가끔 못 읽어오는 때가 있다고 하기에 써봄
                         //String Start = jsonObject.optString("START_TIME", "text on no value");
                         //String Stop = jsonObject.optString("STOP_TIME", "text on no value");
                         //String REG = jsonObject.optString("REG_TIME", "text on no value");
                         Log.i("qw", name + "/" + lng+ "/" + lat);
-                        locationList.addAll(list);
+
                         i++;
                     }
                 } else {
                     Toast.makeText(getContext(), "가까운 곳 없습니다.", Toast.LENGTH_SHORT).show();
                 }
-                locationList.addAll(list);
             } catch (Exception e) {
                 Log.e(ErrMag, "7");
-            }
-            if(!locationList.isEmpty()){
-                MarkerOptions markerOptions = new MarkerOptions();
-
-                for(Location location : locationList){
-                    Float lat;
-                    Float lng;
-                    lat=location.getlat();
-                    lng=location.getlng();
-                    LatLng position=new LatLng(lat,lng);
-                    markerOptions.position(position);
-                    mMap.addMarker(markerOptions);
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2));
-                }
             }
         }
     }
