@@ -112,7 +112,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     public TextView tv_brand;
     public TextView tv_size;
     public TextView tv_date;
-
+    public String weekDay;
     public ImageView iv_heart;
     public ImageView iv_modify;
     public ImageView iv_delete;
@@ -134,6 +134,9 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     private FloatingActionMenu fam;
     private FloatingActionButton fabMake, fabRecommend;
+
+    public fragment_codi() {
+    }
 
     public static fragment_codi newInstance() {
 
@@ -212,7 +215,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         mapView.getMapAsync(this);
         arrayPoints = new ArrayList<LatLng>();
             //탭 목록 설정
-            String weekDay;
+
 
             // SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US); // 특정 언어로 출력하고 싶은 경우
             SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
@@ -233,16 +236,19 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
                     break;
                 case 3:
-                    theme.setText("오늘은 디저트 먹으러!!");
-
+                    theme.setText("오늘은 운동하러 가자!!");
 
                     break;
                 case 4:
                     theme.setText("오늘은 마음의 양식!!");
 
                     break;
+                case 5:
+                    theme.setText("오늘은 불금!!");
+
+                    break;
                 case 6:
-                    theme.setText("오늘은 머리하러 가자!!");
+                    theme.setText("오늘은 놀러 가자!!");
 
                     break;
                 case 7:
@@ -404,9 +410,11 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
         mMap = map;
         MarkerOptions markerOptions = new MarkerOptions();
-        String coordinates[] = {"37.375280717973304", "126.63289979777781"};
+        String day=String.valueOf(day_return(weekDay));
+        String coordinates[] = {"37.375280717973304", "126.63289979777781",day};
         double lat = Double.parseDouble(coordinates[0]);
         double lng = Double.parseDouble(coordinates[1]);
+
         LatLng position = new LatLng(lat, lng);
         GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
         markerOptions.position(position);
@@ -509,7 +517,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
                 // 서버에서 읽어오기 위한 스트림 객체
                 OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                sendMsg = "lat=" + strings[0]+ "&lng=" + strings[1];
+                sendMsg = "lat=" + strings[0]+ "&lng=" + strings[1] + "&day=" + strings[2];
                 wr.write(sendMsg);
                 wr.flush();
                 wr.close();
@@ -560,9 +568,9 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
                     while (jarray != null) {
                         JSONObject jsonObject = jarray.getJSONObject(i);
                         String name = jsonObject.getString("store_name");
-                        float lng = Float.parseFloat(jsonObject.getString("store_lng"));
-                        float lat = Float.parseFloat(jsonObject.getString("store_lat"));
-                        float dst = Float.parseFloat(jsonObject.getString("store_dst"));
+                        double lng =  Double.parseDouble(jsonObject.getString("store_lng"));
+                        double lat = Double.parseDouble(jsonObject.getString("store_lat"));
+                        double dst = Double.parseDouble(jsonObject.getString("store_dst"));
                         Toast.makeText(getContext(), String.valueOf(dst), Toast.LENGTH_SHORT).show();
                         LatLng position=new LatLng(lat,lng);
                         MarkerOptions markerOptions = new MarkerOptions();
@@ -594,7 +602,6 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
             }
         }
     }
-
 
 
 
