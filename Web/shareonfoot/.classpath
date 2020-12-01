@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk-11.0.7">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk-12.02">
 		<attributes>
 			<attribute name="module" value="true"/>
 			<attribute name="owner.project.facets" value="java"/>
@@ -14,7 +14,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="C:/Users/cch23/Downloads/mysql-connector-java-5.1.37-bin.jar"/>
-	<classpathentry kind="lib" path="C:/Users/cch23/Downloads/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/cch23/eclipse-workspace/shareonfoot/WebContent/WEB-INF/lib/mysql-connector-java-5.1.37-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/cch23/eclipse-workspace/shareonfoot/WebContent/WEB-INF/lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
