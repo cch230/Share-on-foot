@@ -20,10 +20,8 @@
 ---|---|
 Eclipse IDE for EE Developers |20-03|
 Adroid Studio |4.1.0|
-compileSdkVersion |28|
-buildToolsVersion|28.0.3|
-oracle JDK |11.0.4|
+compileSdkVersion |29|
+buildToolsVersion|29.0.3|
+oracle JRE |12.0.2|
 Spring Tool Suite |4.8.0|
-MySQL Workbench |8.0 CE|
-AWS-EC2 | |
-Aws RDS-MY SQL |8.0.15|
+N Cloud server-MariaDB |10.2|
