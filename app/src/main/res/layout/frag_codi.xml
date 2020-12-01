@@ -11,7 +11,8 @@
     tools:openDrawer="start">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/view123">
             <com.ssomai.android.scalablelayout.ScalableLayout
                 android:id="@+id/header"
                 android:layout_width="wrap_content"
@@ -58,43 +59,37 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:descendantFocusability="blocksDescendants"
-                        android:background="#cccccc"
+                        android:background="@color/화이트"
 
                         >
 
-                        <HorizontalScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:id="@+id/tab_view"
-                            android:background="@color/화이트"
-                            android:scrollbars="none"
-                            >
+
                             <TextView
                                 android:id="@+id/tabLayout"
-                                android:layout_width="wrap_content"
+                                android:layout_width="90dp"
                                 android:layout_height="50dp"
-                                android:text="요일"
+                                android:text="월요일"
                                 android:textSize="20sp"
-                                android:layout_marginTop="10dp"
+                                android:layout_marginTop="1dp"
                                 android:layout_marginLeft="20dp"
+                                android:textColor="@color/teal"
                                 android:padding="10dp"
+                                android:background="@color/화이트"
                                 android:textAlignment="center"
                                 />
-                            </HorizontalScrollView>
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/day_theme"
                             android:text="오늘은 카페랑 디저트!!"
                             android:textSize="20sp"
-                            android:textColor="@color/teal"
+                            android:padding="10dp"
+
                             android:textAlignment="center"
                             android:background="@color/화이트"
                             android:layout_marginTop="1dp"
-                            android:layout_below="@+id/tab_view"/>
+                            android:layout_marginLeft="100dp"/>
 
                         <com.google.android.gms.maps.MapView
                             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -153,7 +148,7 @@
         android:layout_alignParentRight="true"
         android:paddingBottom="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        fab:menu_backgroundColor="#ccffffff"
+        fab:menu_backgroundColor="#ffffff"
         fab:menu_icon="@drawable/make_codi"
 
 

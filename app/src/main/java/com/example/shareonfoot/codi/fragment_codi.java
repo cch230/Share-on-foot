@@ -4,12 +4,17 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +30,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -35,18 +42,24 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.shareonfoot.R;
 import com.example.shareonfoot.home.activity_home;
 import com.example.shareonfoot.util.OnBackPressedListener;
-import com.example.shareonfoot.util.Location;
 import com.github.clans.fab.FloatingActionMenu;
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -54,34 +67,27 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.nio.Buffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 
-import io.reactivex.Maybe;
 
 import static android.app.Activity.RESULT_OK;
 
-public class fragment_codi extends Fragment implements OnBackPressedListener, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
+public class fragment_codi extends Fragment implements OnBackPressedListener, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener,
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
     ViewGroup viewGroup;
     Toast toast;
@@ -95,10 +101,8 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     Activity activity;
     private PolylineOptions polylineOptions;
     private ArrayList<LatLng> arrayPoints;
-    private ArrayList<MarkerOptions> arrayMarkerOptions;
-    private ViewPager finalPager;
 
-    List<Location> locationList = new ArrayList<Location>();
+
 
     DrawerLayout drawer;
     public RelativeLayout Cloth_Info;
@@ -110,7 +114,6 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     public TextView tv_detailcategory;
     public TextView tv_season;
     public TextView tv_brand;
-    public TextView tv_size;
     public TextView tv_date;
     public String weekDay;
     public ImageView iv_heart;
@@ -126,14 +129,41 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     public TextView tv_edit_detailcategory;
     public TextView tv_edit_brand;
     public TextView weekday;
-    private MapView mapView=null;
-    public static String ErrMag="ErrMag";
+    private MapView mapView = null;
+    public static String ErrMag = "ErrMag";
     public String err;
-    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int PERMISSIONS_REQUEST_CODE = 100;
-    String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+    //tring[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     private FloatingActionMenu fam;
     private FloatingActionButton fabMake, fabRecommend;
+
+    private static final int UPDATE_INTERVAL_MS = 60000;  // 1초
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 30000; // 0.5초
+    private Marker currentMarker = null;
+
+
+    // onRequestPermissionsResult에서 수신된 결과에서 ActivityCompat.requestPermissions를 사용한 퍼미션 요청을 구별하기 위해 사용됩니다.
+
+
+    // 앱을 실행하기 위해 필요한 퍼미션을 정의합니다.
+
+
+    Location mCurrentLocatiion;
+
+
+    private LocationRequest locationRequest;
+    private Location location;
+
+
+    // The entry point to the Fused Location Provider.
+    private FusedLocationProviderClient mFusedLocationProviderClient; // Deprecated된 FusedLocationApi를 대체
+
+    private LatLng mDefaultLocation = new LatLng(37.375280717973304, 126.63289979777781);
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private boolean mLocationPermissionGranted;
+
+    LatLng latLng=null;
+
+
 
     public fragment_codi() {
     }
@@ -150,9 +180,9 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        viewGroup = (ViewGroup) inflater.inflate(R.layout.frag_codi,container,false);
-        toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
-        mapView = (MapView)viewGroup.findViewById(R.id.map);
+        viewGroup = (ViewGroup) inflater.inflate(R.layout.frag_codi, container, false);
+        toast = Toast.makeText(getContext(), "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT);
+        mapView = (MapView) viewGroup.findViewById(R.id.map);
         mapView.getMapAsync(this);
         return viewGroup;
     }
@@ -161,9 +191,9 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        if (context instanceof Activity){
+        if (context instanceof Activity) {
             activity = (Activity) context;
-            ((activity_home)activity).setOnBackPressedListener(this);
+            ((activity_home) activity).setOnBackPressedListener(this);
         }
 
     }
@@ -211,52 +241,49 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         // BitmapDescriptorFactory 생성하기 위한 소스
 
         MapsInitializer.initialize(requireActivity());
-        mapView = (MapView)getView().findViewById(R.id.map);
+        mapView = (MapView) getView().findViewById(R.id.map);
         mapView.getMapAsync(this);
         arrayPoints = new ArrayList<LatLng>();
-            //탭 목록 설정
+        //탭 목록 설정
 
 
-            // SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US); // 특정 언어로 출력하고 싶은 경우
-            SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
 
-            Calendar calendar = Calendar.getInstance();
-            weekDay = dayFormat.format(calendar.getTime());
+        Calendar calendar = Calendar.getInstance();
+        weekDay = dayFormat.format(calendar.getTime());
 
-            //.makeText(getContext(), weekDay, Toast.LENGTH_SHORT ).show();
 
-            weekday.setText(weekDay);
-            switch (day_return(weekDay)) {
-                case 1:
-                    theme.setText("오늘은 카페랑 디저트!!");
+        weekday.setText(weekDay);
+        switch (day_return(weekDay)) {
+            case 1:
+                theme.setText("오늘은 카페랑 디저트!!");
 
-                    break;
-                case 2:
-                    theme.setText("오늘은 맛집이야!!");
+                break;
+            case 2:
+                theme.setText("오늘은 맛집이야!!");
 
-                    break;
-                case 3:
-                    theme.setText("오늘은 운동하러 가자!!");
+                break;
+            case 3:
+                theme.setText("오늘은 운동하러 가자!!");
 
-                    break;
-                case 4:
-                    theme.setText("오늘은 마음의 양식!!");
+                break;
+            case 4:
+                theme.setText("오늘은 마음의 양식!!");
 
-                    break;
-                case 5:
-                    theme.setText("오늘은 불금!!");
+                break;
+            case 5:
+                theme.setText("오늘은 불금!!");
 
-                    break;
-                case 6:
-                    theme.setText("오늘은 놀러 가자!!");
+                break;
+            case 6:
+                theme.setText("오늘은 놀러 가자!!");
 
-                    break;
-                case 7:
-                    theme.setText("오늘은 전부 다!!");
+                break;
+            case 7:
+                theme.setText("오늘은 전부 다!!");
 
-                    break;
-            }
-
+                break;
+        }
 
 
         //플로팅 액션 버튼 설정
@@ -285,10 +312,9 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         fam.setOnMenuButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(fam.isOpened()){
+                if (fam.isOpened()) {
                     fam.close(true);
-                }
-                else{
+                } else {
                     fam.open(true);
                 }
             }
@@ -301,21 +327,21 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
     }
 
-    public int day_return(String day){
-        if(day.equals("월요일")) return 1;
-        else if(day.equals("화요일")) return 2;
-        else if(day.equals("수요일")) return 3;
-        else if(day.equals("목요일")) return 4;
-        else if(day.equals("금요일")) return 5;
-        else if(day.equals("토요일")) return 6;
+    public int day_return(String day) {
+        if (day.equals("월요일")) return 1;
+        else if (day.equals("화요일")) return 2;
+        else if (day.equals("수요일")) return 3;
+        else if (day.equals("목요일")) return 4;
+        else if (day.equals("금요일")) return 5;
+        else if (day.equals("토요일")) return 6;
         else return 7;
     }
 
     private DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            tv_edit_date.setText(year + "년" + monthOfYear + "월" + dayOfMonth +"일");
-            Toast.makeText(getContext(), year + "년" + monthOfYear + "월" + dayOfMonth +"일", Toast.LENGTH_SHORT).show();
+            tv_edit_date.setText(year + "년" + monthOfYear + "월" + dayOfMonth + "일");
+            Toast.makeText(getContext(), year + "년" + monthOfYear + "월" + dayOfMonth + "일", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -324,6 +350,22 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     public void onResume() {
         super.onResume();
         mapView.onResume();
+        if (mLocationPermissionGranted) {
+            Log.d("TAG", "onResume : requestLocationUpdates");
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            mFusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
+            if (mMap!=null)
+                mMap.setMyLocationEnabled(true);
+        }
     }
 
     //뒤로 가기 버튼이 눌렸을 경우 드로워(메뉴)를 닫는다.
@@ -354,6 +396,19 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
 //액티비티가 처음 생성될 때 실행되는 함수
 
+        locationRequest = new LocationRequest()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY) // 정확도를 최우선적으로 고려
+                .setInterval(UPDATE_INTERVAL_MS) // 위치가 Update 되는 주기
+                .setFastestInterval(FASTEST_UPDATE_INTERVAL_MS); // 위치 획득후 업데이트되는 주기
+
+        LocationSettingsRequest.Builder builder =
+                new LocationSettingsRequest.Builder();
+
+        builder.addLocationRequest(locationRequest);
+
+        // FusedLocationProviderClient 객체 생성
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
         if(mapView != null)
         {
             mapView.onCreate(savedInstanceState);
@@ -363,7 +418,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
     @Override
     public void onMapClick(LatLng latLng) {
-        MarkerOptions markerOptions = new MarkerOptions();
+      /*  MarkerOptions markerOptions = new MarkerOptions();
 
         //add marker
         markerOptions.position(latLng);
@@ -378,7 +433,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         arrayPoints.add(latLng);
         polylineOptions.addAll(arrayPoints);
 
-        mMap.addPolyline(polylineOptions);
+        mMap.addPolyline(polylineOptions);*/
     }
 
     //클릭 리스너
@@ -394,6 +449,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if(requestCode == MAKE_CODI && resultCode == RESULT_OK)
             ((activity_home)activity).refresh_codi(fragment_codi.this);
         else if(requestCode == WEATHER_CODI && resultCode == RESULT_OK)
@@ -409,33 +465,22 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     public void onMapReady(final GoogleMap map) {
 
         mMap = map;
-        MarkerOptions markerOptions = new MarkerOptions();
-        int day=day_return(weekDay);
-        String coordinates[] = {"37.375280717973304", "126.63289979777781",String.valueOf(day)};
-        double lat = Double.parseDouble(coordinates[0]);
-        double lng = Double.parseDouble(coordinates[1]);
 
-        LatLng position = new LatLng(lat, lng);
-        GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
-        markerOptions.position(position);
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
-        mMap.addMarker(markerOptions);
-
-        // 맵 위치이동.
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 14));
-        mMap.setOnMapClickListener((GoogleMap.OnMapClickListener) this);
-        mMap.setOnMapLongClickListener((GoogleMap.OnMapLongClickListener) this);
-
-      //  mMap.setOnInfoWindowClickListener((GoogleMap.OnInfoWindowClickListener) this); //정보창 클릭 리스너(마커 삭제 이벤트)
-        new NearestTask().execute(coordinates);
-
+        setDefaultLocation(); // GPS를 찾지 못하는 장소에 있을 경우 지도의 초기 위치가 필요함.
+        getLocationPermission();
+        updateLocationUI();
+        getDeviceLocation();
 
     }
+
     @Override
     public void onStop() {
         super.onStop();
         mapView.onStop();
+        if (mFusedLocationProviderClient != null) {
+            Log.d("TAG", "onStop : removeLocationUpdates");
+            mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
+        }
     }
 
     @Override
@@ -462,27 +507,11 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         mapView.onLowMemory();
     }
 
-// polyline 생성
-
-    public void drawPolyline(){
-
-        polylineOptions = new PolylineOptions();
-
-        polylineOptions.color(Color.RED);
-        polylineOptions.width(5);
-
-        polylineOptions.addAll(arrayPoints);
-
-        mMap.addPolyline(polylineOptions);
-
-    }
-
     @Override
-
     public void onMapLongClick(LatLng latLng) {
 
-        mMap.clear();
-        arrayPoints.clear();
+      /*  mMap.clear();
+        arrayPoints.clear();*/
 
 
     }
@@ -575,13 +604,34 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
                         //Toast.makeText(getContext(), String.valueOf(dst), Toast.LENGTH_SHORT).show();
                         LatLng position=new LatLng(lat,lng);
                         MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.position(position);
-                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2));
+                        markerOptions.position(position)
+                                .title(name)
+                                .snippet(String.format("나와의 거리 %.2fkm", dst));
+                        switch (i){
+                            case 0:
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.m1));
+                                break;
+                            case 1:
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.m2));
+                                break;
+                            case 2:
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.m3));
+                                break;
+                            case 3:
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.m4));
+                                break;
+                            case 4:
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.m5));
+                                break;
+                            default:
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2));
+                                break;
+                        }
                         mMap.addMarker(markerOptions);
                         polylineOptions = new PolylineOptions();
-                        polylineOptions.color(Color.YELLOW);
-
-                        polylineOptions.width(8);
+                        polylineOptions.color(Color.YELLOW)
+                                .width(8).
+                                jointType(JointType.ROUND);;
                         // 맵셋팅
                         arrayPoints.add(position);
                         polylineOptions.addAll(arrayPoints);
@@ -604,125 +654,178 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         }
     }
 
-
-
-/**
-     * 현재 위치정보 조회.
-     *
-     * @return
-     *//*
-
-    public Maybe<Location> get_현재위치정보() {
+    private void updateLocationUI() {
+        if (mMap == null) {
+            return;
+        }
         try {
-            // 권한 체크.
-            CheckUtil.Check(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED, "[ACCESS_FINE_LOCATION] 권한체크 에러", Exception.class);
-            CheckUtil.Check(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED, "[ACCESS_COARSE_LOCATION] 권한체크 에러", Exception.class);
-
-            // 위치정보 조회.
-            LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-
-            // 위치 정보 사용여부 조회.
-            {
-                CheckUtil.Check(get_위치정보_요청가능_여부(locationManager), "위치정보 사용불가능 상태", Exception.class);
+            if (mLocationPermissionGranted) {
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            } else {
+                mMap.setMyLocationEnabled(false);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                mCurrentLocatiion = null;
+                getLocationPermission();
             }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
 
-            // 네트워크 정보로부터 데이터 조회.
-            {
-                // 네트워크 정보로 부터 위치값 가져오기
-                if (isNetworkEnabled) {
-                    locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES
-                            , this
-                    );
+    private void setDefaultLocation() {
+        if (currentMarker != null) currentMarker.remove();
 
-                    if (locationManager != null) {
-                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    }
-                }
-            }
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(mDefaultLocation);
+        markerOptions.title("위치정보 가져올 수 없음");
+        markerOptions.snippet("위치 퍼미션과 GPS 활성 여부 확인하세요");
+        markerOptions.draggable(true);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        currentMarker = mMap.addMarker(markerOptions);
 
-            // GPS 정보로부터 데이터 조회.
-            {
-                if (isGPSEnabled) {
-                    if (location == null) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES,
-                                this
-                        );
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 14);
+        mMap.moveCamera(cameraUpdate);
+    }
 
-                        if (locationManager != null) {
-                            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        }
-                    }
-                }
-            }
+    String getCurrentAddress(LatLng latlng) {
+        // 위치 정보와 지역으로부터 주소 문자열을 구한다.
+        List<Address> addressList = null ;
+        Geocoder geocoder = new Geocoder( getActivity(), Locale.getDefault());
 
-        } catch (Exception e) {
-            Log.e(MiRunConstDefinition.LOG_NAME, "위치정보 획득 실패", e);
+        // 지오코더를 이용하여 주소 리스트를 구한다.
+        try {
+            addressList = geocoder.getFromLocation(latlng.latitude,latlng.longitude,1);
+        } catch (IOException e) {
+            Toast. makeText( getActivity(), "위치로부터 주소를 인식할 수 없습니다. 네트워크가 연결되어 있는지 확인해 주세요.", Toast.LENGTH_SHORT ).show();
+            e.printStackTrace();
+            return "주소 인식 불가" ;
         }
 
-        return MaybeUtil.JustNullable(location);
+        if (addressList.size() < 1) { // 주소 리스트가 비어있는지 비어 있으면
+            return "해당 위치에 주소 없음" ;
+        }
+
+        // 주소를 담는 문자열을 생성하고 리턴
+        Address address = addressList.get(0);
+        StringBuilder addressStringBuilder = new StringBuilder();
+        for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
+            addressStringBuilder.append(address.getAddressLine(i));
+            if (i < address.getMaxAddressLineIndex())
+                addressStringBuilder.append("\n");
+        }
+
+        return addressStringBuilder.toString();
     }
 
-    */
-/**
-     * 마커 그리기
-     *
-     * @param myLocationMaybe
-     *//*
+    LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            super.onLocationResult(locationResult);
 
-    public void setDrawMaker(Maybe<Location> myLocationMaybe) {
+            List<Location> locationList = locationResult.getLocations();
 
-        MaybeUtil.Subscribe(myLocationMaybe,
+            if (locationList.size() > 0) {
+                Location location = locationList.get(locationList.size() - 1);
 
-                location -> {
+                LatLng currentPosition
+                        = new LatLng(location.getLatitude(), location.getLongitude());
 
-                    // Creating a LatLng object for the current location
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                String markerTitle = getCurrentAddress(currentPosition);
+                String markerSnippet = "위도:" + String.valueOf(location.getLatitude())
+                        + " 경도:" + String.valueOf(location.getLongitude());
 
-                    CameraPosition cp = new CameraPosition.Builder().target((latLng)).
-                            zoom(17).
-                            build();
+                Log.d("TAG", "Time :" + CurrentTime() + " onLocationResult : " + markerSnippet);
 
-                    // Showing the current location in Google Map
-                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cp));
+                //현재 위치에 마커 생성하고 이동
+                setCurrentLocation(location, markerTitle, markerSnippet);
+                mCurrentLocatiion = location;
 
-                    // 기존 마커 삭제.
-                    if (marker != null) {
-                        marker.remove();
-                    }
+            }
+        }
 
-                    // 마커 설정.
-                    MarkerOptions optFirst = new MarkerOptions().
-                            position(latLng).
-                            icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).
-                            title(MiRunResourceUtil.GetString(R.string.label_record_current_position));
+    };
 
-                    marker = mMap.addMarker(optFirst);
-                },
-                () -> MiRunViewUtil.ShowToast(R.string.label_emergency_request_location_fail));
-    }
-    */
-/**
-     * 달리는 경로 polyline 생성(pink)
-     *
-     * @param runningPoints
-     *//*
-
-    public void drawRunningPolyline(List<LatLng> runningPoints){
-        PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.color(MiRunResourceUtil.GetColor(R.drawable.marker));
-        polylineOptions.width(7);
-        polylineOptions.addAll(runningPoints);
-        mMap.addPolyline(polylineOptions);
+    private String CurrentTime(){
+        Date today = new Date();
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat time = new SimpleDateFormat("hh:mm:ss a");
+        return time.format(today);
     }
 
-*/
+    public void setCurrentLocation(Location location, String markerTitle, String markerSnippet) {
+        if (currentMarker != null) currentMarker.remove();
 
+        LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        latLng =currentLatLng;
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(currentLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
+
+        Log.i("lng",String.valueOf(latLng.latitude));
+
+        currentMarker = mMap.addMarker(markerOptions);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16));
+        //CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(currentLatLng);
+        //mMap.moveCamera(cameraUpdate);
+
+        mMap.setOnMapClickListener((GoogleMap.OnMapClickListener) this);
+        mMap.setOnMapLongClickListener((GoogleMap.OnMapLongClickListener) this);
+
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+
+        Calendar calendar = Calendar.getInstance();
+        weekDay = dayFormat.format(calendar.getTime());
+        int day=day_return(weekDay);
+
+        String coordinates[] = {String.valueOf(latLng.latitude), String.valueOf(latLng.longitude),String.valueOf(day)};
+
+        //  mMap.setOnInfoWindowClickListener((GoogleMap.OnInfoWindowClickListener) this); //정보창 클릭 리스너(마커 삭제 이벤트)
+        new NearestTask().execute(coordinates);
+    }
+
+    private void getDeviceLocation() {
+        try {
+            if (mLocationPermissionGranted) {
+                mFusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
+    private void getLocationPermission() {
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        mLocationPermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationPermissionGranted = true;
+                }
+            }
+        }
+        updateLocationUI();
+    }
+
+    public boolean checkLocationServicesStatus() {
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
 }
+
