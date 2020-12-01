@@ -223,7 +223,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
             Calendar calendar = Calendar.getInstance();
             weekDay = dayFormat.format(calendar.getTime());
 
-            Toast.makeText(getContext(), weekDay, Toast.LENGTH_SHORT ).show();
+            //.makeText(getContext(), weekDay, Toast.LENGTH_SHORT ).show();
 
             weekday.setText(weekDay);
             switch (day_return(weekDay)) {
@@ -410,8 +410,8 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
         mMap = map;
         MarkerOptions markerOptions = new MarkerOptions();
-        String day=String.valueOf(day_return(weekDay));
-        String coordinates[] = {"37.375280717973304", "126.63289979777781",day};
+        int day=day_return(weekDay);
+        String coordinates[] = {"37.375280717973304", "126.63289979777781",String.valueOf(day)};
         double lat = Double.parseDouble(coordinates[0]);
         double lng = Double.parseDouble(coordinates[1]);
 
@@ -423,7 +423,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
         // 맵 위치이동.
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 14));
         mMap.setOnMapClickListener((GoogleMap.OnMapClickListener) this);
         mMap.setOnMapLongClickListener((GoogleMap.OnMapLongClickListener) this);
 
@@ -518,6 +518,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
                 // 서버에서 읽어오기 위한 스트림 객체
                 OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
                 sendMsg = "lat=" + strings[0]+ "&lng=" + strings[1] + "&day=" + strings[2];
+                Log.i("day",strings[2]);
                 wr.write(sendMsg);
                 wr.flush();
                 wr.close();
@@ -571,7 +572,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
                         double lng =  Double.parseDouble(jsonObject.getString("store_lng"));
                         double lat = Double.parseDouble(jsonObject.getString("store_lat"));
                         double dst = Double.parseDouble(jsonObject.getString("store_dst"));
-                        Toast.makeText(getContext(), String.valueOf(dst), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), String.valueOf(dst), Toast.LENGTH_SHORT).show();
                         LatLng position=new LatLng(lat,lng);
                         MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.position(position);
