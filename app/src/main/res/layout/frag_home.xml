@@ -121,15 +121,25 @@
 
                         </HorizontalScrollView>
 
-                        <com.example.shareonfoot.util.NoneSwipeableViewPager
-                            xmlns:android="http://schemas.android.com/apk/res/android"
+                        <ImageView
                             android:name="com."
                             android:layout_marginTop="0.1dp"
                             android:layout_width="match_parent"
                             android:background="@color/closet"
                             android:layout_height="380dp"
-                            android:id="@+id/map"
-                            android:layout_below="@+id/recommend_tab_view"/>
+                            android:id="@+id/reco"
+                            android:layout_below="@+id/recommend_tab_view">
+
+                            <include layout="@layout/cardview_cloth_info_edit" />
+                        </ImageView>
+                        <TextView
+                            android:id="@+id/bt_reco_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="29dp"
+                            android:layout_marginLeft="50dp"
+                            android:layout_marginTop="350dp"
+                            android:background="@color/cri"
+                            android:text="오늘의 추천" />
                     </RelativeLayout>
 
 
@@ -191,8 +201,6 @@
             android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <include
-                layout="@layout/cardview_cloth_info_edit" />
 
 
         </RelativeLayout>
