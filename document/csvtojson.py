@@ -1,8 +1,8 @@
 import csv
 import json
 
-input_file_name = "C:/Users/cch23/Desktop/창업 아이템/걸어서나눔나눔/파싱/incheon.csv"
-output_file_name = "C:/Users/cch23/Desktop/창업 아이템/걸어서나눔나눔/파싱/incheon_116271.json"
+input_file_name = "C:/Users/cch23/Desktop/창업 아이템/걸어서나눔나눔/파싱/in.csv"
+output_file_name = "C:/Users/cch23/Desktop/창업 아이템/걸어서나눔나눔/파싱/in.json"
 
 with open(input_file_name, "r", encoding="utf-8", newline="") as input_file, \
         open(output_file_name, "w", encoding="utf-8", newline="") as output_file:
