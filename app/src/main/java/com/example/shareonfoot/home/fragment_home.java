@@ -62,7 +62,7 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
     DrawerLayout drawer;
     public RelativeLayout Cloth_Info;
     public RelativeLayout Cloth_Info_edit;
-    public ImageView iv_heart;
+    private ImageView reco;
     public TextView weekday_text;
 
     public static fragment_home newInstance() {
@@ -100,6 +100,9 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
     public void onStart() {
         super.onStart();
 
+        reco = (ImageView) getView().findViewById(R.id.reco);
+
+
         if(tabLayout_favorite == null){
             //탭 목록 설정
             tabLayout_favorite = (TabLayout) getView().findViewById(R.id.favorite_tabLayout);
@@ -113,7 +116,6 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
             finalPager_favorite.setAdapter(pagerAdapter_favorite);
             finalPager_favorite.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout_favorite));
             tabLayout_favorite.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
                     finalPager_favorite.setCurrentItem(tab.getPosition());

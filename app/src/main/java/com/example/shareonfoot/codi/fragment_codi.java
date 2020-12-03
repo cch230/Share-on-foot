@@ -82,6 +82,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 
 import static android.app.Activity.RESULT_OK;
@@ -309,6 +310,11 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         //fabAdd.setOnClickListener(onClickListener);
 
 
+        BtnOnClickListener onClickListener = new BtnOnClickListener();
+
+        fabMake.setOnClickListener(onClickListener);
+        fabRecommend.setOnClickListener(onClickListener);
+
         fam.setOnMenuButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -326,6 +332,9 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         fam.getMenuIconView().setColorFilter(Color.parseColor("#000000"));
 
     }
+
+
+
 
     public int day_return(String day) {
         if (day.equals("월요일")) return 1;
