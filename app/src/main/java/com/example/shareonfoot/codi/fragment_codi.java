@@ -634,7 +634,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
                         }
                         mMap.addMarker(markerOptions);
                         polylineOptions = new PolylineOptions();
-                        polylineOptions.color(Color.YELLOW)
+                        polylineOptions.color(Color.CYAN)
                                 .width(8).
                                 jointType(JointType.ROUND);;
                         // 맵셋팅
