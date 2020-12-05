@@ -693,7 +693,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         currentMarker = mMap.addMarker(markerOptions);
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 14);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mDefaultLocation, (float) 15);
         mMap.moveCamera(cameraUpdate);
     }
 
@@ -773,7 +773,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         Log.i("lng",String.valueOf(latLng.latitude));
 
         currentMarker = mMap.addMarker(markerOptions);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, (float) 15));
         //CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(currentLatLng);
         //mMap.moveCamera(cameraUpdate);
 

@@ -121,27 +121,158 @@
 
                         </HorizontalScrollView>
 
-                        <ImageView
-                            android:name="com."
+                        <!--<com.example.shareonfoot.util.NoneSwipeableViewPager
+                            android:id="@+id/recommend_tab_Pager"
                             android:layout_marginTop="0.1dp"
                             android:layout_width="match_parent"
-                            android:background="@color/closet"
                             android:layout_height="380dp"
-                            android:id="@+id/reco"
-                            android:layout_below="@+id/recommend_tab_view">
+                            android:background="@color/closet"
+                            android:layout_below="@+id/recommend_tab_view" >
 
                             <include layout="@layout/cardview_cloth_info_edit" />
-                        </ImageView>
-                        <TextView
-                            android:id="@+id/bt_reco_txt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="29dp"
-                            android:layout_marginLeft="50dp"
-                            android:layout_marginTop="350dp"
-                            android:background="@color/cri"
-                            android:text="오늘의 추천" />
-                    </RelativeLayout>
+                        </com.example.shareonfoot.util.NoneSwipeableViewPager>-->
 
+                    <FrameLayout
+                        android:id="@+id/recommend_tab_Pager"
+                        android:layout_marginTop="0.1dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="380dp"
+                        android:background="@color/closet"
+                        android:layout_below="@+id/recommend_tab_view"
+                        >
+                        <ImageView
+                            android:id="@+id/iv_codi_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="380dp"
+                            android:layout_gravity="fill_vertical"
+                            android:background="@drawable/gyeom"
+                            android:scaleType="centerCrop" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp"
+                            android:layout_gravity="bottom"
+                            android:background="@drawable/gradation"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+
+
+                            >
+                            <LinearLayout
+                                android:layout_above="@+id/bottom"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/child1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="#맛있는_디저트"
+                                    android:textSize="16dp"
+                                    android:textColor="@color/화이트"
+                                    />
+                                <TextView
+                                    android:id="@+id/child2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="#마카롱"
+                                    android:textSize="16dp"
+                                    android:textColor="@color/화이트"
+                                    />
+                                <TextView
+                                    android:id="@+id/child3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="#세상_맛집"
+                                    android:textSize="16dp"
+                                    android:textColor="@color/화이트"/>
+                                <TextView
+                                    android:id="@+id/child4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="#분위기_달달"
+                                    android:textSize="16dp"
+                                    android:textColor="@color/화이트"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="10dp"
+                                android:orientation="horizontal"
+                                android:layout_above="@+id/bottom"
+                                >
+                                <ImageView
+                                    android:id="@+id/iv_heart"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:src="@drawable/heart_color"
+                                    android:layout_gravity="center">
+                                </ImageView>
+
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/bottom"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginTop="15dp"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:visibility="visible"
+                                >
+                                <ImageView
+                                    android:layout_margin="2dp"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/gyeom1"
+                                    android:scaleType="centerCrop"
+                                    android:id="@+id/bottom1"
+                                    android:clickable="true"
+                                    />
+
+                                <ImageView
+                                    android:id="@+id/bottom2"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_margin="2dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/gyeom2"
+                                    android:clickable="true"
+
+                                    />
+                                <ImageView
+                                    android:layout_margin="2dp"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/gyeom3"
+                                    android:id="@+id/bottom3"
+                                    android:clickable="true"
+                                    android:scaleType="centerCrop"
+                                    />
+                                <ImageView
+                                    android:layout_margin="2dp"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/gyeom4"
+                                    android:scaleType="centerCrop"
+                                    android:clickable="true"
+                                    android:id="@+id/bottom4"
+                                    />
+                                <ImageView
+                                    android:layout_margin="2dp"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/gyeom5"
+                                    android:scaleType="centerCrop"
+                                    android:id="@+id/bottom5"
+                                    android:clickable="true"
+                                    />
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </FrameLayout>
+                    </RelativeLayout>
 
                     <RelativeLayout
                         android:id="@+id/rl_favorite"
@@ -188,22 +319,10 @@
                 </RelativeLayout>
             </androidx.core.widget.NestedScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-        <RelativeLayout
-            android:id="@+id/cloth_info"
-            android:visibility="invisible"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <include
-                layout="@layout/cardview_cloth_info"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/cloth_info_edit"
-            android:visibility="invisible"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
 
-        </RelativeLayout>
+
+
     </RelativeLayout>
 
 <!--    <com.google.android.material.navigation.NavigationView-->
