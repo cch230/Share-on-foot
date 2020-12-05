@@ -102,6 +102,8 @@ dependencies {
     implementation 'ru.github.igla:ferriswheel:1.2'
 
     implementation 'com.github.mecoFarid:squeezeloader:1.0.3'
+
+    implementation 'com.rmtheis:tess-two:9.1.0'
 }
 repositories {
     mavenCentral()
