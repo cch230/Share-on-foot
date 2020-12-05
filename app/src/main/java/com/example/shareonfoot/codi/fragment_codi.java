@@ -137,8 +137,8 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     private FloatingActionMenu fam;
     private FloatingActionButton fabMake, fabRecommend;
 
-    private static final int UPDATE_INTERVAL_MS = 60000;  // 1초
-    private static final int FASTEST_UPDATE_INTERVAL_MS = 30000; // 0.5초
+    private static final int UPDATE_INTERVAL_MS = 120000;  // 1초
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 60000; // 0.5초
     private Marker currentMarker = null;
 
 
@@ -428,20 +428,16 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     @Override
     public void onMapClick(LatLng latLng) {
       /*  MarkerOptions markerOptions = new MarkerOptions();
-
         //add marker
         markerOptions.position(latLng);
-
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2));
         mMap.addMarker(markerOptions);
         polylineOptions = new PolylineOptions();
         polylineOptions.color(Color.YELLOW);
-
         polylineOptions.width(8);
         // 맵셋팅
         arrayPoints.add(latLng);
         polylineOptions.addAll(arrayPoints);
-
         mMap.addPolyline(polylineOptions);*/
     }
 
@@ -789,6 +785,8 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         String coordinates[] = {String.valueOf(latLng.latitude), String.valueOf(latLng.longitude),String.valueOf(day)};
 
         //  mMap.setOnInfoWindowClickListener((GoogleMap.OnInfoWindowClickListener) this); //정보창 클릭 리스너(마커 삭제 이벤트)
+        mMap.clear();
+        arrayPoints.clear();
         new NearestTask().execute(coordinates);
     }
 
@@ -837,4 +835,3 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 }
-

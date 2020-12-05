@@ -138,6 +138,9 @@
                             android:layout_width="320dp"
                             android:layout_height="416dp"
                             android:layout_centerHorizontal="true"
+                            app:uiRotateGestures="true"
+                            app:uiTiltGestures="true"
+                            app:uiZoomGestures="true"
                             android:layout_below="@+id/view1231"
                              />
 

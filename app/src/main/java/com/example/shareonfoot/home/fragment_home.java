@@ -209,10 +209,11 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            int dp40 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,40,getResources().getDisplayMetrics());
             int dp50 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,50,getResources().getDisplayMetrics());
-            if (event.getAction() == ACTION_DOWN) {
+            if (event.getAction() == ACTION_DOWN^event.getAction() == ACTION_MOVE) {
                 switch (v.getId()) {
-                    case R.id.bottom1: 
+                    case R.id.bottom1:
                         iv_codi_image.setImageResource(R.drawable.gyeom1);
                         iv_codi_image1.getLayoutParams().height=dp50;
                         iv_codi_image1.getLayoutParams().width=dp50;
@@ -257,8 +258,18 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
                         break;
                 }
             }
-            if (event.getAction() == ACTION_UP) {
+            else {
                 iv_codi_image.setImageResource(R.drawable.gyeom);
+                iv_codi_image1.getLayoutParams().height=dp40;
+                iv_codi_image1.getLayoutParams().width=dp40;
+                iv_codi_image2.getLayoutParams().height=dp40;
+                iv_codi_image2.getLayoutParams().width=dp40;
+                iv_codi_image3.getLayoutParams().height=dp40;
+                iv_codi_image3.getLayoutParams().width=dp40;
+                iv_codi_image4.getLayoutParams().height=dp40;
+                iv_codi_image4.getLayoutParams().width=dp40;
+                iv_codi_image5.getLayoutParams().height=dp40;
+                iv_codi_image5.getLayoutParams().width=dp40;
             }
             return false;
         }
