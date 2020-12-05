@@ -159,6 +159,7 @@
 
                             >
                             <LinearLayout
+                                android:id="@+id/text123"
                                 android:layout_above="@+id/bottom"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -212,6 +213,30 @@
                                 </ImageView>
 
                             </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_toRightOf="@+id/text123"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@+id/bottom"
+                                android:layout_marginLeft="8dp"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:id="@+id/child6"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="인천 남동구 선수촌공원로55번길14"
+                                    android:textSize="10dp"
+                                    android:textColor="#CFCFCF"/>
+                                <TextView
+                                    android:id="@+id/child7"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="나와의 거리 11.8km"
+                                    android:textSize="10dp"
+                                    android:textColor="#CFCFCF"/>
+                            </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/bottom"
                                 android:layout_width="match_parent"
