@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -58,7 +59,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
     private ViewPager finalPager;
     LinearLayout drawer;
     private TextView tv_nickname;
-
+    private ImageButton imageButton;
 
 
     String myID;
@@ -103,12 +104,12 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         TextView tv_numFollowing = v.findViewById(R.id.tv_numFollowing);
          //소개글 설정
         TextView tv_pfContents = v.findViewById(R.id.tv_pfContents);
-
+        imageButton=v.findViewById(R.id.camera);
 
         LinearLayout ll_following_friends = v.findViewById(R.id.ll_following_friends);
 
         //팔로우 여부 설정
-        bt_follow = v.findViewById(R.id.bt_follow);
+        //bt_follow = v.findViewById(R.id.bt_follow);
      /*   if(myID.equals(targetID)){
             bt_follow.setVisibility(View.GONE);
             ll_following_friends.setVisibility(View.GONE);
@@ -122,10 +123,6 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
             });
             // 내가 팔로우한 사용자 중 현재 페이지 사용자를 팔로우한 사용자가 있는지.
         }*/
-
-
-
-
 
 
         toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
@@ -181,6 +178,14 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
             }
         });
 
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(getContext(), camera.class));
+                ActivityCompat.finishAffinity(getActivity());
+            }
+        });
 
         return v;
     }

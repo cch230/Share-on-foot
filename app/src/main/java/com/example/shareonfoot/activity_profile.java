@@ -7,21 +7,35 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+
+import com.example.shareonfoot.home.mySpace.camera;
 
 public class activity_profile extends AppCompatActivity {
+
+
+    private ImageButton imageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_profile);
         Button bt_logout = findViewById(R.id.bt_logout);
-        bt_logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        imageButton = findViewById(R.id.camera);
 
+
+
+
+    }
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.bt_logout:
                 startActivity(new Intent(activity_profile.this,activity_login.class));
                 ActivityCompat.finishAffinity(activity_profile.this);
-            }
-        });
+                break;
+            case R.id.camera:
+                startActivity(new Intent(activity_profile.this, camera.class));
+                ActivityCompat.finishAffinity(activity_profile.this);
+        }
     }
 }
