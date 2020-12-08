@@ -1,6 +1,7 @@
 package com.example.shareonfoot.social.space;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -56,10 +57,10 @@ public class activity_space extends AppCompatActivity {
     String myID;
     public String targetID;
 
-    Button bt_follow;
+    Button camera;
 
     TextView tv_numFollower;
-
+    Button bt_logout;
 
 
     @Override
@@ -71,7 +72,7 @@ public class activity_space extends AppCompatActivity {
 
 
 
-
+/*
         //프사 설정
         ImageView iv_profileImage = findViewById(R.id.iv_profileImage);
         //아이디 설정
@@ -85,11 +86,11 @@ public class activity_space extends AppCompatActivity {
         TextView tv_numFollowing = findViewById(R.id.tv_numFollowing);
 
         TextView tv_pfContents = findViewById(R.id.tv_pfContents);
-
+        bt_logout=findViewById(R.id.bt_logout);
         LinearLayout ll_following_friends = findViewById(R.id.ll_following_friends);
 
         //팔로우 여부 설정
-        //bt_follow = findViewById(R.id.bt_follow);
+      *//*  bt_follow = findViewById(R.id.bt_follow);
         if(myID.equals(targetID)){
             bt_follow.setVisibility(View.GONE);
             ll_following_friends.setVisibility(View.GONE);
@@ -103,7 +104,7 @@ public class activity_space extends AppCompatActivity {
             });
             // 내가 팔로우한 사용자 중 현재 페이지 사용자를 팔로우한 사용자가 있는지.
 
-        }
+        }*//*
 
 
         
@@ -113,7 +114,7 @@ public class activity_space extends AppCompatActivity {
 
         drawer = findViewById(R.id.final_drawer_layout);
 
-        //BtnOnClickListener onClickListener = new BtnOnClickListener();
+        BtnOnClickListener onClickListener = new BtnOnClickListener();
 
 
         if(tabLayout == null){
@@ -143,8 +144,8 @@ public class activity_space extends AppCompatActivity {
                 public void onTabReselected(TabLayout.Tab tab) {
 
                 }
-            });
-        }
+            });*/
+        //}
     }
 
 
@@ -172,6 +173,14 @@ public class activity_space extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.header_add : //헤더- 추가 버튼
+                    break;
+                case R.id.bt_logout:
+                    SharedPreferences sharedPreferences=getSharedPreferences("pref",0);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putString("login","");
+                    editor.commit();
+                    startActivity(new Intent(activity_space.this, activity_login.class));
+                    ActivityCompat.finishAffinity(activity_space.this);
                     break;
             }
         }

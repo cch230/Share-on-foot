@@ -32,7 +32,7 @@ public class fragment_social extends Fragment implements OnBackPressedListener {
     int ADD_BOARD = 8080;
     Activity activity;
     private TabLayout tabLayout;
-   // private ViewPager finalPager;
+    private ViewPager finalPager;
 
     //RelativeLayout filterButton;
     //RelativeLayout addButton;
@@ -144,7 +144,7 @@ public class fragment_social extends Fragment implements OnBackPressedListener {
             tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
             //탭 페이저 설정 (탭 클릭시 바뀌는 화면)
-        /*    finalPager = (ViewPager) getView().findViewById(R.id.tab_Pager);
+            finalPager = (ViewPager) getView().findViewById(R.id.tab_Pager);
 
             finalPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -161,7 +161,7 @@ public class fragment_social extends Fragment implements OnBackPressedListener {
                 public void onTabReselected(TabLayout.Tab tab) {
 
                 }
-            });*/
+            });
         }
 
 

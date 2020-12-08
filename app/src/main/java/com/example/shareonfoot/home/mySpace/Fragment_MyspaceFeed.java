@@ -1,7 +1,9 @@
 package com.example.shareonfoot.home.mySpace;
 
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.shareonfoot.R;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
 
 /* 그리드 사이즈 조절 방법 :
 어댑터 변경, 그리드 사이즈 변경, 페이지사이즈 변경
@@ -32,9 +41,6 @@ public class Fragment_MyspaceFeed extends Fragment {
     RecyclerView rv_post;
 
 
-
-    String targetID;
-
     public static Fragment_MyspaceFeed newInstance(String identifier, String size) {
 
         Bundle args = new Bundle();
@@ -50,7 +56,6 @@ public class Fragment_MyspaceFeed extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 
 
@@ -80,6 +85,8 @@ public class Fragment_MyspaceFeed extends Fragment {
             }
         }
 
+
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -89,28 +96,42 @@ public class Fragment_MyspaceFeed extends Fragment {
         //현재 페이지수와 함께 웹서버에 옷 데이터 요청
 
         fragment_mySpace parent = (fragment_mySpace) getParentFragment();
-        targetID = parent.targetID;
 
         //리사이클러 뷰 설정하기
         View view = inflater.inflate(R.layout.layout_share, container, false);
-        rv_post = (RecyclerView) view.findViewById(R.id.post_list);
-        rv_post.setLayoutManager(new GridLayoutManager(getContext(), gridsize)); //그리드 사이즈 설정
-        rv_post.setNestedScrollingEnabled(true);
+
+//
+//        rv_post.setNestedScrollingEnabled(true);
 
 
-        rv_post.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+      /*  rv_post.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-
+                if (!rv_post.canScrollVertically(-1)) {
+                    //스크롤이 최상단이면 데이터를 갱신한다
+                    //page = 0;
+                    //new networkTask().execute(Integer.toString(page));
+                    //Log.e("test","데이터 갱신");
+                }
+                else if (!rv_post.canScrollVertically(1)) {
+                    //스크롤이 최하단이면 웹서버에 다음 페이지 옷 데이터 요청
+                    Log.e("test","페이지 수 증가");
+                }
+                else {
+                }
             }
         });
-
+*/
 
         final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                //스크롤이 최상단이면 데이터를 갱신한다
 
+                page=0;
+                Log.e("test","데이터 갱신");
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
 
@@ -120,15 +141,10 @@ public class Fragment_MyspaceFeed extends Fragment {
 
 
 
-
-
-
-
-
-
     @Override
     public void onResume() {
         super.onResume();
+
     }
 
 }

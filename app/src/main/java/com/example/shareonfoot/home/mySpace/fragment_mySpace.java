@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,12 +28,10 @@ import com.example.shareonfoot.Global;
 
 import com.example.shareonfoot.R;
 import com.example.shareonfoot.activity_login;
-import com.example.shareonfoot.activity_profile;
 import com.example.shareonfoot.home.activity_home;
 import com.example.shareonfoot.social.space.subfragment.TabPagerAdapter_space;
 import com.example.shareonfoot.util.NumFormat;
 import com.example.shareonfoot.util.OnBackPressedListener;
-import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
@@ -42,7 +39,6 @@ import java.util.concurrent.ExecutionException;
 
 import retrofit2.Call;
 
-import static com.example.shareonfoot.util.NumFormat.formatNumStringZero;
 
 public class fragment_mySpace extends Fragment implements OnBackPressedListener {
 
@@ -57,13 +53,16 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
     private TabLayout tabLayout;
     public TabPagerAdapter_mySpace pagerAdapter;
     private ViewPager finalPager;
+
     LinearLayout drawer;
-    private TextView tv_nickname;
-    private ImageButton imageButton;
+
+
+
 
 
     String myID;
-    public String targetID,targetNAME;
+    public String targetID;
+
     Button bt_follow;
 
     TextView tv_numFollower;
@@ -87,42 +86,37 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_space, container,false);
         toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
-        SharedPreferences pref= getContext().getSharedPreferences("pref",0);
-        targetID = pref.getString("login","");
-        targetNAME= pref.getString(targetID+"NAME","");
+
+
+
+
+
+        targetID = myID;
+
+
+
+
         //프사 설정
         ImageView iv_profileImage = v.findViewById(R.id.iv_profileImage);
         //아이디 설정
         TextView tv_id = v.findViewById(R.id.tv_id);
         tv_id.setText("@"+targetID);
         //닉네임 설정
-        tv_nickname = v.findViewById(R.id.tv_nickname);
-        tv_nickname.setText(targetNAME);
+        TextView tv_nickname = v.findViewById(R.id.tv_nickname);
         //게시물, 팔로워, 팔로잉 수 설정
         TextView tv_numBoard = v.findViewById(R.id.tv_numBoard);
         tv_numFollower = v.findViewById(R.id.tv_numFollower);
         TextView tv_numFollowing = v.findViewById(R.id.tv_numFollowing);
-         //소개글 설정
+
         TextView tv_pfContents = v.findViewById(R.id.tv_pfContents);
-        imageButton=v.findViewById(R.id.camera);
+
 
         LinearLayout ll_following_friends = v.findViewById(R.id.ll_following_friends);
 
         //팔로우 여부 설정
-        //bt_follow = v.findViewById(R.id.bt_follow);
-     /*   if(myID.equals(targetID)){
-            bt_follow.setVisibility(View.GONE);
-            ll_following_friends.setVisibility(View.GONE);
-        }
-        else{
-            bt_follow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                }
-            });
-            // 내가 팔로우한 사용자 중 현재 페이지 사용자를 팔로우한 사용자가 있는지.
-        }*/
+
+
 
 
         toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
@@ -164,7 +158,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
 
 
         //로그아웃 버튼
-        Button bt_logout = v.findViewById(R.id.bt_logout);
+        final Button bt_logout = v.findViewById(R.id.bt_logout);
         bt_logout.setVisibility(View.VISIBLE);
         bt_logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,14 +172,6 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
             }
         });
 
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                startActivity(new Intent(getContext(), camera.class));
-                ActivityCompat.finishAffinity(getActivity());
-            }
-        });
 
         return v;
     }
@@ -218,7 +204,6 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
             toast.cancel();
         }
     }
-
 
 
 
@@ -273,4 +258,5 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         numFollow = NumFormat.formatNumString(Integer.parseInt(numFollow),false); //수 포매팅
         tv_numFollower.setText(numFollow);
     }
+
 }

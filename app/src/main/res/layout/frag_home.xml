@@ -132,8 +132,17 @@
                             <include layout="@layout/cardview_cloth_info_edit" />
                         </com.example.shareonfoot.util.NoneSwipeableViewPager>-->
 
+                        <com.example.shareonfoot.util.NoneSwipeableViewPager
+                            android:id="@+id/recommend_tab_Pager"
+                            android:layout_marginTop="0.1dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="380dp"
+                            android:background="@color/closet"
+                            android:layout_below="@+id/recommend_tab_view" >
+
+                        </com.example.shareonfoot.util.NoneSwipeableViewPager>
                     <FrameLayout
-                        android:id="@+id/recommend_tab_Pager"
+                        android:id="@+id/recommend_tab_Pager2"
                         android:layout_marginTop="0.1dp"
                         android:layout_width="match_parent"
                         android:layout_height="380dp"

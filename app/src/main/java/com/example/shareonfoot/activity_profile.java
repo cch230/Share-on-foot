@@ -21,7 +21,7 @@ public class activity_profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_profile);
         Button bt_logout = findViewById(R.id.bt_logout);
-        imageButton = findViewById(R.id.camera);
+       /* imageButton = findViewById(R.id.camera);*/
 
 
 
@@ -33,9 +33,9 @@ public class activity_profile extends AppCompatActivity {
                 startActivity(new Intent(activity_profile.this,activity_login.class));
                 ActivityCompat.finishAffinity(activity_profile.this);
                 break;
-            case R.id.camera:
+            /*case R.id.camera:
                 startActivity(new Intent(activity_profile.this, camera.class));
-                ActivityCompat.finishAffinity(activity_profile.this);
+                ActivityCompat.finishAffinity(activity_profile.this);*/
         }
     }
 }

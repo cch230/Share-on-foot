@@ -65,18 +65,22 @@
                             android:id="@+id/tabLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-
+                        <androidx.viewpager.widget.ViewPager
+                            android:id="@+id/tab_Pager"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_below="@+id/tabLayout" />
                         <ru.github.igla.ferriswheel.FerrisWheelView
                             android:id="@+id/ferrisWheelView"
                             android:layout_width="match_parent"
                             android:layout_height="450dp"
                             android:layout_gravity="center"
-                            android:layout_below="@+id/tabLayout"
+                            android:layout_below="@+id/tab_Pager"
                             android:layout_marginTop="30dp"
                             app:fwv_cabinsNumber="8"
                             app:fwv_rotateSpeed="12"
                             app:fwv_wheelStrokeColor="@color/lite_blue"
-                             />
+                            />
                         <com.mecofarid.squeezeloader.SqueezeLoader
                             android:layout_width="match_parent"
                             android:layout_height="4dp"

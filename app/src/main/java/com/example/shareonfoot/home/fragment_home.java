@@ -105,7 +105,8 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
             activity = (Activity) context;
             ((activity_home) activity).setOnBackPressedListener(this);
         }
-
+        if(pagerAdapter_recommend!=null)
+            pagerAdapter_recommend.notifyDataSetChanged();
 
     }
 
@@ -168,10 +169,10 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
             });
         }
         //탭 페이저 설정 (탭 클릭시 바뀌는 화면)
-        //finalPager_recommend = (ViewPager) getView().findViewById(R.id.recommend_tab_Pager);
-        //pagerAdapter_recommend = new MyPagerAdapter(getChildFragmentManager());
+        finalPager_recommend = (ViewPager) getView().findViewById(R.id.recommend_tab_Pager);
+        pagerAdapter_recommend = new MyPagerAdapter(getChildFragmentManager());
 
-        //finalPager_recommend.setAdapter(pagerAdapter_recommend);
+        finalPager_recommend.setAdapter(pagerAdapter_recommend);
 
     }
 
