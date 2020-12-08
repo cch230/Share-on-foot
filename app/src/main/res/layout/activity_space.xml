@@ -216,15 +216,14 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
-                                <ImageButton
-                                    android:id="@+id/camera"
-                                    android:layout_width="50dp"
-                                    android:layout_height="42dp"
+                                <Button
+                                    android:id="@+id/bt_follow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="38dp"
                                     android:layout_margin="5dp"
-                                    android:background="@color/cri"
-                                    android:onClick="Onclick"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/add_photo" />
+                                    android:backgroundTint="@color/follow"
+                                    android:text="팔로우"
+                                    android:textColor="#ffffff" />
                                 <View
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -238,6 +237,7 @@
                                     android:layout_gravity="right|center_vertical"
                                     android:layout_width="wrap_content"
                                     android:layout_height="38dp"
+                                    android:visibility="gone"
                                     android:text="로그아웃"/>
                             </LinearLayout>
 
@@ -250,7 +250,6 @@
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.core.widget.NestedScrollView
-                android:id="@+id/nestedScrollView2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -263,19 +262,18 @@
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tabLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"/>
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/tab_Pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="600dp"
+                        android:layout_below="@+id/tabLayout" />
+
 
 
                 </RelativeLayout>
             </androidx.core.widget.NestedScrollView>
-
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/tab_Pager"
-                android:layout_width="match_parent"
-                android:layout_height="600dp"
-                android:layout_marginTop="4dp"
-                app:layout_anchor="@+id/nestedScrollView2"
-                app:layout_anchorGravity="center" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

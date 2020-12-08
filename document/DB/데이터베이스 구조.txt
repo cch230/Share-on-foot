@@ -1,0 +1,205 @@
+﻿-- 테이블 순서는 관계를 고려하여 한 번에 실행해도 에러가 발생하지 않게 정렬되었습니다.
+
+
+
+
+CREATE DATABASE CLOSET;
+USE CLOSET;
+
+-- USER Table Create SQL
+
+CREATE TABLE `USER` (
+  `userID` varchar(45) NOT NULL COMMENT '유저아이디',
+  `nickname` varchar(50) DEFAULT NULL,
+  `email` varchar(70) DEFAULT NULL,
+  `pwd` varchar(45) DEFAULT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `birth` date DEFAULT NULL,
+  `emailChecked` varchar(45) DEFAULT NULL COMMENT '유저메일체크',
+  `pfImageName` varchar(50) DEFAULT NULL COMMENT '프로필 이미지 이름',
+  `pfImagePath` varchar(80) DEFAULT NULL COMMENT '프로필 이미지 경로',
+  `pfContents` varchar(300) DEFAULT NULL COMMENT '프로필 소개글',
+  PRIMARY KEY (`userID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='유저'
+
+ALTER TABLE USER COMMENT '유저';
+
+
+-- 옷 테이블
+CREATE TABLE `CLOTHES` (
+  `cloNo` int(11) NOT NULL AUTO_INCREMENT COMMENT '옷번호(대리키)',
+  `location` varchar(45) DEFAULT NULL,
+  `kind` varchar(45) DEFAULT NULL,
+  `category` varchar(45) DEFAULT NULL,
+  `detailCategory` varchar(45) DEFAULT NULL,
+  `color` varchar(45) DEFAULT NULL,
+  `identifier` varchar(91) DEFAULT NULL,
+  `season` varchar(45) DEFAULT NULL,
+  `brand` varchar(45) DEFAULT NULL,
+  `cloSize` varchar(45) DEFAULT NULL,
+  `buyDate` date DEFAULT NULL,
+  `fileName` varchar(45) DEFAULT NULL COMMENT '파일이름',
+  `filePath` varchar(100) DEFAULT NULL COMMENT '파일경로',
+  `favorite` varchar(45) DEFAULT NULL,
+  `userID` varchar(45) NOT NULL COMMENT '유저아이디',
+  `closetName` varchar(45) NOT NULL COMMENT '옷장이름',
+  `regDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`cloNo`),
+  KEY `FK_CLOTHES_closetName_CLOSET_closetName` (`userID`,`closetName`),
+  CONSTRAINT `FK_CLOTHES_closetName_CLOSET_closetName` FOREIGN KEY (`userID`, `closetName`) REFERENCES `CLOSET` (`userID`, `closetName`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=192 DEFAULT CHARSET=utf8 COMMENT='옷';
+
+
+-- USER Table Create SQL
+CREATE TABLE `CODI` (
+  `codiNo` int(11) NOT NULL AUTO_INCREMENT COMMENT '코디번호(대리키)',
+  `codiName` varchar(45) DEFAULT NULL COMMENT '이름',
+  `season` varchar(45) DEFAULT NULL COMMENT '계절',
+  `place` varchar(45) DEFAULT NULL COMMENT '장소',
+  `buyDate` date DEFAULT NULL COMMENT '구입 날짜',
+  `comment` varchar(1000) DEFAULT NULL COMMENT '코멘트 500자',
+  `favorite` varchar(45) DEFAULT NULL,
+  `fileName` varchar(50) DEFAULT NULL COMMENT '파일이름',
+  `filePath` varchar(80) DEFAULT NULL COMMENT '파일경로',
+  `addedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '추가 날짜',
+  `userID` varchar(30) NOT NULL COMMENT '유저아이디',
+  PRIMARY KEY (`codiNo`),
+  KEY `FK_CODI_name_CLOSET_name` (`userID`),
+  CONSTRAINT `FK_CODI_name_CLOSET_name` FOREIGN KEY (`userID`) REFERENCES `CLOSET` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8 COMMENT='코디';
+
+
+
+
+-- USER Table Create SQL
+CREATE TABLE `BOARD` (
+  `boardNo` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` varchar(45) NOT NULL COMMENT '작성자 아이디-유저 외래키',
+  `fileName` varchar(45) DEFAULT NULL COMMENT '파일이름',
+  `filePath` varchar(100) DEFAULT NULL COMMENT '파일경로',
+  `contents` text COMMENT '게시글 내용',
+  `regDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '등록일',
+  PRIMARY KEY (`boardNo`),
+  KEY `BOARD_CLO_USER` (`userID`),
+  CONSTRAINT `BOARD_CLO_USER` FOREIGN KEY (`userID`) REFERENCES `USER` (`userID`)
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COMMENT='옷 공유 게시판'
+
+ALTER TABLE BOARD COMMENT '옷 공유 게시판';
+
+ALTER TABLE BOARD
+    ADD CONSTRAINT BOARD_CLO_USER FOREIGN KEY (userID)
+        REFERENCES USER (userID) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE BOARD
+    ADD CONSTRAINT BOARD_CLO_CLOTHES FOREIGN KEY (cloNo)
+        REFERENCES CLOTHES (cloNo) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+desc BOARD;
+insert into BOARD values (null, 'a', 68, '제목' ,'안녕하세요? 게시글 내용입니다.', null, null);
+select * from BOARD;
+
+
+
+CREATE TABLE `COMMENT` (
+  `commentNo` int(11) NOT NULL AUTO_INCREMENT COMMENT '댓글 고유번호',
+  `boardNo` int(11) NOT NULL COMMENT '게시글 고유번호-옷 게시판 외래키',
+  `writerID` varchar(45) NOT NULL COMMENT '작성자 아이디-유저 외래키',
+  `contents` text COMMENT '댓글 내용',
+  `regDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '등록일',
+  PRIMARY KEY (`commentNo`),
+  KEY `COMMENT_BOARD` (`boardNo`),
+  KEY `COMMENT_USER` (`writerID`),
+  CONSTRAINT `COMMENT_BOARD` FOREIGN KEY (`boardNo`) REFERENCES `BOARD` (`boardNo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `COMMENT_USER` FOREIGN KEY (`writerID`) REFERENCES `USER` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=281377 DEFAULT CHARSET=utf8 COMMENT='옷 게시판 댓글';
+
+
+
+CREATE TABLE `HEART` (
+  `boardNo` int(11) NOT NULL COMMENT '게시글 고유번호-게시판 외래키',
+  `hearterID` varchar(45) NOT NULL COMMENT '하트한 유저 아이디-유저 외래키',
+  `regDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '등록일',
+  PRIMARY KEY (`boardNo`,`hearterID`),
+  KEY `HEART_BOARD` (`boardNo`),
+  KEY `HEART_USER` (`hearterID`),
+  CONSTRAINT `HEART_BOARD` FOREIGN KEY (`boardNo`) REFERENCES `BOARD` (`boardNo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `HEART_USER` FOREIGN KEY (`hearterID`) REFERENCES `USER` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='게시글 하트';
+
+
+
+CREATE TABLE `GOOD` (
+  `commentNo` int(11) NOT NULL COMMENT '댓글 고유번호- 댓글 외래키',
+  `gooderID` varchar(45) NOT NULL COMMENT '댓글 좋아요한 유저 아이디-유저 외래키',
+  `regDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '댓글 좋아요 등록일',
+  PRIMARY KEY (`commentNo`,`gooderID`),
+  KEY `GOOD_COMMENT` (`commentNo`),
+  KEY `GOOD_USER` (`gooderID`),
+  CONSTRAINT `GOOD_COMMENT` FOREIGN KEY (`commentNo`) REFERENCES `COMMENT` (`commentNo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `GOOD_USER` FOREIGN KEY (`gooderID`) REFERENCES `USER` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='댓글 좋아요';
+
+
+
+CREATE TABLE `FOLLOW` (
+  `followerID` varchar(45) NOT NULL COMMENT '팔로워 아이디 - 유저 외래키',
+  `followedID` varchar(45) NOT NULL COMMENT '팔로우된 유저 아이디-유저 외래키',
+  `regDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '등록일',
+  PRIMARY KEY (`followerID`,`followedID`),
+  KEY `FOLLOWER_USER` (`followerID`),
+  KEY `FOLLOWED_USER` (`followedID`),
+  CONSTRAINT `FOLLOWER_USER` FOREIGN KEY (`followerID`) REFERENCES `USER` (`userID`),
+  CONSTRAINT `FOLLOWED_USER` FOREIGN KEY (`followedID`) REFERENCES `USER` (`userID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='팔로우';
+
+
+
+CREATE TABLE `RELATION_BOARD_CLO` (
+  `relNo` int(11) NOT NULL AUTO_INCREMENT COMMENT '관계 고유번호',
+  `boardNo` int(11) NOT NULL COMMENT '게시물 고유번호-게시물 외래키',
+  `cloNo` int(11) NOT NULL COMMENT '옷 고유번호-옷 외래키',
+  PRIMARY KEY (`relNo`),
+  KEY `RELATION_TO_BOARD` (`boardNo`),
+  KEY `RELATION_TO_CLO` (`cloNo`),
+  CONSTRAINT `RELATION_TO_BOARD` FOREIGN KEY (`boardNo`) REFERENCES `BOARD` (`boardNo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `RELATION_TO_CLO` FOREIGN KEY (`cloNo`) REFERENCES `CLOTHES` (`cloNo`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='게시물-옷 관계';
+
+
+
+
+
+-- USER Table Create SQL
+CREATE TABLE `CLOSET` (
+  `userID` varchar(45) NOT NULL COMMENT '유저아이디',
+  `closetName` varchar(45) NOT NULL COMMENT '옷장이름',
+  `closetLocation` varchar(45) DEFAULT NULL COMMENT '옷장위치',
+  `closetMemo` varchar(45) DEFAULT NULL COMMENT '옷장메모',
+  `closetOpen` varchar(45) DEFAULT NULL COMMENT '공개여부',
+  PRIMARY KEY (`userID`,`closetName`),
+  CONSTRAINT `FK_CLOSET_userID_USER_userID` FOREIGN KEY (`userID`) REFERENCES `USER` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='옷장';
+
+
+
+
+
+-- USER Table Create SQL
+CREATE TABLE RELATION
+(
+    `relationUserID`  VARCHAR(45)    NOT NULL    COMMENT '주사람ID', 
+    `relatedUserID`   VARCHAR(45)    NOT NULL    COMMENT '부사람ID', 
+    `type`            VARCHAR(45)    NULL        COMMENT '관계', 
+    PRIMARY KEY (relationUserID, relatedUserID)
+);
+
+ALTER TABLE RELATION COMMENT '유저관계';
+
+ALTER TABLE RELATION
+    ADD CONSTRAINT FK_RELATION_relationUserID_USER_userID FOREIGN KEY (relationUserID)
+        REFERENCES USER (userID) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE RELATION
+    ADD CONSTRAINT FK_RELATION_relatedUserID_USER_userID FOREIGN KEY (relatedUserID)
+        REFERENCES USER (userID) ON DELETE RESTRICT ON UPDATE RESTRICT;
+

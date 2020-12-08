@@ -8,12 +8,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" /> <!-- 카메라 권한 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 저장소 읽기 권한 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 저장소 쓰기 권한 -->
+
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true" />
+        android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -24,13 +22,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".camera"></activity>
-        <activity android:name=".crawling" />
-        <activity android:name=".coupon" />
 
+       //
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+
 
         <activity android:name=".codi.weather.PermissionActivity" />
         <activity android:name=".closet.activity_cloInfo" />
@@ -52,10 +49,9 @@
         <activity android:name=".activity_login" />
         <activity android:name=".home.activity_home" />
         <activity android:name=".social.space.activity_space" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDopLZqllQK_y1KfBLBAjjTa_lCYEpE4vU" />
-    </application>
+            android:value="AIzaSyDopLZqllQK_y1KfBLBAjjTa_lCYEpE4vU"/>
 
+    </application>
 </manifest>

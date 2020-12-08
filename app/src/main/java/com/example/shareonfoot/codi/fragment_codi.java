@@ -82,7 +82,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 
 import static android.app.Activity.RESULT_OK;
@@ -137,8 +136,8 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     private FloatingActionMenu fam;
     private FloatingActionButton fabMake, fabRecommend;
 
-    private static final int UPDATE_INTERVAL_MS = 120000;  // 1초
-    private static final int FASTEST_UPDATE_INTERVAL_MS = 60000; // 0.5초
+    private static final int UPDATE_INTERVAL_MS = 60000;  // 1초
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 30000; // 0.5초
     private Marker currentMarker = null;
 
 
@@ -310,11 +309,6 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         //fabAdd.setOnClickListener(onClickListener);
 
 
-        BtnOnClickListener onClickListener = new BtnOnClickListener();
-
-        fabMake.setOnClickListener(onClickListener);
-        fabRecommend.setOnClickListener(onClickListener);
-
         fam.setOnMenuButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -332,9 +326,6 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         fam.getMenuIconView().setColorFilter(Color.parseColor("#000000"));
 
     }
-
-
-
 
     public int day_return(String day) {
         if (day.equals("월요일")) return 1;
@@ -428,16 +419,20 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     @Override
     public void onMapClick(LatLng latLng) {
       /*  MarkerOptions markerOptions = new MarkerOptions();
+
         //add marker
         markerOptions.position(latLng);
+
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2));
         mMap.addMarker(markerOptions);
         polylineOptions = new PolylineOptions();
         polylineOptions.color(Color.YELLOW);
+
         polylineOptions.width(8);
         // 맵셋팅
         arrayPoints.add(latLng);
         polylineOptions.addAll(arrayPoints);
+
         mMap.addPolyline(polylineOptions);*/
     }
 
@@ -634,8 +629,8 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
                         }
                         mMap.addMarker(markerOptions);
                         polylineOptions = new PolylineOptions();
-                        polylineOptions.color(Color.rgb(135,206,235))
-                                .width(10).
+                        polylineOptions.color(Color.YELLOW)
+                                .width(8).
                                 jointType(JointType.ROUND);;
                         // 맵셋팅
                         arrayPoints.add(position);
@@ -689,7 +684,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         currentMarker = mMap.addMarker(markerOptions);
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mDefaultLocation, (float) 15);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 14);
         mMap.moveCamera(cameraUpdate);
     }
 
@@ -769,7 +764,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         Log.i("lng",String.valueOf(latLng.latitude));
 
         currentMarker = mMap.addMarker(markerOptions);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, (float) 15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16));
         //CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(currentLatLng);
         //mMap.moveCamera(cameraUpdate);
 
@@ -785,8 +780,6 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         String coordinates[] = {String.valueOf(latLng.latitude), String.valueOf(latLng.longitude),String.valueOf(day)};
 
         //  mMap.setOnInfoWindowClickListener((GoogleMap.OnInfoWindowClickListener) this); //정보창 클릭 리스너(마커 삭제 이벤트)
-        mMap.clear();
-        arrayPoints.clear();
         new NearestTask().execute(coordinates);
     }
 
@@ -835,3 +828,4 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 }
+

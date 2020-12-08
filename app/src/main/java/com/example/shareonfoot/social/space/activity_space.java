@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,16 +14,12 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.shareonfoot.Global;
 
 import com.example.shareonfoot.R;
-import com.example.shareonfoot.activity_login;
-import com.example.shareonfoot.activity_profile;
-import com.example.shareonfoot.home.mySpace.camera;
 import com.example.shareonfoot.social.space.subfragment.TabPagerAdapter_space;
 import com.example.shareonfoot.util.NumFormat;
 import com.bumptech.glide.Glide;
@@ -53,6 +48,7 @@ public class activity_space extends AppCompatActivity {
     LinearLayout drawer;
 
 
+
     String myID;
     public String targetID;
 
@@ -66,6 +62,7 @@ public class activity_space extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space);
+
 
 
 
@@ -89,7 +86,7 @@ public class activity_space extends AppCompatActivity {
         LinearLayout ll_following_friends = findViewById(R.id.ll_following_friends);
 
         //팔로우 여부 설정
-        //bt_follow = findViewById(R.id.bt_follow);
+        bt_follow = findViewById(R.id.bt_follow);
         if(myID.equals(targetID)){
             bt_follow.setVisibility(View.GONE);
             ll_following_friends.setVisibility(View.GONE);
@@ -104,6 +101,7 @@ public class activity_space extends AppCompatActivity {
             // 내가 팔로우한 사용자 중 현재 페이지 사용자를 팔로우한 사용자가 있는지.
 
         }
+
 
 
         
@@ -190,4 +188,18 @@ public class activity_space extends AppCompatActivity {
 
 
 
+    public void applyFollow(boolean is_following, String numFollow){
+        if(!is_following){
+            ViewCompat.setBackgroundTintList(bt_follow, ColorStateList.valueOf(Color.parseColor("#aa0055af")));
+            bt_follow.setTextColor(Color.parseColor("#ffffff"));
+            bt_follow.setText("팔로우");
+        }else if(is_following){
+            ViewCompat.setBackgroundTintList(bt_follow, ColorStateList.valueOf(Color.parseColor("#ffffff")));
+            bt_follow.setTextColor(Color.parseColor("#000000"));
+            bt_follow.setText("팔로잉");
+        }
+
+        numFollow = NumFormat.formatNumString(Integer.parseInt(numFollow),false); //수 포매팅
+        tv_numFollower.setText(numFollow);
+    }
 }

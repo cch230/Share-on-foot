@@ -8,15 +8,13 @@
     tools:context=".home.recommend.recommendedItemFragment">
 
     <!-- TODO: Update blank fragment layout -->
-
     <ImageView
         android:id="@+id/iv_codi_image"
         android:layout_width="match_parent"
         android:layout_height="380dp"
+        android:scaleType="centerCrop"
         android:layout_gravity="fill_vertical"
-        android:background="@drawable/gyeom"
-        android:scaleType="centerCrop" />
-
+        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
@@ -53,7 +51,7 @@
                 android:id="@+id/child3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="#세상_맛집"
+                android:text="#블랙_가방"
                 android:textSize="16dp"
                 android:textColor="@color/화이트"/>
             <TextView
@@ -79,7 +77,15 @@
                 android:src="@drawable/heart_color"
                 android:layout_gravity="center">
             </ImageView>
-
+            <TextView
+                android:id="@+id/tv_numHeart"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                android:textSize="17dp"
+                android:textColor="@color/화이트">
+            </TextView>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/bottom"
@@ -95,43 +101,36 @@
                 android:layout_margin="2dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/gyeom1"
-                android:scaleType="centerCrop"
-                android:id="@+id/bottom1"
-                />
-            <ImageView
-                android:layout_margin="2dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/gyeom2"
-                android:scaleType="centerCrop"
-                android:id="@+id/bottom2"
-
-                />
-            <ImageView
-                android:layout_margin="2dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/gyeom3"
-                android:id="@+id/bottom3"
-
+                android:src="@drawable/codi"
                 android:scaleType="centerCrop"
                 />
             <ImageView
                 android:layout_margin="2dp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/gyeom4"
+                android:src="@drawable/codi"
                 android:scaleType="centerCrop"
-                android:id="@+id/bottom4"
                 />
             <ImageView
                 android:layout_margin="2dp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/gyeom5"
+                android:src="@drawable/codi"
                 android:scaleType="centerCrop"
-                android:id="@+id/bottom5"
+                />
+            <ImageView
+                android:layout_margin="2dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/codi"
+                android:scaleType="centerCrop"
+                />
+            <ImageView
+                android:layout_margin="2dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/codi"
+                android:scaleType="centerCrop"
                 />
         </LinearLayout>
     </RelativeLayout>

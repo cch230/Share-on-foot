@@ -50,6 +50,10 @@
                     </com.google.android.material.appbar.CollapsingToolbarLayout>
                 </com.google.android.material.appbar.AppBarLayout>
 
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -59,34 +63,20 @@
 
                         >
 
-                        <TextView
-                            android:id="@+id/reco_t"
-                            android:layout_width="wrap_content"
-                            android:layout_height="50dp"
-                            android:text="오늘의 추천 나눔길"
-                            android:textSize="24sp"
-                            android:layout_marginTop="1dp"
-                            android:layout_marginLeft="20dp"
-                            android:padding="10dp"
-                            android:background="@color/화이트"
-                            android:textAlignment="center"
-                            android:textColor="@color/스카이블루"
-                            android:layout_centerHorizontal="true"
-                            />
-                        <TextView
-                            android:id="@+id/tabLayout"
-                            android:layout_width="90dp"
-                            android:layout_height="50dp"
-                            android:text="월요일"
-                            android:textSize="20sp"
-                            android:layout_marginTop="1dp"
-                            android:layout_marginLeft="20dp"
-                            android:padding="10dp"
-                            android:textColor="@color/스카이블루"
-                            android:textAlignment="center"
-                            android:layout_below="@+id/reco_t"
 
-                            />
+                            <TextView
+                                android:id="@+id/tabLayout"
+                                android:layout_width="90dp"
+                                android:layout_height="50dp"
+                                android:text="월요일"
+                                android:textSize="20sp"
+                                android:layout_marginTop="1dp"
+                                android:layout_marginLeft="20dp"
+                                android:textColor="@color/teal"
+                                android:padding="10dp"
+                                android:background="@color/화이트"
+                                android:textAlignment="center"
+                                />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -95,57 +85,25 @@
                             android:text="오늘은 카페랑 디저트!!"
                             android:textSize="20sp"
                             android:padding="10dp"
-                            android:layout_below="@+id/reco_t"
+
                             android:textAlignment="center"
                             android:background="@color/화이트"
                             android:layout_marginTop="1dp"
                             android:layout_marginLeft="100dp"/>
-                        <View
-                            android:layout_width="324dp"
-                            android:layout_height="2dp"
-                            android:background="@color/lite_blue"
-                            android:layout_below="@+id/map"
-                            android:layout_centerHorizontal="true"
-                            />
-                        <View
-                            android:id="@+id/view1231"
-                            android:layout_width="320dp"
-                            android:layout_height="2dp"
-                            android:layout_marginTop="34dp"
-                            android:background="@color/lite_blue"
-                            android:layout_below="@+id/day_theme"
-                            android:layout_centerHorizontal="true"
-                            />
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="418dp"
-                            android:background="@color/lite_blue"
-                            android:layout_toLeftOf="@+id/map"
-                            android:layout_below="@+id/day_theme"
-                            android:layout_marginTop="34dp"
-                            />
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="418dp"
-                            android:background="@color/lite_blue"
-                            android:layout_toRightOf="@+id/map"
-                            android:layout_below="@+id/day_theme"
-                            android:layout_marginTop="34dp"
-                            />
+
                         <com.google.android.gms.maps.MapView
-                            android:id="@+id/map"
+                            xmlns:android="http://schemas.android.com/apk/res/android"
                             android:name="com.google.android.gms.maps.MapFragment"
-                            android:layout_width="320dp"
-                            android:layout_height="416dp"
-                            android:layout_centerHorizontal="true"
-                            app:uiRotateGestures="true"
-                            app:uiTiltGestures="true"
-                            app:uiZoomGestures="true"
-                            android:layout_below="@+id/view1231"
-                             />
+                            android:layout_marginTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="380dp"
+                            android:id="@+id/map"
+                            android:layout_below="@+id/day_theme"/>
+
 
 
                     </RelativeLayout>
+                </androidx.core.widget.NestedScrollView>
 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
