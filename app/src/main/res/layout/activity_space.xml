@@ -229,7 +229,6 @@
                                     android:layout_height="42dp"
                                     android:layout_margin="5dp"
                                     android:background="@color/cri"
-                                    android:onClick="Onclick"
                                     android:scaleType="centerCrop"
                                     android:src="@drawable/add_photo" />
                                 <View
@@ -276,6 +275,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="600dp"
                         android:layout_below="@+id/tabLayout" />
+                        <TextView
+                            android:id="@+id/tv_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_below="@+id/tabLayout"
+                            android:text="@string/FirstMessage" />
+
+
 
                 </RelativeLayout>
             </androidx.core.widget.NestedScrollView>

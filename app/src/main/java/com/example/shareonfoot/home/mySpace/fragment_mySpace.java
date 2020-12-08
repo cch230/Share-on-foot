@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,18 +29,48 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.shareonfoot.Global;
 
+import com.example.shareonfoot.ProgressCircleDialog;
 import com.example.shareonfoot.R;
 import com.example.shareonfoot.activity_login;
 import com.example.shareonfoot.home.activity_home;
-import com.example.shareonfoot.social.space.subfragment.TabPagerAdapter_space;
+
 import com.example.shareonfoot.util.NumFormat;
 import com.example.shareonfoot.util.OnBackPressedListener;
 import com.google.android.material.tabs.TabLayout;
+import com.googlecode.tesseract.android.TessBaseAPI;
 
+import android.Manifest;
+
+import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
+
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.Build;
+
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.MediaStore;
+
+import androidx.core.content.FileProvider;
+
+import com.example.shareonfoot.ConstantDefine;
+import com.example.shareonfoot.ProgressCircleDialog;
+import com.example.shareonfoot.R;
+import com.googlecode.tesseract.android.TessBaseAPI;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import retrofit2.Call;
+import static android.app.Activity.RESULT_OK;
 
 
 public class fragment_mySpace extends Fragment implements OnBackPressedListener {
@@ -64,12 +97,29 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
     public String targetID;
 
     Button bt_follow;
-
+    ImageButton imageButton;
     TextView tv_numFollower;
 
     int gridsize=2;
     String pageSize="8";
 
+    private boolean CameraOnOffFlag = true;
+
+    private TessBaseAPI m_Tess; //Tess API reference
+    private ProgressCircleDialog m_objProgressCircle = null;
+    private MessageHandler m_messageHandler;
+
+    private String mCurrentPhotoPath; //카메라로 찍은 사진 저장할 루트경로
+
+    private String mDataPath = "";
+    private final String[] mLanguageList = {"eng", "kor"};
+    // View
+    private Context mContext;
+    private TextView m_ocrTextView;
+    private Bitmap image;
+    final static int REQEST_TAKE_PHOTO =1;
+    private boolean ProgressFlag = false;
+    final static int CAPTURE_IMAGE = 2;  //카메라로찍은 사진선택
 
     public static fragment_mySpace newInstance() {
 
@@ -88,10 +138,10 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
 
 
+        SharedPreferences pref= getContext().getSharedPreferences("pref",0);
 
 
-
-        targetID = myID;
+        targetID = pref.getString("login","");
 
 
 
@@ -109,13 +159,13 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         TextView tv_numFollowing = v.findViewById(R.id.tv_numFollowing);
 
         TextView tv_pfContents = v.findViewById(R.id.tv_pfContents);
-
+        imageButton=v.findViewById(R.id.camera);
 
         LinearLayout ll_following_friends = v.findViewById(R.id.ll_following_friends);
 
         //팔로우 여부 설정
 
-
+        tv_nickname.setText(targetID);
 
 
 
@@ -124,6 +174,27 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         drawer = v.findViewById(R.id.final_drawer_layout);
 
         //BtnOnClickListener onClickListener = new BtnOnClickListener();
+        mContext = getContext();
+
+
+        m_ocrTextView = v.findViewById(R.id.tv_view);
+        imageButton = v.findViewById(R.id.camera);
+
+        if (CameraOnOffFlag) {
+            PermissionCheck();
+            Tesseract();
+        } else {
+            //이미지 디코딩을 위한 초기화
+            image = BitmapFactory.decodeResource(getResources(), R.drawable.sampledata);
+            Test();
+        }
+
+
+        m_objProgressCircle = new ProgressCircleDialog(getContext());
+        m_messageHandler = new MessageHandler();
+
+
+
 
 
         if(tabLayout == null){
@@ -156,7 +227,17 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
             });
         }
 
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (CameraOnOffFlag) {
+                    takePictureFromCameraIntent();
+                } else {
 
+                    processImage(v);
+                }
+            }
+        });
         //로그아웃 버튼
         final Button bt_logout = v.findViewById(R.id.bt_logout);
         bt_logout.setVisibility(View.VISIBLE);
@@ -171,6 +252,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
                 ActivityCompat.finishAffinity(getActivity());
             }
         });
+
 
 
         return v;
@@ -240,23 +322,300 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         super.onActivityResult(requestCode, resultCode, data);
 //        if(requestCode == ADD_BOARD && resultCode == RESULT_OK)
 //            ((activity_home)activity).refresh_share();
+        switch (requestCode) {
+            case ConstantDefine.ACT_TAKE_PIC:
+                Toast.makeText(getContext(), "권한이 허용되었습니다.", Toast.LENGTH_SHORT).show();
+                break;
+            case CAPTURE_IMAGE :
+                //카메라로 찍은 사진을 받는다.
+                if ((resultCode == RESULT_OK)) {
+
+                    try {
+                        File file = new File(mCurrentPhotoPath);
+                        Bitmap rotatedBitmap = null;
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),
+                                FileProvider.getUriForFile(getContext(),
+                                        getContext().getPackageName() + ".fileprovider", file));
+
+                        // 회전된 사진을 원래대로 돌려 표시한다.
+                        if (bitmap != null) {
+                            ExifInterface ei = new ExifInterface(mCurrentPhotoPath);
+                            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                                    ExifInterface.ORIENTATION_UNDEFINED);
+                            switch (orientation) {
+
+                                case ExifInterface.ORIENTATION_ROTATE_90:
+                                    rotatedBitmap = rotateImage(bitmap, 90);
+                                    break;
+
+                                case ExifInterface.ORIENTATION_ROTATE_180:
+                                    rotatedBitmap = rotateImage(bitmap, 180);
+                                    break;
+
+                                case ExifInterface.ORIENTATION_ROTATE_270:
+                                    rotatedBitmap = rotateImage(bitmap, 270);
+                                    break;
+
+                                case ExifInterface.ORIENTATION_NORMAL:
+                                default:
+                                    rotatedBitmap = bitmap;
+                            }
+                            OCRThread ocrThread = new OCRThread(rotatedBitmap);
+                            ocrThread.setDaemon(true);
+                            ocrThread.start();
+
+                            m_ocrTextView.setText(getResources().getString(R.string.LoadingMessage));
+                        }
+                    } catch (Exception e) {
+                    }
+                }
+                break;
+        }
     }
 
 
 
-    public void applyFollow(boolean is_following, String numFollow){
-        if(!is_following){
-            ViewCompat.setBackgroundTintList(bt_follow, ColorStateList.valueOf(Color.parseColor("#aa0055af")));
-            bt_follow.setTextColor(Color.parseColor("#ffffff"));
-            bt_follow.setText("팔로우");
-        }else if(is_following){
-            ViewCompat.setBackgroundTintList(bt_follow, ColorStateList.valueOf(Color.parseColor("#ffffff")));
-            bt_follow.setTextColor(Color.parseColor("#000000"));
-            bt_follow.setText("팔로잉");
+
+
+
+
+
+
+
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
+
+    public void PermissionCheck() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (getContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED &&
+                    getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED &&
+                    getContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                // 권한 없음
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.CAMERA,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        ConstantDefine.ACT_TAKE_PIC);
+            } else {
+                // 권한 있음
+            }
+        }
+    }
+
+
+    public void Tesseract() {
+
+        mDataPath = getContext().getFilesDir() + "/tesseract/";
+
+
+        String lang = "";
+        for (String Language : mLanguageList) {
+            checkFile(new File(mDataPath + "tessdata/"), Language);
+            lang += Language + "+";
+        }
+        m_Tess = new TessBaseAPI();
+        m_Tess.init(mDataPath, lang);
+    }
+
+
+
+
+    private void takePictureFromCameraIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity( getContext().getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getContext(),
+                        "com.example.shareonfoot.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAPTURE_IMAGE);
+            }
+        }
+    }
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir;
+        storageDir =  getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    //copy file to device
+    private void copyFiles(String Language) {
+        try {
+            String filepath = mDataPath + "/tessdata/" + Language + ".traineddata";
+            AssetManager assetManager = getContext().getAssets();
+            InputStream instream = assetManager.open("tessdata/" + Language + ".traineddata");
+            OutputStream outstream = new FileOutputStream(filepath);
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = instream.read(buffer)) != -1) {
+                outstream.write(buffer, 0, read);
+            }
+            outstream.flush();
+            outstream.close();
+            instream.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //check file on the device
+    private void checkFile(File dir, String Language) {
+        if (!dir.exists() && dir.mkdirs()) {
+            copyFiles(Language);
+        }
+        if (dir.exists()) {
+            String datafilepath = mDataPath + "tessdata/" + Language + ".traineddata";
+            File datafile = new File(datafilepath);
+            if (!datafile.exists()) {
+                copyFiles(Language);
+            }
+        }
+    }
+
+    //region Thread
+    public class OCRThread extends Thread {
+        private Bitmap rotatedImage;
+
+        OCRThread(Bitmap rotatedImage) {
+            this.rotatedImage = rotatedImage;
+            if (!ProgressFlag)
+                m_objProgressCircle = ProgressCircleDialog.show(mContext, "", "", true);
+            ProgressFlag = true;
         }
 
-        numFollow = NumFormat.formatNumString(Integer.parseInt(numFollow),false); //수 포매팅
-        tv_numFollower.setText(numFollow);
+        @Override
+        public void run() {
+            super.run();
+            // 사진의 글자를 인식해서 옮긴다
+            String OCRresult = null;
+            m_Tess.setImage(rotatedImage);
+            OCRresult = m_Tess.getUTF8Text();
+
+            Message message = Message.obtain();
+            message.what = ConstantDefine.RESULT_OCR;
+            message.obj = OCRresult;
+            m_messageHandler.sendMessage(message);
+
+        }
+    }
+    //endregion
+
+    //region Handler
+    public class MessageHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case ConstantDefine.RESULT_OCR:
+                    TextView OCRTextView = getActivity().findViewById(R.id.tv_view);
+                    OCRTextView.setText(String.valueOf(msg.obj)); //텍스트 변경
+
+                    // 원형 프로그레스바 종료
+                    if (m_objProgressCircle.isShowing() && m_objProgressCircle != null)
+                        m_objProgressCircle.dismiss();
+                    ProgressFlag = false;
+
+                    Toast.makeText(mContext, getResources().getString(R.string.CompleteMessage), Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    }
+    //endregion
+
+    public void Test() {
+        image = BitmapFactory.decodeResource(getResources(), R.drawable.sampledata);
+        mDataPath = getContext().getFilesDir() + "/tesseract/";
+
+
+        String lang = "";
+        for (String Language : mLanguageList) {
+            checkFile(new File(mDataPath + "tessdata/"), Language);
+            lang += Language + "+";
+        }
+        lang = lang.substring(0, lang.length() - 1);
+        m_Tess = new TessBaseAPI();
+        m_Tess.init(mDataPath, lang);
     }
 
+    private void copyFiles2(String lang) {
+        try {
+            //location we want the file to be at
+            String filepath = mDataPath + "/tessdata/" + lang + ".traineddata";
+
+            //get access to AssetManager
+            AssetManager assetManager = getContext().getAssets();
+
+            //open byte streams for reading/writing
+            InputStream instream = assetManager.open("tessdata/" + lang + ".traineddata");
+            OutputStream outstream = new FileOutputStream(filepath);
+
+            //copy the file to the location specified by filepath
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = instream.read(buffer)) != -1) {
+                outstream.write(buffer, 0, read);
+            }
+            outstream.flush();
+            outstream.close();
+            instream.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void checkFile2(File dir, String lang) {
+        //directory does not exist, but we can successfully create it
+        if (!dir.exists() && dir.mkdirs()) {
+            copyFiles2(lang);
+        }
+        //The directory exists, but there is no data file in it
+        if (dir.exists()) {
+            String datafilepath = mDataPath + "/tessdata/" + lang + ".traineddata";
+            File datafile = new File(datafilepath);
+            if (!datafile.exists()) {
+                copyFiles2(lang);
+            }
+        }
+    }
+
+    //Process an Image
+    public void processImage(View view) {
+        OCRThread ocrThread = new OCRThread(image);
+        ocrThread.setDaemon(true);
+        ocrThread.start();
+    }
+
+    
 }

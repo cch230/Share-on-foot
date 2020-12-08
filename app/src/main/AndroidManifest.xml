@@ -24,7 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".camera"></activity>
         <activity android:name=".crawling" />
         <activity android:name=".coupon" />
 
@@ -51,8 +50,16 @@
         <activity android:name=".signup.activity_signup_profile_contents" />
         <activity android:name=".activity_login" />
         <activity android:name=".home.activity_home" />
-        <activity android:name=".social.space.activity_space" />
-
+        <activity android:name=".social.space.activity_space" ></activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.shareonfoot.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDopLZqllQK_y1KfBLBAjjTa_lCYEpE4vU" />

@@ -45,27 +45,29 @@ import java.util.Date;
 
 public class camera extends AppCompatActivity implements View.OnClickListener {
 
+    // true  : Camera On  : 카메라로 직접 찍어 문자 인식
+    // false : Camera Off : 샘플이미지를 로드하여 문자 인식
     private boolean CameraOnOffFlag = true;
 
     private TessBaseAPI m_Tess; //Tess API reference
-    private ProgressCircleDialog m_objProgressCircle = null;
+    private ProgressCircleDialog m_objProgressCircle = null; // 원형 프로그레스바
     private MessageHandler m_messageHandler;
 
-    private long m_start;
-    private long m_end;
-    private String mDataPath = "";
-    private String mCurrentPhotoPath;
-    private final String[] mLanguageList = {"eng", "kor"};
+    private long m_start; // 처리시간 시작지점
+    private long m_end; //처리시간 끝지점
+    private String mDataPath = ""; //언어데이터가 있는 경로
+    private String mCurrentPhotoPath; // 사진 경로
+    private final String[] mLanguageList = {"eng","kor"}; // 언어
     // View
     private Context mContext;
-    private Button m_btnOCR;
-    private TextView m_ocrTextView;
-    private ImageView m_ivImage;
-    private Bitmap image;
-    private TextView m_tvTime;
+    private Button m_btnOCR; // 인식하기 위해 사진찍는 버튼
+    private TextView m_ocrTextView; // 결과 변환 텍스트
+    private ImageView m_ivImage; // 찍은 사진
+    private Bitmap image; //사용되는 이미지
+    private TextView m_tvTime; // 처리시간 표시 텍스트
 
-    private boolean ProgressFlag = false;
-
+    private boolean ProgressFlag = false; // 프로그레스바 상태 플래그
+    final static int REQEST_TAKE_PHOTO =1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,12 +84,15 @@ public class camera extends AppCompatActivity implements View.OnClickListener {
         m_objProgressCircle = new ProgressCircleDialog(this);
         m_messageHandler = new MessageHandler();
 
-        if (CameraOnOffFlag) {
+        if(CameraOnOffFlag)
+        {
             PermissionCheck();
             Tesseract();
-        } else {
+        }
+        else
+        {
             //이미지 디코딩을 위한 초기화
-            image = BitmapFactory.decodeResource(getResources(), R.drawable.sampledata);
+            image = BitmapFactory.decodeResource(getResources(), R.drawable.sampledata); //샘플이미지파일
             Test();
         }
     }
@@ -101,7 +106,7 @@ public class camera extends AppCompatActivity implements View.OnClickListener {
                 break;
             case ConstantDefine.ACT_TAKE_PIC:
                 //카메라로 찍은 사진을 받는다.
-                if ((resultCode == RESULT_OK)) {
+                if ((resultCode == RESULT_OK) ) {
 
                     try {
                         m_start = System.currentTimeMillis();
@@ -137,8 +142,8 @@ public class camera extends AppCompatActivity implements View.OnClickListener {
                             OCRThread ocrThread = new OCRThread(rotatedBitmap);
                             ocrThread.setDaemon(true);
                             ocrThread.start();
-                            m_ivImage.setImageBitmap(rotatedBitmap);
-                            m_ocrTextView.setText(getResources().getString(R.string.LoadingMessage));
+                            m_ivImage.setImageBitmap(rotatedBitmap);// 카메라로 찍은 사진을 뷰에 표시한다.
+                            m_ocrTextView.setText(getResources().getString(R.string.LoadingMessage)); //인식된텍스트 표시
                         }
                     } catch (Exception e) {
                     }
@@ -150,10 +155,14 @@ public class camera extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            // 카메라를 찍기위해 카메라 앱을 연다
             case R.id.btn_OCR:
-                if (CameraOnOffFlag) {
+                if(CameraOnOffFlag)
+                {
                     dispatchTakePictureIntent();
-                } else {
+                }
+                else
+                {
                     m_start = System.currentTimeMillis();
                     processImage(v);
                 }
@@ -180,7 +189,9 @@ public class camera extends AppCompatActivity implements View.OnClickListener {
     }
 
     public void PermissionCheck() {
-
+        /**
+         * 6.0 마시멜로우 이상일 경우에는 권한 체크후 권한을 요청한다.
+         */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED &&
                     checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED &&
@@ -198,10 +209,10 @@ public class camera extends AppCompatActivity implements View.OnClickListener {
 
 
     public void Tesseract() {
-
+        //언어파일 경로
         mDataPath = getFilesDir() + "/tesseract/";
 
-
+        //트레이닝데이터가 카피되어 있는지 체크
         String lang = "";
         for (String Language : mLanguageList) {
             checkFile(new File(mDataPath + "tessdata/"), Language);
@@ -227,7 +238,9 @@ public class camera extends AppCompatActivity implements View.OnClickListener {
         return image;
     }
 
-
+    /**
+     * 기본카메라앱을 실행 시킨다.
+     */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -243,13 +256,14 @@ public class camera extends AppCompatActivity implements View.OnClickListener {
             // 사진파일이 정상적으로 생성되었을때
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
-                        this.getApplicationContext().getPackageName() + ".fileprovider",
+                        this.getApplicationContext().getPackageName()+".fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, ConstantDefine.ACT_TAKE_PIC);
+                startActivityForResult(takePictureIntent, REQEST_TAKE_PHOTO);
             }
         }
     }
+
 
 
     //copy file to device
@@ -257,7 +271,7 @@ public class camera extends AppCompatActivity implements View.OnClickListener {
         try {
             String filepath = mDataPath + "/tessdata/" + Language + ".traineddata";
             AssetManager assetManager = getAssets();
-            InputStream instream = assetManager.open("tessdata/" + Language + ".traineddata");
+            InputStream instream = assetManager.open("tessdata/"+Language+".traineddata");
             OutputStream outstream = new FileOutputStream(filepath);
             byte[] buffer = new byte[1024];
             int read;
@@ -277,9 +291,11 @@ public class camera extends AppCompatActivity implements View.OnClickListener {
 
     //check file on the device
     private void checkFile(File dir, String Language) {
+        //디렉토리가 없으면 디렉토리를 만들고 그후에 파일을 카피
         if (!dir.exists() && dir.mkdirs()) {
             copyFiles(Language);
         }
+        //디렉토리가 있지만 파일이 없으면 파일카피 진행
         if (dir.exists()) {
             String datafilepath = mDataPath + "tessdata/" + Language + ".traineddata";
             File datafile = new File(datafilepath);
@@ -290,12 +306,13 @@ public class camera extends AppCompatActivity implements View.OnClickListener {
     }
 
     //region Thread
-    public class OCRThread extends Thread {
+    public class OCRThread extends Thread
+    {
         private Bitmap rotatedImage;
-
-        OCRThread(Bitmap rotatedImage) {
+        OCRThread(Bitmap rotatedImage)
+        {
             this.rotatedImage = rotatedImage;
-            if (!ProgressFlag)
+            if(!ProgressFlag)
                 m_objProgressCircle = ProgressCircleDialog.show(mContext, "", "", true);
             ProgressFlag = true;
         }
@@ -318,55 +335,59 @@ public class camera extends AppCompatActivity implements View.OnClickListener {
     //endregion
 
     //region Handler
-    public class MessageHandler extends Handler {
+    public class MessageHandler extends Handler
+    {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            switch (msg.what) {
+            switch (msg.what)
+            {
                 case ConstantDefine.RESULT_OCR:
                     TextView OCRTextView = findViewById(R.id.tv_view);
                     OCRTextView.setText(String.valueOf(msg.obj)); //텍스트 변경
 
                     // 원형 프로그레스바 종료
-                    if (m_objProgressCircle.isShowing() && m_objProgressCircle != null)
+                    if(m_objProgressCircle.isShowing() && m_objProgressCircle !=null)
                         m_objProgressCircle.dismiss();
                     ProgressFlag = false;
                     m_end = System.currentTimeMillis();
-                    long time = (m_end - m_start) / 1000;
-                    m_tvTime.setText("처리시간 : " + time + "초");
-                    Toast.makeText(mContext, getResources().getString(R.string.CompleteMessage), Toast.LENGTH_SHORT).show();
+                    long time = (m_end - m_start)/1000;
+                    m_tvTime.setText("처리시간 : "+time+"초");
+                    Toast.makeText(mContext,getResources().getString(R.string.CompleteMessage),Toast.LENGTH_SHORT).show();
                     break;
             }
         }
     }
     //endregion
 
-    public void Test() {
+    public void Test()
+    {
+//        String lang = "eng";
         image = BitmapFactory.decodeResource(getResources(), R.drawable.sampledata);
-        mDataPath = getFilesDir() + "/tesseract/";
+        mDataPath = getFilesDir()+ "/tesseract/";
 
+//        checkFile2(new File(mDataPath + "tessdata/"),lang);
 
         String lang = "";
         for (String Language : mLanguageList) {
             checkFile(new File(mDataPath + "tessdata/"), Language);
             lang += Language + "+";
         }
-        lang = lang.substring(0, lang.length() - 1);
+        lang = lang.substring(0,lang.length()-1);
         m_Tess = new TessBaseAPI();
         m_Tess.init(mDataPath, lang);
     }
-
     private void copyFiles2(String lang) {
         try {
             //location we want the file to be at
-            String filepath = mDataPath + "/tessdata/" + lang + ".traineddata";
+            String filepath = mDataPath + "/tessdata/"+lang+".traineddata";
 
             //get access to AssetManager
             AssetManager assetManager = getAssets();
 
             //open byte streams for reading/writing
-            InputStream instream = assetManager.open("tessdata/" + lang + ".traineddata");
+            InputStream instream = assetManager.open("tessdata/"+lang+".traineddata");
             OutputStream outstream = new FileOutputStream(filepath);
 
             //copy the file to the location specified by filepath
@@ -386,21 +407,20 @@ public class camera extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    private void checkFile2(File dir, String lang) {
+    private void checkFile2(File dir,String lang) {
         //directory does not exist, but we can successfully create it
-        if (!dir.exists() && dir.mkdirs()) {
+        if (!dir.exists()&& dir.mkdirs()){
             copyFiles2(lang);
         }
         //The directory exists, but there is no data file in it
-        if (dir.exists()) {
-            String datafilepath = mDataPath + "/tessdata/" + lang + ".traineddata";
+        if(dir.exists()) {
+            String datafilepath = mDataPath+ "/tessdata/"+lang+".traineddata";
             File datafile = new File(datafilepath);
             if (!datafile.exists()) {
                 copyFiles2(lang);
             }
         }
     }
-
     //Process an Image
     public void processImage(View view) {
         OCRThread ocrThread = new OCRThread(image);
