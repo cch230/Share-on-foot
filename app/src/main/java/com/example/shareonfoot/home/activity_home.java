@@ -2,6 +2,7 @@ package com.example.shareonfoot.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,10 +20,19 @@ import com.example.shareonfoot.codi.fragment_codi;
 import com.example.shareonfoot.util.OnBackPressedListener;
 import com.ssomai.android.scalablelayout.ScalableLayout;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+
 import static com.example.shareonfoot.R.id.fragment_place;
 
 public class activity_home extends AppCompatActivity {
-
+    static {
+        if (!OpenCVLoader.initDebug()) {
+            Log.wtf("TAG", "OpenCV failed to load!");
+        }
+    }
+    
     private FragmentManager fragmentManager;
     Fragment f_closet, f_codi, f_home, f_share, f_my;
     OnBackPressedListener listener;
@@ -33,6 +43,7 @@ public class activity_home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_home);
+        mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
 
         fragmentManager = getSupportFragmentManager();
         f_home = fragment_home.newInstance();
@@ -268,7 +279,21 @@ public class activity_home extends AppCompatActivity {
             transaction.add(fragment_place,f_share,"share").commit();
         }
     }
-
+    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            switch (status) {
+                case LoaderCallbackInterface.SUCCESS:
+                {
+                    Log.i("OpenCV", "OpenCV loaded successfully");
+                } break;
+                default:
+                {
+                    super.onManagerConnected(status);
+                } break;
+            }
+        }
+    };
     public void notify_home_changed(){
         is_home_changed=true;
     }

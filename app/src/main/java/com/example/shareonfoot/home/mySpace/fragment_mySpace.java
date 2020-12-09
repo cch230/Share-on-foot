@@ -1,15 +1,24 @@
 package com.example.shareonfoot.home.mySpace;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
+import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.AsyncTask;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,43 +32,23 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.view.ViewCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
-
-import com.example.shareonfoot.Global;
-
-import com.example.shareonfoot.ProgressCircleDialog;
-import com.example.shareonfoot.R;
-import com.example.shareonfoot.activity_login;
-import com.example.shareonfoot.home.activity_home;
-
-import com.example.shareonfoot.util.NumFormat;
-import com.example.shareonfoot.util.OnBackPressedListener;
-import com.google.android.material.tabs.TabLayout;
-import com.googlecode.tesseract.android.TessBaseAPI;
-
-import android.Manifest;
-
-import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
-
-import android.graphics.Matrix;
-import android.media.ExifInterface;
-import android.net.Uri;
-import android.os.Build;
-
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.MediaStore;
-
-import androidx.core.content.FileProvider;
 
 import com.example.shareonfoot.ConstantDefine;
 import com.example.shareonfoot.ProgressCircleDialog;
 import com.example.shareonfoot.R;
+import com.example.shareonfoot.activity_login;
+import com.example.shareonfoot.home.activity_home;
+import com.example.shareonfoot.home.mySpace.Image_processing;
+import com.example.shareonfoot.util.OnBackPressedListener;
+import com.google.android.material.tabs.TabLayout;
 import com.googlecode.tesseract.android.TessBaseAPI;
+
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -88,11 +77,6 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
     private ViewPager finalPager;
 
     LinearLayout drawer;
-
-
-
-
-
     String myID;
     public String targetID;
 
@@ -118,6 +102,9 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
     private TextView m_ocrTextView;
     private Bitmap image;
     private boolean ProgressFlag = false;
+    private ImageView imageView;
+
+
 
     public static fragment_mySpace newInstance() {
 
@@ -134,7 +121,6 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_space, container,false);
         toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
-
 
         SharedPreferences pref= getContext().getSharedPreferences("pref",0);
 
@@ -165,7 +151,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
 
         tv_nickname.setText(targetID);
 
-
+        imageView=v.findViewById(R.id.iv_image);
 
         toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
 
@@ -285,19 +271,10 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         }
     }
 
-
-
-
-
-
-
-
-
-
-
     @Override
     public void onResume() {
         super.onResume();
+
         //activity.setOnBackPressedListener(this);
     }
 
@@ -316,7 +293,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 //        if(requestCode == ADD_BOARD && resultCode == RESULT_OK)
 //            ((activity_home)activity).refresh_share();
@@ -324,7 +301,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
             case ConstantDefine.PERMISSION_CODE:
                 Toast.makeText(getContext(), "권한이 허용되었습니다.", Toast.LENGTH_SHORT).show();
                 break;
-            case ConstantDefine.CAPTURE_IMAGE :
+            case ConstantDefine.ACT_TAKE_PIC :
                 //카메라로 찍은 사진을 받는다.
                 if ((resultCode == RESULT_OK)) {
 
@@ -353,14 +330,17 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
                                 case ExifInterface.ORIENTATION_ROTATE_270:
                                     rotatedBitmap = rotateImage(bitmap, 270);
                                     break;
-
                                 case ExifInterface.ORIENTATION_NORMAL:
                                 default:
                                     rotatedBitmap = bitmap;
                             }
-                            OCRThread ocrThread = new OCRThread(rotatedBitmap);
-                            ocrThread.setDaemon(true);
-                            ocrThread.start();
+                            Bitmap ip_img;
+                            Image_processing image_processing=new Image_processing();
+                            ip_img=image_processing.ImageProcessing(rotatedBitmap);
+                            imageView.setImageBitmap(ip_img);
+                            //OCRThread ocrThread = new OCRThread(rotatedBitmap);
+                            //ocrThread.setDaemon(true);
+                            //ocrThread.start();
 
                             m_ocrTextView.setText(getResources().getString(R.string.LoadingMessage));
                         }
@@ -440,7 +420,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
                         getContext().getApplicationContext().getPackageName()+".fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, ConstantDefine.CAPTURE_IMAGE);
+                startActivityForResult(takePictureIntent, ConstantDefine.ACT_TAKE_PIC);
             }
         }
     }
@@ -615,5 +595,6 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         ocrThread.start();
     }
 
-    
+
+
 }

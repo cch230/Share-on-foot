@@ -269,19 +269,26 @@
                         android:id="@+id/tabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tv_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_below="@+id/tabLayout"
+                        android:text="@string/FirstMessage" />
+                    <ImageView
+                        android:id="@+id/iv_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_view"
 
+                        />
                     <androidx.viewpager.widget.ViewPager
                         android:id="@+id/tab_Pager"
                         android:layout_width="match_parent"
                         android:layout_height="600dp"
                         android:layout_below="@+id/tabLayout" />
-                        <TextView
-                            android:id="@+id/tv_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_below="@+id/tabLayout"
-                            android:text="@string/FirstMessage" />
+
 
 
 
