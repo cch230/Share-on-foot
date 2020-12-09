@@ -22,10 +22,8 @@ import java.util.List;
 public class Image_processing {
 
      public Bitmap ImageProcessing(Bitmap bitmap){
-         List<Rect> boundRect=new ArrayList<>();
          Mat input =new Mat();
-
-         
+         Utils.bitmapToMat(bitmap,input);
          Mat img_gray =new Mat(), img_sobel=new Mat(), img_threshold=new Mat(), element=new Mat(), gradThresh=new Mat();
          Imgproc.cvtColor(input, img_gray, Imgproc.COLOR_RGB2GRAY);
          Imgproc.Sobel(img_gray, img_sobel, CvType.CV_8U, 1, 0, 3, 1, 0, Core.BORDER_DEFAULT);
