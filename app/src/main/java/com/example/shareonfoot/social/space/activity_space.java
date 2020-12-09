@@ -2,14 +2,9 @@ package com.example.shareonfoot.social.space;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,26 +12,12 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
-
-import com.example.shareonfoot.Global;
 
 import com.example.shareonfoot.R;
 import com.example.shareonfoot.activity_login;
-import com.example.shareonfoot.activity_profile;
-import com.example.shareonfoot.home.mySpace.camera;
 import com.example.shareonfoot.social.space.subfragment.TabPagerAdapter_space;
-import com.example.shareonfoot.util.NumFormat;
-import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
-
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
-
-import retrofit2.Call;
-
-import static com.example.shareonfoot.util.NumFormat.formatNumStringZero;
 
 public class activity_space extends AppCompatActivity {
 

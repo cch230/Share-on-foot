@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import com.example.shareonfoot.home.mySpace.camera;
-
 public class activity_profile extends AppCompatActivity {
 
 

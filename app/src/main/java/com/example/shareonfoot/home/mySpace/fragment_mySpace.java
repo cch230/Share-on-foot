@@ -117,9 +117,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
     private Context mContext;
     private TextView m_ocrTextView;
     private Bitmap image;
-    final static int REQEST_TAKE_PHOTO =1;
     private boolean ProgressFlag = false;
-    final static int CAPTURE_IMAGE = 2;  //카메라로찍은 사진선택
 
     public static fragment_mySpace newInstance() {
 
@@ -323,10 +321,10 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
 //        if(requestCode == ADD_BOARD && resultCode == RESULT_OK)
 //            ((activity_home)activity).refresh_share();
         switch (requestCode) {
-            case ConstantDefine.ACT_TAKE_PIC:
+            case ConstantDefine.PERMISSION_CODE:
                 Toast.makeText(getContext(), "권한이 허용되었습니다.", Toast.LENGTH_SHORT).show();
                 break;
-            case CAPTURE_IMAGE :
+            case ConstantDefine.CAPTURE_IMAGE :
                 //카메라로 찍은 사진을 받는다.
                 if ((resultCode == RESULT_OK)) {
 
@@ -400,7 +398,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.CAMERA,
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        ConstantDefine.ACT_TAKE_PIC);
+                        ConstantDefine.PERMISSION_CODE);
             } else {
                 // 권한 있음
             }
@@ -439,10 +437,10 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(getContext(),
-                        "com.example.shareonfoot.fileprovider",
+                        getContext().getApplicationContext().getPackageName()+".fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, CAPTURE_IMAGE);
+                startActivityForResult(takePictureIntent, ConstantDefine.CAPTURE_IMAGE);
             }
         }
     }
