@@ -1,11 +1,6 @@
 <resources>
     <string name="app_name"> 걸어서 나눔나눔</string>
 
-    <string name="FirstMessage">인식할 영수증를 찍어주세요!</string>
-    <string name="LoadingMessage">잠시만 기다려주세요.결과가 여기에 나타납니다!</string>
-    <string name="CompleteMessage">문자인식이 완료되었습니다!</string>
-
-
     <string-array name="Kind">
         <item>"상의"</item>
         <item>"하의"</item>
