@@ -32,5 +32,6 @@
     <color name="follow">#aa0055af</color>
     <color name="button">#aaFFB805</color>
     <color name="button2">#aaFFA500</color>
+    <color name="cri">#00000000</color>
 
 </resources>

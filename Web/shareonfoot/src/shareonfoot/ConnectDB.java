@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 public class ConnectDB {
 	private static ConnectDB instance = new ConnectDB();
 
@@ -17,9 +16,9 @@ public class ConnectDB {
 
 	
 
-	String jdbcUrl = "jdbc:mysql://49.50.172.215:3307/shareonfoot"; // MySQL ï¿½ï¿½ï¿½ï¿½
-	String dbId = "root"; // MySQL ï¿½ï¿½ï¿½ï¿½
-	String dbPw = "Cch951753!"; // ï¿½ï¿½Ð¹ï¿½È£
+	String jdbcUrl = "jdbc:mysql://49.50.172.215:3307/shareonfoot"; // MySQL °èÁ¤
+	String dbId = "root"; // MySQL °èÁ¤
+	String dbPw = "Cch951753!"; // ºñ¹Ð¹øÈ£
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	PreparedStatement pstmt2 = null;
@@ -28,11 +27,11 @@ public class ConnectDB {
 	String sql2 = "";
 	String returns = "a";
 
-	// ï¿½ï¿½ï¿½ï¿½ï¿½Íºï¿½ï¿½Ì½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Úµå°¡ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
+	// µ¥ÀÌÅÍº£ÀÌ½º¿Í Åë½ÅÇÏ±â À§ÇÑ ÄÚµå°¡ µé¾îÀÖ´Â ¸Þ¼­µå
 	private ConnectDB() {
 
 		try {
-			System.out.println("ï¿½ï¿½ï¿½ï¿½");
+			System.out.println("¿¬°á");
 
 			Class.forName("com.mysql.jdbc.Driver");
 
@@ -42,11 +41,11 @@ public class ConnectDB {
 			
 		} catch (SQLException e) {
 
-			System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½Íºï¿½ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½á¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.");
+			System.out.println("µ¥ÀÌÅÍº£ÀÌ½º ¿¬°á¿¡ ½ÇÆÐÇß½À´Ï´Ù.");
 			e.printStackTrace();
 
 		} catch (ClassNotFoundException e) {
-			System.out.println("Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
+			System.out.println("Å¬·¡½º°¡ ¾ø½À´Ï´Ù.");
 			e.printStackTrace();
 
 		}
@@ -78,7 +77,7 @@ public class ConnectDB {
 			conn.close();
 		} catch (SQLException e) {
 
-			System.out.println("ï¿½ï¿½È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.");
+			System.out.println("Á¶È¸¿¡ ½ÇÆÐÇß½À´Ï´Ù.");
 			e.printStackTrace();
 
 		} finally {
@@ -101,29 +100,4 @@ public class ConnectDB {
 		return list;
 
 	}
-			
-	public String InsertMember(String id, String password, String nickname, String gender, String birth) {
-		 
-		 sql="INSERT into member(id, password, name, gender, birth) VALUES(?,?,?,?,?)";
-		 try {
-			 Class.forName("com.mysql.jdbc.Driver");
-			 conn = DriverManager.getConnection(jdbcUrl, dbId, dbPw);
-			 
-			 pstmt=conn.prepareStatement(sql);
-			 pstmt.setString(1, id);
-			 pstmt.setString(2, password);
-			 pstmt.setString(3, nickname);
-			 pstmt.setString(4, gender);
-			 pstmt.setString(5, birth);
-			 pstmt.executeUpdate();
-			 
-			 returns = "ok";
-			 			 
-		 }catch(Exception e) {
-			 e.printStackTrace();
-		 } finally {if (pstmt != null)try {pstmt.close();} catch (SQLException ex) {}}
-			if (conn != null)try {conn.close();} catch (SQLException ex) {}
-		 
-		 return returns;
-	 }
 }

@@ -40,7 +40,7 @@ public class recommendPagerFragment extends Fragment {
     // TODO: Rename and change types of parameters
 
 
-    ImageView iv_codi1, iv_codi2, iv_codi3, iv_codi4, iv_codi5;
+    ImageView iv_codi1, iv_codi2, iv_codi3, iv_codi4, iv_codi5,iv_codi;
     ArrayList<ImageView> iv_codi_list;
     ArrayList<Integer> index_resourceID;
 
@@ -68,12 +68,20 @@ public class recommendPagerFragment extends Fragment {
 
     }
 
+    public static recommendPagerFragment newInstance() {
+        recommendPagerFragment fragment = new recommendPagerFragment();
+        Bundle args = new Bundle();
+        //args.putParcelableArrayList(boardParams, boards);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.layout_recommend_viewpager, container, false);
+       // View view = inflater.inflate(R.layout.layout_recommend_viewpager, container, false);
 
 
 
@@ -81,8 +89,9 @@ public class recommendPagerFragment extends Fragment {
 
 
 
+        //Glide.with((iv_codi).getContext()).load(R.drawable.gyeom).into(iv_codi);
 
-        iv_codi1 = view.findViewById(R.id.iv_codi1);
+       /* iv_codi1 = view.findViewById(R.id.iv_codi1);
         iv_codi2 = view.findViewById(R.id.iv_codi2);
         iv_codi3 = view.findViewById(R.id.iv_codi3);
         iv_codi4 = view.findViewById(R.id.iv_codi4);
@@ -93,11 +102,11 @@ public class recommendPagerFragment extends Fragment {
         iv_codi2.setOnClickListener(onClickListener);
         iv_codi3.setOnClickListener(onClickListener);
         iv_codi4.setOnClickListener(onClickListener);
-        iv_codi5.setOnClickListener(onClickListener);
+        iv_codi5.setOnClickListener(onClickListener);*/
 
 
         //뷰페이저 어댑터 설정
-        viewPager = (ViewPager) view.findViewById(R.id.viewPager) ;
+        //viewPager = (ViewPager) view.findViewById(R.id.viewPager) ;
         //viewPager.setOffscreenPageLimit(1); //캐싱을 해놓을 프래그먼트 개수
 
 
@@ -120,8 +129,7 @@ public class recommendPagerFragment extends Fragment {
 
 
 
-        iv_codi_list = new ArrayList<ImageView>(Arrays.asList(iv_codi1, iv_codi2, iv_codi3, iv_codi4, iv_codi5));
-        index_resourceID = new ArrayList<Integer>(Arrays.asList(R.id.iv_codi1, R.id.iv_codi2, R.id.iv_codi3, R.id.iv_codi4, R.id.iv_codi5));
+
 
 
         //뷰페이저에 코디 개수만큼 프래그먼트 추가
@@ -140,7 +148,8 @@ public class recommendPagerFragment extends Fragment {
         selected_iv = iv_codi_list.get(0);
 
 
-        return view;
+       // return view;
+        return null;
     }
 
     class BtnOnClickListener implements Button.OnClickListener {
@@ -148,33 +157,7 @@ public class recommendPagerFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Intent intent;
-            Integer resourceID = view.getId();
-            int dp40;
-            int dp50;
-            switch (view.getId()) {
-                case R.id.iv_codi1 :
-                case R.id.iv_codi2 :
-                case R.id.iv_codi3 :
-                case R.id.iv_codi4 :
-                case R.id.iv_codi5 :
-                    if(selected_index!=index_resourceID.indexOf(resourceID)){
-                        //이전 선택 이미지뷰 작게 변경
-                        dp40 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,40,getResources().getDisplayMetrics());
-                        dp50 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,50,getResources().getDisplayMetrics());
-                        selected_iv.getLayoutParams().height=dp40;
-                        selected_iv.getLayoutParams().width=dp40;
-                        selected_iv.requestLayout();
-                        //현재 선택된 페이지로 바꾸고 이미지뷰 크게 변경
-                        selected_index = index_resourceID.indexOf(resourceID);
-                        selected_iv = iv_codi_list.get(selected_index);
-                        selected_iv.getLayoutParams().height=dp50;
-                        selected_iv.getLayoutParams().width=dp50;
-                        selected_iv.requestLayout();
-                        viewPager.setCurrentItem(selected_index);
-                    }
-                    break;
-            }
+
         }
     }
 
