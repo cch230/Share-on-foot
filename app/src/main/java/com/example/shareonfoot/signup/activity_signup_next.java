@@ -175,8 +175,8 @@ public class activity_signup_next extends AppCompatActivity {
 
         String sendMsg, receiveMsg;
 
-        public String ip = "106.10.45.203:3389";
-        String serverIp = "http://" + ip + "/test/insertMember.jsp";    // 이클립스에서 실행 시 jsp 파일이 있는 주소로 위치 변경해야함
+        public String ip = "49.50.172.215:8080";
+        String serverIp = "http://" + ip + "/shareonfoot/insertMember.jsp";    // 서버에 위치에 jsp 파일 저장되어 있어야 함
 
         @Override
         protected String doInBackground(String... strings) {
