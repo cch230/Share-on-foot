@@ -338,9 +338,9 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
                             Image_processing image_processing=new Image_processing();
                             ip_img=image_processing.ImageProcessing(rotatedBitmap);
                             imageView.setImageBitmap(ip_img);
-                            //OCRThread ocrThread = new OCRThread(rotatedBitmap);
-                            //ocrThread.setDaemon(true);
-                            //ocrThread.start();
+                            OCRThread ocrThread = new OCRThread(ip_img);
+                            ocrThread.setDaemon(true);
+                            ocrThread.start();
 
                             m_ocrTextView.setText(getResources().getString(R.string.LoadingMessage));
                         }

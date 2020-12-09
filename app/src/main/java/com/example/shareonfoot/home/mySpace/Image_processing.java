@@ -24,16 +24,19 @@ public class Image_processing {
      public Bitmap ImageProcessing(Bitmap bitmap){
          List<Rect> boundRect=new ArrayList<>();
          Mat input =new Mat();
-         Utils.bitmapToMat(bitmap,input);
-         Mat img_gray =new Mat(), img_sobel=new Mat(), img_threshold=new Mat(), element=new Mat();
+
+         
+         Mat img_gray =new Mat(), img_sobel=new Mat(), img_threshold=new Mat(), element=new Mat(), gradThresh=new Mat();
          Imgproc.cvtColor(input, img_gray, Imgproc.COLOR_RGB2GRAY);
-         Imgproc.Sobel(img_gray, img_sobel, CvType.CV_8U, 1, 0, 5, 1, 0, Core.BORDER_DEFAULT);
+         Imgproc.Sobel(img_gray, img_sobel, CvType.CV_8U, 1, 0, 3, 1, 0, Core.BORDER_DEFAULT);
          //at src, Mat dst, double thresh, double maxval, int type
          Imgproc.threshold(img_sobel, img_threshold, 0, 255, 8);
-         element=Imgproc.getStructuringElement(Imgproc.MORPH_OPEN, new Size(15,5));
+         //Imgproc.adaptiveThreshold(img_sobel, img_threshold, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY_INV, 3, 12);  //block size 3
+
+         element=Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(15,5));
          Imgproc.morphologyEx(img_threshold, img_threshold, Imgproc.MORPH_CLOSE, element);
-         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-        /* Mat hierarchy = new Mat();
+         /*List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+         Mat hierarchy = new Mat();
          Imgproc.findContours(img_threshold, contours,hierarchy, 0, 1);
 
          List<MatOfPoint> contours_poly = new ArrayList<MatOfPoint>(contours.size());
