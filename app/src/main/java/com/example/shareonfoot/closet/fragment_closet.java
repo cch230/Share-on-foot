@@ -315,13 +315,13 @@ public class fragment_closet extends Fragment implements OnBackPressedListener {
             //탭 목록 설정
             tabLayout = (TabLayout) viewGroup.findViewById(R.id.tabLayout);
             tabLayout.addTab(tabLayout.newTab().setText("모두"));
+            tabLayout.addTab(tabLayout.newTab().setText("카페&디저트"));
             tabLayout.addTab(tabLayout.newTab().setText("음식"));
+            tabLayout.addTab(tabLayout.newTab().setText("스포츠"));
+            tabLayout.addTab(tabLayout.newTab().setText("독서&연극"));
+            tabLayout.addTab(tabLayout.newTab().setText("포차"));
             tabLayout.addTab(tabLayout.newTab().setText("놀거리"));
-            tabLayout.addTab(tabLayout.newTab().setText("디저트"));
-            tabLayout.addTab(tabLayout.newTab().setText("카페"));
-            tabLayout.addTab(tabLayout.newTab().setText("서점"));
-            tabLayout.addTab(tabLayout.newTab().setText("미용실"));
-            tabLayout.addTab(tabLayout.newTab().setText("기타"));
+
 
             tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
 
