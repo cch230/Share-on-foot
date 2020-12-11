@@ -418,7 +418,7 @@ public class ConnectDB {
 						  +"NAME, category, star, adress, review, lat, lng "  
 						  +"FROM (SELECT * FROM review_join " 
 						  +"WHERE category " 
-						  +"IN (PC/오락/당구/볼링등,취미/오락관련소매,놀이/여가/취미,) "
+						  +"IN (PC/오락/당구/볼링등,취미/오락관련소매,놀이/여가/취미) "
 						  +"ORDER BY star) a, (select @num:=0) b "
 						  +"ORDER BY idx "
 						  +"LIMIT ?,15";
