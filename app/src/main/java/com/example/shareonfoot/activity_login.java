@@ -145,8 +145,8 @@ public class activity_login extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             try {
-                String str; //http://49.50.172.215:8080/shareonfoot/loginMember.jsp
-                URL url = new URL("http://172.30.1.48:8080/test/loginMember.jsp");
+                String str;
+                URL url = new URL("http://49.50.172.215:8080/shareonfoot/loginMember.jsp");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setRequestMethod("POST");
