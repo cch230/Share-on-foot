@@ -312,6 +312,7 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
                         if(image!=0) clolist.setimage(image);
                         clothesList.add(clolist);
                         clothesListAdapter.notifyDataSetChanged();
+                        Log.i("list",clothesList.toString());
                         //Toast.makeText(getContext(), String.valueOf(dst), Toast.LENGTH_SHORT).show();
                         //LatLng position=new LatLng(lat,lng);
                        /* MarkerOptions markerOptions = new MarkerOptions();

@@ -82,7 +82,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 import static android.app.Activity.RESULT_OK;
@@ -137,8 +141,8 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     private FloatingActionMenu fam;
     private FloatingActionButton fabMake, fabRecommend;
 
-    private static final int UPDATE_INTERVAL_MS = 120000;  // 1초
-    private static final int FASTEST_UPDATE_INTERVAL_MS = 60000; // 0.5초
+    private static final int UPDATE_INTERVAL_MS = 300000;  // 1초
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 300000; // 0.5초
     private Marker currentMarker = null;
 
 
@@ -506,6 +510,8 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         mapView.onLowMemory();
     }
 
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -524,6 +530,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     class NearestTask extends AsyncTask<String, String, String> {
         String sendMsg, receiveMsg;
         StringBuffer Buffer = new StringBuffer();
+        URL url;
 
         @Override
         protected void onPreExecute() {
@@ -535,6 +542,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
             CookieHandler.setDefault( new CookieManager( null, CookiePolicy.ACCEPT_ALL ) );
             String get_json = "",tmp;
             URL url;
+
             try {
                 url = new URL("http://49.50.172.215:8080/shareonfoot/data.jsp");
                 HttpURLConnection conn = null;
