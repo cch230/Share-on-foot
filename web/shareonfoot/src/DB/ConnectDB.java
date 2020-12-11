@@ -65,7 +65,7 @@ public class ConnectDB {
 						  		+ "HAVING distance < 5) "
 							  		+ "UNION "
 							  		+ "(SELECT name,lng,lat, ( 6371 * acos( cos( radians(?) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(?) ) + sin( radians(?) ) * sin( radians( lat ) ) ) ) AS distance "
-							  		+ "FROM incheon_st WHERE category IN (?,?,?,?,?,?) "
+							  		+ "FROM siheung_st WHERE category IN (?,?,?,?,?,?) "
 							  		+ "GROUP BY lng, lat "
 							  		+ "HAVING distance < 5) "
 							  		+ "ORDER BY distance LIMIT 0 , 5"; 
@@ -99,7 +99,7 @@ public class ConnectDB {
 						  		+ "HAVING distance < 5) "
 							  		+ "UNION "
 							  		+ "(SELECT name,lng,lat, ( 6371 * acos( cos( radians(?) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(?) ) + sin( radians(?) ) * sin( radians( lat ) ) ) ) AS distance "
-							  		+ "FROM incheon_st WHERE category IN (?,?,?,?,?,?) "
+							  		+ "FROM siheung_st WHERE category IN (?,?,?,?,?,?) "
 							  		+ "GROUP BY lng, lat "
 							  		+ "HAVING distance < 5) "
 							  		+ "ORDER BY distance LIMIT 0 , 5"; 
@@ -133,7 +133,7 @@ public class ConnectDB {
 					  		+ "HAVING distance < 5) "
 						  		+ "UNION "
 						  		+ "(SELECT name,lng,lat, ( 6371 * acos( cos( radians(?) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(?) ) + sin( radians(?) ) * sin( radians( lat ) ) ) ) AS distance "
-						  		+ "FROM incheon_st WHERE category IN (?,?,?,?,?,?) "
+						  		+ "FROM siheung_st WHERE category IN (?,?,?,?,?,?) "
 						  		+ "GROUP BY lng, lat "
 						  		+ "HAVING distance < 5) "
 						  		+ "ORDER BY distance LIMIT 0 , 5"; 
@@ -167,7 +167,7 @@ public class ConnectDB {
 						  		+ "HAVING distance < 5) "
 							  		+ "UNION "
 							  		+ "(SELECT name,lng,lat, ( 6371 * acos( cos( radians(?) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(?) ) + sin( radians(?) ) * sin( radians( lat ) ) ) ) AS distance "
-							  		+ "FROM incheon_st WHERE category IN (?,?,?,?,?,?) "
+							  		+ "FROM siheung_st WHERE category IN (?,?,?,?,?,?) "
 							  		+ "GROUP BY lng, lat "
 							  		+ "HAVING distance < 5) "
 							  		+ "ORDER BY distance LIMIT 0 , 5"; 
@@ -201,7 +201,7 @@ public class ConnectDB {
 						  		+ "HAVING distance < 5) "
 							  		+ "UNION "
 							  		+ "(SELECT name,lng,lat, ( 6371 * acos( cos( radians(?) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(?) ) + sin( radians(?) ) * sin( radians( lat ) ) ) ) AS distance "
-							  		+ "FROM incheon_st WHERE category IN (?,?,?,?,?,?) "
+							  		+ "FROM siheung_st WHERE category IN (?,?,?,?,?,?) "
 							  		+ "GROUP BY lng, lat "
 							  		+ "HAVING distance < 5) "
 							  		+ "ORDER BY distance LIMIT 0 , 5"; 
@@ -235,7 +235,7 @@ public class ConnectDB {
 						  		+ "HAVING distance < 5) "
 							  		+ "UNION "
 							  		+ "(SELECT name,lng,lat, ( 6371 * acos( cos( radians(?) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(?) ) + sin( radians(?) ) * sin( radians( lat ) ) ) ) AS distance "
-							  		+ "FROM incheon_st WHERE category IN (?,?,?,?,?,?) "
+							  		+ "FROM siheung_st WHERE category IN (?,?,?,?,?,?) "
 							  		+ "GROUP BY lng, lat "
 							  		+ "HAVING distance < 5) "
 							  		+ "ORDER BY distance LIMIT 0 , 5";
@@ -267,7 +267,7 @@ public class ConnectDB {
 					  		+ "HAVING distance < 5) "
 								+ "UNION "
 								+ "(SELECT name,lng,lat, ( 6371 * acos( cos( radians(?) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(?) ) + sin( radians(?) ) * sin( radians( lat ) ) ) ) AS distance "
-								+ "FROM incheon_st "
+								+ "FROM siheung_st "
 							  	+ "GROUP BY lng, lat "
 							  	+ "HAVING distance < 5) "
 							  	+ "ORDER BY distance LIMIT 0 , 5";
@@ -295,6 +295,147 @@ public class ConnectDB {
 				list.add(rs.getString("lng"));
 				list.add(rs.getString("lat"));
 				list.add(rs.getString("distance"));
+			}
+			// conn.close();
+		} catch (SQLException e) {
+
+			System.out.println("조회에 실패했습니다.");
+			e.printStackTrace();
+
+		} finally {
+
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+
+				}
+			if (pstmt2 != null)
+				try {
+					pstmt2.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+		}
+		
+		return list;
+
+	}
+	
+	public List<String> category(String category,  int page) {
+		List<String> list = new ArrayList<>();
+		try {
+
+			page*=15;
+			 switch (category) {
+             case "share": //모든 옷 조회
+            	 sql =	"SELECT " 
+						  +"@num:=@num+1 AS idx, "
+						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"FROM (SELECT * FROM review_join " 
+						  +"ORDER BY star) a, (select @num:=0) b "
+						  +"ORDER BY idx "
+						  +"LIMIT ?,15";
+				  pstmt = conn.prepareStatement(sql); 
+				  pstmt.setInt(1, page);
+				  break; 
+				  
+             case "카페&디저트": //카테고리 top 조회
+            	  sql =	"SELECT " 
+						  +"@num:=@num+1 AS idx, "
+						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"FROM (SELECT * FROM review_join " 
+						  +"WHERE category " 
+						  +"IN (커피점/카페,제과제빵떡케익,음/식료품소매) "
+						  +"ORDER BY star) a, (select @num:=0) b "
+						  +"ORDER BY idx "
+						  +"LIMIT ?,15";
+				  pstmt = conn.prepareStatement(sql); 
+				  pstmt.setInt(1, page);
+				  break; 
+				  
+             case "음식": //카테고리 bottom 조회
+            	 sql =	"SELECT " 
+						  +"@num:=@num+1 AS idx, "
+						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"FROM (SELECT * FROM review_join " 
+						  +"WHERE category " 
+						  +"IN (한식,분식,중식,일식/수산물,별식/퓨전요리,닭/오리요리) "
+						  +"ORDER BY star) a, (select @num:=0) b "
+						  +"ORDER BY idx "
+						  +"LIMIT ?,15";
+				  pstmt = conn.prepareStatement(sql); 
+				  pstmt.setInt(1, page);
+				  break; 
+				  
+             case "스포츠": //카테고리 suit 조회
+            	 sql =	"SELECT " 
+						  +"@num:=@num+1 AS idx, "
+						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"FROM (SELECT * FROM review_join " 
+						  +"WHERE category " 
+						  +"IN (학원-예능취미체육,스포츠/운동,실외운동시설,실내운동시설) "
+						  +"ORDER BY star) a, (select @num:=0) b "
+						  +"ORDER BY idx "
+						  +"LIMIT ?,15";
+				  pstmt = conn.prepareStatement(sql); 
+				  pstmt.setInt(1, page);
+				  break; 
+				  
+             case "독서&연극": //카테고리 outer 조회
+            	 sql =	"SELECT " 
+						  +"@num:=@num+1 AS idx, "
+						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"FROM (SELECT * FROM review_join " 
+						  +"WHERE category " 
+						  +"IN (학원-음악미술무용,연극/영화/극장,책/서적/도서,도서관/독서실) "
+						  +"ORDER BY star) a, (select @num:=0) b "
+						  +"ORDER BY idx "
+						  +"LIMIT ?,15";
+				  pstmt = conn.prepareStatement(sql); 
+				  pstmt.setInt(1, page);
+				  break;
+				  
+             case "포차": //카테고리 shoes 조회
+            	 sql =	"SELECT " 
+						  +"@num:=@num+1 AS idx, "
+						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"FROM (SELECT * FROM review_join " 
+						  +"WHERE category " 
+						  +"IN (유흥주점) "
+						  +"ORDER BY star) a, (select @num:=0) b "
+						  +"ORDER BY idx "
+						  +"LIMIT ?,15";
+				  pstmt = conn.prepareStatement(sql); 
+				  pstmt.setInt(1, page);
+				  break;
+				
+             case "놀거리": //카테고리 bag 조회
+            	 sql =	"SELECT " 
+						  +"@num:=@num+1 AS idx, "
+						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"FROM (SELECT * FROM review_join " 
+						  +"WHERE category " 
+						  +"IN (PC/오락/당구/볼링등,취미/오락관련소매,놀이/여가/취미,) "
+						  +"ORDER BY star) a, (select @num:=0) b "
+						  +"ORDER BY idx "
+						  +"LIMIT ?,15";
+				  pstmt = conn.prepareStatement(sql); 
+				  pstmt.setInt(1, page);
+				  break;
+			 }
+			  
+			
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				list.add(rs.getString("name"));
+				list.add(rs.getString("category"));
+				list.add(rs.getString("star"));
+				list.add(rs.getString("adress"));
+				list.add(rs.getString("review"));
+
 			}
 			// conn.close();
 		} catch (SQLException e) {
