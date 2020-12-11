@@ -333,11 +333,11 @@ public class ConnectDB {
              case "share": //모든 옷 조회
             	 sql =	"SELECT " 
 						  +"@num:=@num+1 AS idx, "
-						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"NAME, category, star, adress, review "  
 						  +"FROM (SELECT * FROM review_join " 
 						  +"ORDER BY star) a, (select @num:=0) b "
 						  +"ORDER BY idx "
-						  +"LIMIT ?,15";
+						  +"LIMIT ?,10";
 				  pstmt = conn.prepareStatement(sql); 
 				  pstmt.setInt(1, page);
 				  break; 
@@ -345,13 +345,13 @@ public class ConnectDB {
              case "카페&디저트": //카테고리 top 조회
             	  sql =	"SELECT " 
 						  +"@num:=@num+1 AS idx, "
-						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"NAME, category, star, adress, review "  
 						  +"FROM (SELECT * FROM review_join " 
 						  +"WHERE category " 
 						  +"IN (커피점/카페,제과제빵떡케익,음/식료품소매) "
 						  +"ORDER BY star) a, (select @num:=0) b "
 						  +"ORDER BY idx "
-						  +"LIMIT ?,15";
+						  +"LIMIT ?,10";
 				  pstmt = conn.prepareStatement(sql); 
 				  pstmt.setInt(1, page);
 				  break; 
@@ -359,13 +359,13 @@ public class ConnectDB {
              case "음식": //카테고리 bottom 조회
             	 sql =	"SELECT " 
 						  +"@num:=@num+1 AS idx, "
-						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"NAME, category, star, adress, review "  
 						  +"FROM (SELECT * FROM review_join " 
 						  +"WHERE category " 
 						  +"IN (한식,분식,중식,일식/수산물,별식/퓨전요리,닭/오리요리) "
 						  +"ORDER BY star) a, (select @num:=0) b "
 						  +"ORDER BY idx "
-						  +"LIMIT ?,15";
+						  +"LIMIT ?,10";
 				  pstmt = conn.prepareStatement(sql); 
 				  pstmt.setInt(1, page);
 				  break; 
@@ -373,13 +373,13 @@ public class ConnectDB {
              case "스포츠": //카테고리 suit 조회
             	 sql =	"SELECT " 
 						  +"@num:=@num+1 AS idx, "
-						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"NAME, category, star, adress, review "  
 						  +"FROM (SELECT * FROM review_join " 
 						  +"WHERE category " 
 						  +"IN (학원-예능취미체육,스포츠/운동,실외운동시설,실내운동시설) "
 						  +"ORDER BY star) a, (select @num:=0) b "
 						  +"ORDER BY idx "
-						  +"LIMIT ?,15";
+						  +"LIMIT ?,10";
 				  pstmt = conn.prepareStatement(sql); 
 				  pstmt.setInt(1, page);
 				  break; 
@@ -387,13 +387,13 @@ public class ConnectDB {
              case "독서&연극": //카테고리 outer 조회
             	 sql =	"SELECT " 
 						  +"@num:=@num+1 AS idx, "
-						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"NAME, category, star, adress, review "  
 						  +"FROM (SELECT * FROM review_join " 
 						  +"WHERE category " 
 						  +"IN (학원-음악미술무용,연극/영화/극장,책/서적/도서,도서관/독서실) "
 						  +"ORDER BY star) a, (select @num:=0) b "
 						  +"ORDER BY idx "
-						  +"LIMIT ?,15";
+						  +"LIMIT ?,10";
 				  pstmt = conn.prepareStatement(sql); 
 				  pstmt.setInt(1, page);
 				  break;
@@ -401,13 +401,13 @@ public class ConnectDB {
              case "포차": //카테고리 shoes 조회
             	 sql =	"SELECT " 
 						  +"@num:=@num+1 AS idx, "
-						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"NAME, category, star, adress, review "  
 						  +"FROM (SELECT * FROM review_join " 
 						  +"WHERE category " 
 						  +"IN (유흥주점) "
 						  +"ORDER BY star) a, (select @num:=0) b "
 						  +"ORDER BY idx "
-						  +"LIMIT ?,15";
+						  +"LIMIT ?,10";
 				  pstmt = conn.prepareStatement(sql); 
 				  pstmt.setInt(1, page);
 				  break;
@@ -415,13 +415,13 @@ public class ConnectDB {
              case "놀거리": //카테고리 bag 조회
             	 sql =	"SELECT " 
 						  +"@num:=@num+1 AS idx, "
-						  +"NAME, category, star, adress, review, lat, lng "  
+						  +"NAME, category, star, adress, review "  
 						  +"FROM (SELECT * FROM review_join " 
 						  +"WHERE category " 
 						  +"IN (PC/오락/당구/볼링등,취미/오락관련소매,놀이/여가/취미) "
 						  +"ORDER BY star) a, (select @num:=0) b "
 						  +"ORDER BY idx "
-						  +"LIMIT ?,15";
+						  +"LIMIT ?,10";
 				  pstmt = conn.prepareStatement(sql); 
 				  pstmt.setInt(1, page);
 				  break;

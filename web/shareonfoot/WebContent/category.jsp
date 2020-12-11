@@ -11,7 +11,7 @@
 	@SuppressWarnings("rawtypes")
 	JSONObject jsonMain = new JSONObject();
 	JSONArray jsonArray = new JSONArray();
-	JSONObject[] jObject = new JSONObject[15];
+	JSONObject[] jObject = new JSONObject[10];
 	int i=0; 
 	
     try{
