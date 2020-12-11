@@ -288,6 +288,7 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
             int i=0;
             Integer image=0;
             Log.d("onPostExecute:  ", " <<<<<onPostExecute>>>> ");
+            ArrayList<String> jidx=new ArrayList();
             ArrayList<String> jname=new ArrayList();
             ArrayList<String> jcategory=new ArrayList();
             ArrayList<String> jstar=new ArrayList();
@@ -301,11 +302,13 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
                     while (jarray != null) {
 
                         JSONObject jsonObject = jarray.getJSONObject(i);
-                        String star = jsonObject.getString("store_star");
-                        String review = jsonObject.getString("store_review");
-                        String adress = jsonObject.getString("store_adress");
-                        String name = jsonObject.getString("store_name");
-                        String category =  jsonObject.getString("store_category");
+                        String idx = jsonObject.getString("store_jidx");
+                        String star = jsonObject.getString("store_jstar");
+                        String review = jsonObject.getString("store_jreview");
+                        String adress = jsonObject.getString("store_jadress");
+                        String name = jsonObject.getString("store_jname");
+                        String category =  jsonObject.getString("store_jcategory");
+                        jidx.add(idx);
                         jname.add(name);
                         jname.add(category);
                         jname.add(star);
@@ -343,6 +346,7 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
                       for (int j = 0; j <jname.size(); j++) {
                           // 각 List의 값들을 data 객체에 set 해줍니다.
                           ClothesVO data = new ClothesVO();
+                          data.setidx(jidx.get(j));
                           data.setname(jname.get(j));
                           data.setcategory(jcategory.get(j));
                           data.setstar(jstar.get(j));

@@ -80,16 +80,18 @@ public class ClothesListAdapter extends RecyclerView.Adapter<ClothesListAdapter.
         private TextView textView3;
         private TextView textView4;
         private TextView textView5;
+        private TextView textView6;
         private ImageView imageView;
 
         ItemViewHolder(View itemView) {
             super(itemView);
 
-            textView1 = (TextView)itemView.findViewById(R.id.title);
-            textView2 = (TextView)itemView.findViewById(R.id.category);
-            textView3 = (TextView)itemView.findViewById(R.id.star);
-            textView4 = (TextView)itemView.findViewById(R.id.adress);
-            textView5 = (TextView)itemView.findViewById(R.id.review);
+            textView1 = (TextView)itemView.findViewById(R.id.idx);
+            textView2 = (TextView)itemView.findViewById(R.id.title);
+            textView3 = (TextView)itemView.findViewById(R.id.category);
+            textView4 = (TextView)itemView.findViewById(R.id.star);
+            textView5 = (TextView)itemView.findViewById(R.id.adress);
+            textView6 = (TextView)itemView.findViewById(R.id.review);
 
             imageView = (ImageView)itemView.findViewById(R.id.image);
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -110,12 +112,12 @@ public class ClothesListAdapter extends RecyclerView.Adapter<ClothesListAdapter.
         }
 
         void onBind(ClothesVO data) {
-            textView1.setText(data.getname());
-            textView2.setText(data.getcategory());
-            textView3.setText(data.getstar());
-            textView4.setText(data.getadress());
-            textView5.setText(data.getreview());
-
+            textView1.setText(data.getidx());
+            textView2.setText(data.getname());
+            textView3.setText(data.getcategory());
+            textView4.setText(data.getstar());
+            textView5.setText(data.getadress());
+            textView6.setText(data.getreview());
             imageView.setImageResource(data.getimage());
         }
 

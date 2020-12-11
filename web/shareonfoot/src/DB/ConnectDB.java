@@ -430,6 +430,7 @@ public class ConnectDB {
 			
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
+				list.add(rs.getString("idx"));
 				list.add(rs.getString("name"));
 				list.add(rs.getString("category"));
 				list.add(rs.getString("star"));

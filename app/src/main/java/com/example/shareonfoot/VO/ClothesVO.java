@@ -4,12 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class ClothesVO implements Parcelable {
+    private String idx;
     private String name; // PRIMARY KEY. AUTO INCREMENT
     private String category;
     private String review;
     private String star; // not null
     private String adress; // not null
-   // private String dst;
     private int image;
     //임시
     private int pageStart =-1;
@@ -19,12 +19,12 @@ public class ClothesVO implements Parcelable {
 
 
     protected ClothesVO(Parcel in) {
+        idx=in.readString();
         name = in.readString();
         category = in.readString();
         review = in.readString();
         star = in.readString();
         adress = in.readString();
-      //  dst= in.readString();
         image= in.readInt();
     }
 
@@ -65,8 +65,9 @@ public class ClothesVO implements Parcelable {
     }
 
 
-    public ClothesVO(String name, String category, String review, String star,
-                     String adress, /*String dst,*/ int image){
+    public ClothesVO(String idx, String name, String category, String review, String star,
+                     String adress, int image){
+        this.idx = idx;
         this.name = name;
         this.category =category;
         this.review =review;
@@ -75,6 +76,11 @@ public class ClothesVO implements Parcelable {
         //this.dst=dst;
         this.image=image;
     }
+
+    public String getidx() {
+        return idx;
+    }
+    public void setidx(String idx){this.idx=idx;}
 
     public String getname() {
         return name;
@@ -110,6 +116,7 @@ public class ClothesVO implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(idx);
         dest.writeString(name);
         dest.writeString(category);
         dest.writeString(review);

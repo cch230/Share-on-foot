@@ -11,7 +11,7 @@
 	@SuppressWarnings("rawtypes")
 	JSONObject jsonMain = new JSONObject();
 	JSONArray jsonArray = new JSONArray();
-	JSONObject[] jObject = new JSONObject[10];
+	JSONObject[] jObject = new JSONObject[11];
 	int i=0; 
 	
     try{
@@ -26,18 +26,19 @@
 			for (String obj : list) {
 				
 				//HashMapObject = new HashMap<String, Object>();
-				if(i%5==0)	{
-					jObject[i/5] = new JSONObject();
-					jObject[i/5].put("store_name", obj);
+				if(i%6==0)	{
+					jObject[i/6] = new JSONObject();
+					jObject[i/6].put("store_jidx", obj);
 				
 				}
-				else if(i%5==1)	jObject[i/5].put("store_category",  obj);
-				else if(i%5==2)	jObject[i/5].put("store_star",  obj);
-				else if(i%5==3)	jObject[i/5].put("store_adress",  obj);
+				else if(i%6==1)	jObject[i/6].put("store_jname",  obj);
+				else if(i%6==2)	jObject[i/6].put("store_jcategory",  obj);
+				else if(i%6==4)	jObject[i/6].put("store_jstar",  obj);
+				else if(i%6==5)	jObject[i/6].put("store_jadress",  obj);
 
 				else	{
-					jObject[i/5].put("store_review",  obj);	
-					jsonArray.add(jObject[i/5]);
+					jObject[i/6].put("store_jreview",  obj);	
+					jsonArray.add(jObject[i/6]);
 					
 				}
 				
