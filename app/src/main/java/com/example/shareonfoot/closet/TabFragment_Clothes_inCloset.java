@@ -1,5 +1,6 @@
 package com.example.shareonfoot.closet;
 
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -9,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +47,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.nostra13.universalimageloader.utils.L;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -77,21 +80,14 @@ import retrofit2.Call;
 public class   TabFragment_Clothes_inCloset extends Fragment {
 
     fragment_closet parentFragment;
-    int current_pos = 0;
-
-    String location;
     String identifier; //프래그먼트의 종류를 알려줌
-    String size;
-
-    int gridsize;
-    String pagesize;
-
+    Integer pos=10;
+    String location;
     public RelativeLayout Cloth_Info;
     private static final int UPDATE_INTERVAL_MS = 120000;  // 1초
     private static final int FASTEST_UPDATE_INTERVAL_MS = 60000; // 0.5초
     Integer page = 0;
     RecyclerView rv_clothes;
-    ClothesVO clolist= new ClothesVO();
     ArrayList<ClothesVO> clothesList = new ArrayList<ClothesVO>();
     Location mCurrentLocatiion;
     private LocationRequest locationRequest;
@@ -128,37 +124,41 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
             location = args.getString("location");
             identifier = args.getString("identifier");
         }
+        clothesListAdapter = new ClothesListAdapter(getContext(),clothesList, R.layout.fragment_recyclerview);
 
-        //리사이클러뷰 어댑터 초기화
-        clothesListAdapter = new ClothesListAdapter(getContext(),clothesList,R.layout.fragment_recyclerview);
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        String coordinates[]={page.toString()};
+        String coordinates[]={page.toString(),""};
         //Log.i("qe",String.valueOf(page));
         //현재 페이지수와 함께 웹서버에 옷 데이터 요청
-        new networkTask().execute(coordinates);
+        //new networkTask().execute(coordinates);
         //리사이클러 뷰 설정하기
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
         rv_clothes = (RecyclerView) view.findViewById(R.id.tab_clothes_rv);
         rv_clothes.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv_clothes.setAdapter(clothesListAdapter);
         rv_clothes.setNestedScrollingEnabled(true);
         rv_clothes.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View view, int i, int i1, int i2, int i3) {
                 if (!rv_clothes.canScrollVertically(-1)) {
                     //스크롤이 최상단이면 데이터를 갱신한다
-                    //clothesList.clear();
-                    //page=0;
-                    //new networkTask().execute(Integer.toString(page));
-                    //clothesListAdapter.notifyDataSetChanged();
-                    //Log.e("test","데이터 갱신");
+                    /*clothesList.clear();
+                    page=0;
+                    new networkTask().execute(Integer.toString(page));
+                    clothesListAdapter.notifyDataSetChanged();
+                    rv_clothes.setAdapter(clothesListAdapter);
+                    //Log.e("test","데이터 갱신");*/
                 } else if (!rv_clothes.canScrollVertically(1)) {
                     String coordinates[]={(++page).toString()};
                     new networkTask().execute(coordinates);
+                    clothesListAdapter.notifyDataSetChanged();
+                    rv_clothes.setAdapter(clothesListAdapter);
+
                     Log.e("test", "페이지 수 증가");
                 } else {
                 }
@@ -182,18 +182,6 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
         return view;
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    //프래그먼트 갱신
-    private void refresh() {
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.detach(this).attach(this).commit();
-    }
-
     class networkTask extends AsyncTask<String, String, String> {
         String sendMsg, receiveMsg;
         StringBuffer Buffer = new StringBuffer();
@@ -205,8 +193,10 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
 
         @Override
         protected String doInBackground(String[] strings) {
+
             CookieHandler.setDefault( new CookieManager( null, CookiePolicy.ACCEPT_ALL ) );
             String get_json = "",tmp;
+
             URL url;
             try {
                 url = new URL("http://49.50.172.215:8080/shareonfoot/category.jsp");
@@ -222,9 +212,37 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
                 conn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset 설정.
                 conn.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;cahrset=UTF-8");
                 OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-
+                SharedPreferences sharedPreferences=getContext().getSharedPreferences("tab",0);
+                pos=sharedPreferences.getInt("pos",10);
+                Log.i("pos",pos.toString());
+                switch (pos) {
+                    case 0: //모든 옷 조회
+                       tmp="share";
+                        break;
+                    case 1: //카테고리 top 조회
+                        tmp="카페&디저트";
+                        break;
+                    case 2: //카테고리 bottom 조회
+                        tmp="음식";
+                        break;
+                    case 3: //카테고리 suit 조회
+                        tmp="스포츠";
+                        break;
+                    case 4: //카테고리 outer 조회
+                        tmp="독서&연극";
+                        break;
+                    case 5: //카테고리 shoes 조회
+                        tmp="포차";
+                        break;
+                    case 6: //카테고리 bag 조회
+                        tmp="놀거리";
+                        break;
+                    default:
+                        tmp="";
+                        break;
+                }
                 // 서버에서 읽어오기 위한 스트림 객체
-                sendMsg = "identifier=" + identifier+ "&page=" + strings[0] ;
+                sendMsg = "identifier=" + tmp+ "&page=" + strings[0] ;
                 Log.i("qe",sendMsg);
                 wr.write(sendMsg);
                 wr.flush();
@@ -270,72 +288,93 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
             int i=0;
             Integer image=0;
             Log.d("onPostExecute:  ", " <<<<<onPostExecute>>>> ");
+            ArrayList<String> jname=new ArrayList();
+            ArrayList<String> jcategory=new ArrayList();
+            ArrayList<String> jstar=new ArrayList();
+            ArrayList<String> jadress=new ArrayList();
+            ArrayList<String> jreview=new ArrayList();
+            ArrayList<Integer> jimage=new ArrayList();
+
             try {
                 JSONArray jarray = new JSONObject(result).getJSONArray("store_info");
                 if(jarray!=null){
                     while (jarray != null) {
+
                         JSONObject jsonObject = jarray.getJSONObject(i);
+                        String star = jsonObject.getString("store_star");
+                        String review = jsonObject.getString("store_review");
+                        String adress = jsonObject.getString("store_adress");
                         String name = jsonObject.getString("store_name");
                         String category =  jsonObject.getString("store_category");
-                        String star = jsonObject.getString("store_star");
-                        String adress = jsonObject.getString("store_adress");
-                        String review = jsonObject.getString("store_review");
-                        clolist.setname(name);
-                        clolist.setcategory(category);
-                        clolist.setstar(star);
-                        clolist.setadress(adress);
-                        clolist.setreview(review);
-
-                        switch (identifier) {
-                            case "share": //모든 옷 조회
+                        jname.add(name);
+                        jname.add(category);
+                        jname.add(star);
+                        jname.add(adress);
+                        jname.add(review);
+                        switch (pos) {
+                            case 0: //모든 옷 조회
                                 image=R.drawable.all;
                                 break;
-                            case "카페&디저트": //카테고리 top 조회
+                            case 1: //카테고리 top 조회
                                 image=R.drawable.desert;
                                 break;
-                            case "음식": //카테고리 bottom 조회
+                            case 2: //카테고리 bottom 조회
                                 image=R.drawable.food1;
                                 break;
-                            case "스포츠": //카테고리 suit 조회
+                            case 3: //카테고리 suit 조회
                                 image=R.drawable.sports;
                                 break;
-                            case "독서&연극": //카테고리 outer 조회
+                            case 4: //카테고리 outer 조회
                                 image=R.drawable.movie;
                                 break;
-                            case "포차": //카테고리 shoes 조회
+                            case 5: //카테고리 shoes 조회
                                 image=R.drawable.soju;
                                 break;
-                            case "놀거리": //카테고리 bag 조회
+                            case 6: //카테고리 bag 조회
                                 image=R.drawable.play;
                                 break;
+                            default:
+                                image=10;
+                                break;
                         }
-                        if(image!=0) clolist.setimage(image);
-                        clothesList.add(clolist);
-                        clothesListAdapter.notifyDataSetChanged();
-                        Log.i("list",clothesList.toString());
-                        //Toast.makeText(getContext(), String.valueOf(dst), Toast.LENGTH_SHORT).show();
-                        //LatLng position=new LatLng(lat,lng);
-                       /* MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.position(position)
-                                .title(name)
-                                .snippet(String.format("나와의 거리 %.2fkm", dst));*/
-                        // null을 가끔 못 읽어오는 때가 있다고 하기에 써봄
-                        //String Start = jsonObject.optString("START_TIME", "text on no value");
-                        //String Stop = jsonObject.optString("STOP_TIME", "text on no value");
-                        //String REG = jsonObject.optString("REG_TIME", "text on no value");
-                        //Log.i("qw", name + "/" + lng+ "/" + lat);
-
-
+                        jimage.add(image);
+                        i++;
                     }
+                      for (int j = 0; j <jname.size(); j++) {
+                          // 각 List의 값들을 data 객체에 set 해줍니다.
+                          ClothesVO data = new ClothesVO();
+                          data.setname(jname.get(j));
+                          data.setcategory(jcategory.get(j));
+                          data.setstar(jstar.get(j));
+                          data.setadress(jadress.get(j));
+                          data.setreview(jreview.get(j));
+                          data.setimage(jimage.get(j));
+                          clothesListAdapter.addItem(data);
+                          clothesListAdapter.notifyDataSetChanged();
+
+                      }
+
+                    clothesListAdapter.notifyDataSetChanged();
+
+                    //clothesList.clear();
                 } else {
                     Toast.makeText(getContext(), "가까운 곳 없습니다.", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
-                Log.e(ErrMag, "7");
+                Log.e(ErrMag, e.toString());
             }
         }
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
+    //프래그먼트 갱신
+    private void refresh(){
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.detach(this).attach(this).commit();
+    }
 
 
 

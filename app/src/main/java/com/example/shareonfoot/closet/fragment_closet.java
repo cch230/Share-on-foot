@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -210,8 +211,11 @@ public class fragment_closet extends Fragment implements OnBackPressedListener {
 
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
+                    SharedPreferences sharedPreferences=getContext().getSharedPreferences("tab",0);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putInt("pos",tab.getPosition());
+                    editor.commit();
                     finalPager.setCurrentItem(tab.getPosition());
-                    Log.i("pos",String.valueOf(tab.getPosition()));
 
                 }
                 @Override
@@ -328,7 +332,6 @@ public class fragment_closet extends Fragment implements OnBackPressedListener {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
                     finalPager.setCurrentItem(tab.getPosition());
-                    //Log.i("pos",String.valueOf(tab.getPosition()));
                 }
                 @Override
                 public void onTabUnselected(TabLayout.Tab tab) {

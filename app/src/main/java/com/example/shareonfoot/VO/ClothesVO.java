@@ -9,7 +9,7 @@ public class ClothesVO implements Parcelable {
     private String review;
     private String star; // not null
     private String adress; // not null
-    private String dst;
+   // private String dst;
     private int image;
     //임시
     private int pageStart =-1;
@@ -24,7 +24,7 @@ public class ClothesVO implements Parcelable {
         review = in.readString();
         star = in.readString();
         adress = in.readString();
-        dst= in.readString();
+      //  dst= in.readString();
         image= in.readInt();
     }
 
@@ -66,16 +66,16 @@ public class ClothesVO implements Parcelable {
 
 
     public ClothesVO(String name, String category, String review, String star,
-                     String adress, String dst, int image){
+                     String adress, /*String dst,*/ int image){
         this.name = name;
         this.category =category;
         this.review =review;
         this.star= star;
         this.adress=adress;
-        this.dst=dst;
+        //this.dst=dst;
+        this.image=image;
     }
 
-    //get set
     public String getname() {
         return name;
     }
@@ -97,8 +97,8 @@ public class ClothesVO implements Parcelable {
     public String getadress(){return adress;}
     public void setadress(String adress){this.adress=adress;}
 
-    public String getdst(){return  dst;}
-    public void setdst(String dst){this.dst=dst;}
+    /*public String getdst(){return  dst;}
+    public void setdst(String dst){this.dst=dst;}*/
 
     public int getimage(){return image;}
     public void setimage(int image){this.image=image;}
@@ -115,7 +115,7 @@ public class ClothesVO implements Parcelable {
         dest.writeString(review);
         dest.writeString(star);
         dest.writeString(adress);
-        dest.writeString(dst);
+        //dest.writeString(dst);
         dest.writeInt(image);
     }
 }

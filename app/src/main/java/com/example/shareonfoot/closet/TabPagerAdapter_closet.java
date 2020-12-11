@@ -20,7 +20,6 @@ public class TabPagerAdapter_closet extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Log.i("pos",String.valueOf(position));
         // Returning the current tabs
         switch (position) {
             case 0:
