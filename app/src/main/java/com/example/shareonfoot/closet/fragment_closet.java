@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,133 +149,7 @@ public class fragment_closet extends Fragment implements OnBackPressedListener {
         tv_edit_category = (TextView) viewGroup.findViewById(R.id.tv_edit_catergory);
         tv_edit_season = (TextView) viewGroup.findViewById(R.id.tv_edit_season);
         tv_edit_date = (TextView) viewGroup.findViewById(R.id.tv_edit_date);
-/*
-        tv_edit_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Calendar cal = Calendar.getInstance();
-                //현재 년도, 월, 일
-                int year = cal.get (Calendar.YEAR);
-                int month = cal.get (Calendar.MONTH);
-                int date = cal.get (Calendar.DATE) ;
-
-                DatePickerDialog dialog = new DatePickerDialog(activity, listener, year, month, date);
-                dialog.show();
-            }
-        });
-*/
-
-        BtnOnClickListener onClickListener = new BtnOnClickListener();
-        //iv_heart.setOnClickListener(onClickListener);
-        iv_modify.setOnClickListener(onClickListener);
-        iv_delete.setOnClickListener(onClickListener);
-        //shareButton.setOnClickListener(onClickListener);
-        iv_save.setOnClickListener(onClickListener);
-
-        final String[] Season = {""};
-        tv_edit_season.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                final String[] items = getResources().getStringArray(R.array.Season);
-                final ArrayList<String> selectedItem  = new ArrayList<String>();
-                selectedItem.add(items[0]);
-
-                builder.setTitle("카테고리 선택");
-
-                builder.setSingleChoiceItems(R.array.Season, 0, new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        selectedItem.clear();
-                        selectedItem.add(items[pos]);
-                    }
-                });
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        Season[0] = selectedItem.get(0);
-
-                        switch(Season[0]){
-                            case "봄":
-                                tv_edit_season.setText("봄");
-                                break;
-                            case "여름":
-                                tv_edit_season.setText("여름");
-                                break;
-                            case "가을":
-                                tv_edit_season.setText("가을");
-                                break;
-                            case "겨울":
-                                tv_edit_season.setText("겨울");
-                                break;
-                        }
-                    }
-                });
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }
-        });
-        final String[] Category = {""};
-        tv_edit_category.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                final String[] items = getResources().getStringArray(R.array.Kind);
-                final ArrayList<String> selectedItem  = new ArrayList<String>();
-                selectedItem.add(items[0]);
-
-                builder.setTitle("카테고리 선택");
-
-                builder.setSingleChoiceItems(R.array.Kind, 0, new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        selectedItem.clear();
-                        selectedItem.add(items[pos]);
-                    }
-                });
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        Category[0] = selectedItem.get(0);
-
-                        switch(Category[0]){
-                            case "상의":
-                                tv_edit_category.setText("상의");
-                                break;
-                            case "하의":
-                                tv_edit_category.setText("하의");
-                                break;
-                            case "한벌옷":
-                                tv_edit_category.setText("한벌옷");
-                                break;
-                            case "외투":
-                                tv_edit_category.setText("외투");
-                                break;
-                            case "신발":
-                                tv_edit_category.setText("신발");
-                                break;
-                            case "가방":
-                                tv_edit_category.setText("가방");
-                                break;
-                            case "액세서리":
-                                tv_edit_category.setText("액세서리");
-                                break;
-                        }
-                    }
-                });
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }
-        });
 
         //NavigationView navigationView = (NavigationView) viewGroup.findViewById(R.id.final_nav_view); //드로워 뷰
 
@@ -336,6 +211,8 @@ public class fragment_closet extends Fragment implements OnBackPressedListener {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
                     finalPager.setCurrentItem(tab.getPosition());
+                    Log.i("pos",String.valueOf(tab.getPosition()));
+
                 }
                 @Override
                 public void onTabUnselected(TabLayout.Tab tab) {
@@ -366,9 +243,6 @@ public class fragment_closet extends Fragment implements OnBackPressedListener {
             }
         });
 
-        //handling each floating action button clicked
-        fabAdd.setOnClickListener(onClickListener);
-        fabBring.setOnClickListener(onClickListener);
 
         fam.setOnMenuButtonClickListener(new View.OnClickListener() {
             @Override
@@ -434,13 +308,12 @@ public class fragment_closet extends Fragment implements OnBackPressedListener {
             //탭 목록 설정
             tabLayout = (TabLayout) viewGroup.findViewById(R.id.tabLayout);
             tabLayout.addTab(tabLayout.newTab().setText("모두"));
-            tabLayout.addTab(tabLayout.newTab().setText("상의"));
-            tabLayout.addTab(tabLayout.newTab().setText("하의"));
-            tabLayout.addTab(tabLayout.newTab().setText("한벌"));
-            tabLayout.addTab(tabLayout.newTab().setText("외투"));
-            tabLayout.addTab(tabLayout.newTab().setText("신발"));
-            tabLayout.addTab(tabLayout.newTab().setText("가방"));
-            tabLayout.addTab(tabLayout.newTab().setText("액세서리"));
+            tabLayout.addTab(tabLayout.newTab().setText("카페&디저트"));
+            tabLayout.addTab(tabLayout.newTab().setText("음식"));
+            tabLayout.addTab(tabLayout.newTab().setText("스포츠"));
+            tabLayout.addTab(tabLayout.newTab().setText("독서&연극"));
+            tabLayout.addTab(tabLayout.newTab().setText("포차"));
+            tabLayout.addTab(tabLayout.newTab().setText("놀거리"));
 
             tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
 
@@ -455,6 +328,7 @@ public class fragment_closet extends Fragment implements OnBackPressedListener {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
                     finalPager.setCurrentItem(tab.getPosition());
+                    //Log.i("pos",String.valueOf(tab.getPosition()));
                 }
                 @Override
                 public void onTabUnselected(TabLayout.Tab tab) {
@@ -493,89 +367,6 @@ public class fragment_closet extends Fragment implements OnBackPressedListener {
 
     }
 
-
-
-
-
-    //클릭 리스너
-    class BtnOnClickListener implements Button.OnClickListener {
-        String res="";
-        String color;
-        String season;
-        String brand;
-        String size;
-        String date;
-
-        @Override
-        public void onClick(View view) {
-            Intent intent;
-            switch (view.getId()) {
-                //case R.id.share_closet : //공유 옷장 버튼
-                    //intent = new Intent(getContext(), activity_closet_DB.class);
-                    //startActivity(intent);
-
-                case R.id.iv_modify : //수정 버튼
-                    //Cloth_Info.setVisibility(View.GONE);
-                    Cloth_Info_edit.setVisibility(View.VISIBLE);
-
-                    tv_edit_category.setText(tv_category.getText());
-                    if(ll_detail.getVisibility()!=View.GONE){
-                        ll_detail_edit.setVisibility(View.VISIBLE);
-                        tv_edit_detailcategory.setText(tv_detailcategory.getText());
-                    }
-                    else{
-                        ll_detail_edit.setVisibility(View.GONE);
-                    }
-                    color =  tv_color.getText().toString();
-                    season = tv_season.getText().toString();
-                    brand =   tv_brand.getText().toString();
-                    size =   tv_size.getText().toString();
-                    date =   tv_date.getText().toString();
-
-                    if(!color.isEmpty())
-                        tv_edit_color.setText(tv_color.getText());
-                    if(!season.isEmpty())
-                        tv_edit_season.setText(tv_season.getText());
-                    if(!brand.isEmpty())
-                        tv_edit_brand.setText(tv_brand.getText());
-                    if(!size.isEmpty())
-                        tv_edit_size.setText(tv_size.getText());
-                    if(!date.isEmpty())
-                        tv_edit_date.setText(tv_date.getText());
-                    break;
-
-                case R.id.iv_save: //저장 버튼
-                    tv_category.setText(tv_edit_category.getText());
-                    if(ll_detail_edit.getVisibility()!=View.GONE){
-                        ll_detail.setVisibility(View.VISIBLE);
-                        tv_detailcategory.setText(tv_edit_detailcategory.getText());
-                    }
-                    else
-                        ll_detail.setVisibility(View.GONE);
-                    tv_color.setText(tv_edit_color.getText());
-
-                    season = tv_edit_season.getText().toString();
-                    date = tv_edit_date.getText().toString();
-                    brand =   tv_edit_brand.getText().toString();
-                    size =   tv_edit_size.getText().toString();
-                    date =   tv_edit_date.getText().toString();
-
-                    if(!season.equals("선택"))
-                        tv_season.setText(tv_edit_season.getText());
-                    tv_brand.setText(tv_edit_brand.getText());
-                    tv_size.setText(tv_edit_size.getText());
-                    if(!date.equals("선택"))
-                        tv_date.setText(tv_edit_date.getText());
-                    Cloth_Info_edit.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), "옷을 수정했습니다.", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.iv_delete : //삭제 버튼
-                    //확인 Alert 다이얼로그
-                   break;
-
-            }
-        }
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

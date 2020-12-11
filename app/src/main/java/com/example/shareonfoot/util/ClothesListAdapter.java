@@ -22,49 +22,47 @@ import java.util.ArrayList;
 //뷰 홀더 : 아이템 뷰를 저장하는 객체
 //아이템 뷰 : 각각의 카드뷰 한 개
 public class ClothesListAdapter extends RecyclerView.Adapter<ClothesListAdapter.ItemViewHolder> {
-    String size;
 
     Context mContext;
-    private ArrayList<ClothesVO> listData = new ArrayList<>();
+    ArrayList<ClothesVO> listData;
 
     int item_layout; //리사이클러뷰 레이아웃. fragment_recyclerview임.
     private AdapterView.OnItemClickListener mListener = null ;
 
-  /*  public interface OnItemClickListener {
+
+    public interface OnItemClickListener {
         void onItemClick(View v, int position, ImageView iv_Clothes, ClothesVO cloInfo);
     }
 
     // 리스너 객체 참조를 저장하는 변수
-    private OnItemClickListener mListener = null ;
+    private OnItemClickListener nmListener = null ;
 
     // OnItemClickListener 리스너 객체 참조를 어댑터에 전달하는 메서드
     public void setOnItemClickListener(OnItemClickListener listener) {
-        this.mListener = listener ;
+        this.nmListener = listener ;
     }
-*/
 
- /*   //생성자에서 데이터 리스트 객체를 전달받음.
-    public ClothesListAdapter(Context context, ArrayList<ClothesVO> items, int item_layout, String size) {
+
+    //생성자에서 데이터 리스트 객체를 전달받음.
+    public ClothesListAdapter(Context context, ArrayList<ClothesVO> items, int item_layout ) {
         this.mContext=context;
-        this.ClothesList=items;
         this.item_layout=item_layout;
-        this.size = size;
+        this.listData=items;
+
     }
-*/
     //뷰홀더 객체 생성하며 리턴 (아이템뷰를 위한)
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v=null;
-        v=LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem,parent,false);
+        View v=LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem,parent,false);
 
         return new ItemViewHolder(v);
     }
 
     //position 에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        holder.onBind(listData.get(position));
-
-       // final ClothesVO clothesVO=listData.get(position);
+        ItemViewHolder myViewholder = (ItemViewHolder) holder;
+       final ClothesVO clothesVO=listData.get(position);
+       myViewholder.imageView.setImageResource(R.drawable.all);
     }
 
     //아이템 개수 반환
@@ -94,7 +92,22 @@ public class ClothesListAdapter extends RecyclerView.Adapter<ClothesListAdapter.
             textView5 = itemView.findViewById(R.id.adress);
             textView6 = itemView.findViewById(R.id.review);
 
-            imageView = itemView.findViewById(R.id.image);
+            //imageView = itemView.findViewById(R.id.image);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition() ;
+                    if (pos != RecyclerView.NO_POSITION) {
+                        // 리스너 객체의 메서드 호출.
+                        System.out.println("클릭");
+                        if (nmListener != null) {
+                            nmListener.onItemClick(v, pos, imageView, listData.get(pos)) ;
+                        }
+                        // 데이터 리스트로부터 아이템 데이터 참조.
+                        //RecyclerItem item = mData.get(pos) ;
+                    }
+                }
+            });
         }
 
         void onBind(ClothesVO data) {
@@ -108,19 +121,6 @@ public class ClothesListAdapter extends RecyclerView.Adapter<ClothesListAdapter.
             imageView.setImageResource(data.getimage());
         }
 
-         /*itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int pos = getAdapterPosition() ;
-                if (pos != RecyclerView.NO_POSITION) {
-                    // 리스너 객체의 메서드 호출.
-                    if (mListener != null) {
-                        //mListener.onItemClick(v, pos, iv_Clothes, listData.get(pos)) ;
-                    }
-                    // 데이터 리스트로부터 아이템 데이터 참조.
-                    //RecyclerItem item = mData.get(pos) ;
-                }
-            }
-        });*/
+
     }
 }
