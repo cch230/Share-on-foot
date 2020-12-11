@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.xml.internal.bind.v2.runtime.Location;
+
 public class ConnectDB {
 	private static ConnectDB instance = new ConnectDB();
 
@@ -27,6 +29,7 @@ public class ConnectDB {
 	String sql = "";
 	String sql2 = "";
 	String returns = "a";
+	String returns2 = "";
 
 	// �����ͺ��̽��� ����ϱ� ���� �ڵ尡 ����ִ� �޼���
 	private ConnectDB() {
@@ -56,55 +59,56 @@ public class ConnectDB {
 	 
 	
 	
-	public List<Location> recommend(Float lng, Float lat) {
-		List<Location> list = new ArrayList<Location>();
-		try {
+//	public List<Location> recommend(Float lng, Float lat) {
+//		List<Location> list = new ArrayList<Location>();
+//		try {
+//			
+//			sql = "SELECT name,lng,lat, ( 6371 * acos( cos( radians(?) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(?) ) + sin( radians(?) ) * sin( radians( lat ) ) ) ) AS distance FROM TEST_TABLE HAVING distance < 5 ORDER BY distance LIMIT 0 , 5";
+//			pstmt = conn.prepareStatement(sql);
+//			pstmt.setFloat(1, lat);
+//			pstmt.setFloat(2, lng);
+//			pstmt.setFloat(3, lat);
+//			rs = pstmt.executeQuery();
+//			Location location = new Location();
+//			while (rs.next()) {
+//				location.setname(rs.getString("name"));
+//				location.setlng(rs.getString("lng"));
+//				location.setlat(rs.getString("lat"));
+//				location.setdst(rs.getString("dst"));
+//
+//				list.add(location);
+//			} 
+//			conn.close();
+//		} catch (SQLException e) {
+//
+//			System.out.println("��ȸ�� �����߽��ϴ�.");
+//			e.printStackTrace();
+//
+//		} finally {
+//
+//			if (pstmt != null)
+//				try {
+//					pstmt.close();
+//				} catch (SQLException e) {
+//					e.printStackTrace();
+//				
+//				}
+//			if (pstmt2 != null)
+//				try {
+//					pstmt2.close();
+//				} catch (SQLException e) {
+//					e.printStackTrace();
+//				}
+//
+//		}
+//		return list;
+//
+//	}
 			
-			sql = "SELECT name,lng,lat, ( 6371 * acos( cos( radians(?) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(?) ) + sin( radians(?) ) * sin( radians( lat ) ) ) ) AS distance FROM TEST_TABLE HAVING distance < 5 ORDER BY distance LIMIT 0 , 5";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setFloat(1, lat);
-			pstmt.setFloat(2, lng);
-			pstmt.setFloat(3, lat);
-			rs = pstmt.executeQuery();
-			Location location = new Location();
-			while (rs.next()) {
-				location.setname(rs.getString("name"));
-				location.setlng(rs.getString("lng"));
-				location.setlat(rs.getString("lat"));
-				location.setdst(rs.getString("dst"));
-
-				list.add(location);
-			} 
-			conn.close();
-		} catch (SQLException e) {
-
-			System.out.println("��ȸ�� �����߽��ϴ�.");
-			e.printStackTrace();
-
-		} finally {
-
-			if (pstmt != null)
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				
-				}
-			if (pstmt2 != null)
-				try {
-					pstmt2.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-
-		}
-		return list;
-
-	}
-			
-	public String InsertMember(String id, String password, String nickname, String gender, String birth) {
+	 public String InsertMember(String id, String password, String nickname, String gender, String birth) {
 		 
 		 sql="INSERT into member(id, password, name, gender, birth) VALUES(?,?,?,?,?)";
+		 
 		 try {
 			 Class.forName("com.mysql.jdbc.Driver");
 			 conn = DriverManager.getConnection(jdbcUrl, dbId, dbPw);
@@ -126,4 +130,36 @@ public class ConnectDB {
 		 
 		 return returns;
 	 }
-}
+
+	public String LoginMember(String id, String password) {
+		
+		 sql="SELECT id, password from member where id=? and password=?";
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(jdbcUrl, dbId, dbPw);
+			 
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, password);
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				if (rs.getString("id").equals(id) && rs.getString("password").equals(password)) {
+					returns2 = "true";// 로그인 가능
+				} else {
+					returns2 = "false"; // 로그인 실패
+				}
+			} else {
+				returns2 = "noId"; // 아이디 또는 비밀번호 존재 X
+			}
+	
+		} catch (Exception e) {
+	
+		} finally {if (rs != null)try {rs.close();} catch (SQLException ex) {}
+			if (pstmt != null)try {pstmt.close();} catch (SQLException ex) {}
+			if (conn != null)try {conn.close();} catch (SQLException ex) {}
+		}
+		return returns2;
+		}
+	}
