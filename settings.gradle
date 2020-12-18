@@ -1,2 +1,3 @@
+include ':swipe-button'
 include ':app'
 rootProject.name='shareonfoot'

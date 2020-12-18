@@ -12,8 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.shareonfoot.Global;
 
 import com.example.shareonfoot.R;
+import com.example.shareonfoot.ScreenService;
 import com.example.shareonfoot.activity_login;
 import com.example.shareonfoot.activity_profile;
 import com.example.shareonfoot.home.activity_home;
@@ -48,6 +51,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
 
     Toast toast;
     long backKeyPressedTime;
+    Switch switchOnOff;
 
     //int ADD_BOARD = 8080;
 
@@ -79,7 +83,6 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Nullable
     @Override
@@ -123,10 +126,24 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
             // 내가 팔로우한 사용자 중 현재 페이지 사용자를 팔로우한 사용자가 있는지.
         }*/
 
+     //  잠금화면 기능 활성화
 
 
+        switchOnOff = (Switch) v.findViewById(R.id.lockscreenOnOff);
 
+        switchOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    Intent intent = new Intent(activity.getApplicationContext(), ScreenService.class);
+                    activity.startService(intent);
+                } else {
+                    Intent intent = new Intent(activity.getApplicationContext(), ScreenService.class);
+                    activity.stopService(intent);
+                }
 
+            }
+        });
 
         toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
 
@@ -213,16 +230,6 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
             toast.cancel();
         }
     }
-
-
-
-
-
-
-
-
-
-
 
 
     @Override

@@ -92,4 +92,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:11.0.2'
     implementation 'com.google.android.material:material'
 
+    // swipe해서 잠금화면 해제
+    implementation 'me.imid.swipebacklayout.lib:library:1.0.0'
+
 }
