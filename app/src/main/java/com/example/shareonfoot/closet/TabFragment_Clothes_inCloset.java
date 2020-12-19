@@ -299,8 +299,10 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
             try {
                 JSONArray jarray = new JSONObject(result).getJSONArray("store_info");
                 if(jarray!=null){
-                    while (jarray != null) {
+                    final int numberOfItemsInResp =  jarray.length();
+                    Log.i("teaq", String.valueOf(numberOfItemsInResp));
 
+                    for ( i = 0; i < numberOfItemsInResp; i++){
                         JSONObject jsonObject = jarray.getJSONObject(i);
                         String idx = jsonObject.getString("store_jidx");
                         String star = jsonObject.getString("store_jstar");
@@ -314,6 +316,8 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
                         jname.add(star);
                         jname.add(adress);
                         jname.add(review);
+                        Log.i("teaq", idx);
+
                         switch (pos) {
                             case 0: //모든 옷 조회
                                 image=R.drawable.all;
@@ -341,22 +345,31 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
                                 break;
                         }
                         jimage.add(image);
-                        i++;
+                        ClothesVO data = new ClothesVO();
+                        /*data.setidx(jidx.get(i));
+                        data.setname(jname.get(i));
+                        data.setcategory(jcategory.get(i));
+                        data.setstar(jstar.get(i));
+                        data.setadress(jadress.get(i));
+                        data.setreview(jreview.get(i));
+                        data.setimage(jimage.get(i));*/
+                        data.setidx(idx);
+                        data.setname(name);
+                        data.setcategory(category);
+                        data.setstar(star);
+                        data.setadress(adress);
+                        data.setreview(review);
+                        data.setimage(image);
+                        clothesListAdapter.addItem(data);
                     }
-                      for (int j = 0; j <jname.size(); j++) {
+                      /*for (int j = 0; j <jname.size(); j++) {
                           // 각 List의 값들을 data 객체에 set 해줍니다.
-                          ClothesVO data = new ClothesVO();
-                          data.setidx(jidx.get(j));
-                          data.setname(jname.get(j));
-                          data.setcategory(jcategory.get(j));
-                          data.setstar(jstar.get(j));
-                          data.setadress(jadress.get(j));
-                          data.setreview(jreview.get(j));
-                          data.setimage(jimage.get(j));
-                          clothesListAdapter.addItem(data);
+                          Log.i("teaq", String.valueOf(jname.size())+"     1");
+
+
                           clothesListAdapter.notifyDataSetChanged();
 
-                      }
+                      }*/
 
                     clothesListAdapter.notifyDataSetChanged();
 

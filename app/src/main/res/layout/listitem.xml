@@ -74,9 +74,9 @@
         android:layout_marginTop="5dp"
         android:textColor="#666666"
         android:textSize="13dip" />
-    <view
+   <!-- <view
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_below="@id/review"
-        android:background="#444444"/>
+        android:background="#444444"/>-->
 </RelativeLayout>

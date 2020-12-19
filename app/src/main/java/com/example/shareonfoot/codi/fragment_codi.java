@@ -769,8 +769,10 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
     public void setCurrentLocation(Location location, String markerTitle, String markerSnippet) {
         if (currentMarker != null) currentMarker.remove();
 
-        LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        latLng =currentLatLng;
+        //LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        LatLng currentLatLng = new LatLng(37.341561, 126.7328088);
+        latLng =new LatLng(37.341561, 126.7328088);
+
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(currentLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
 
@@ -791,7 +793,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
         int day=day_return(weekDay);
 
         String coordinates[] = {String.valueOf(latLng.latitude), String.valueOf(latLng.longitude),String.valueOf(day)};
-
+        //String coordinates[] = {"126.7328088", "37.341561`",String.valueOf(day)};
         //  mMap.setOnInfoWindowClickListener((GoogleMap.OnInfoWindowClickListener) this); //정보창 클릭 리스너(마커 삭제 이벤트)
         mMap.clear();
         arrayPoints.clear();

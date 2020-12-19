@@ -104,10 +104,8 @@ dependencies {
     implementation 'com.github.mecoFarid:squeezeloader:1.0.3'
     implementation project(path: ':opencv')
     implementation 'com.rmtheis:tess-two:9.1.0'
-}
-repositories {
-    mavenCentral()
-    // swipe해서 잠금화면 해제
+
     implementation 'me.imid.swipebacklayout.lib:library:1.0.0'
 
 }
+
