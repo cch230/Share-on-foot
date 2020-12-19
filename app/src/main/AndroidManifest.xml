@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <uses-permission android:name="android.permission.CAMERA" /> <!-- 카메라 권한 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 저장소 읽기 권한 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 저장소 쓰기 권한 -->
@@ -29,6 +32,7 @@
        >
         <activity android:name=".crawling" />
         <activity android:name=".coupon" />
+
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -63,6 +67,13 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path" />
         </provider>
+        <activity android:name=".social.space.activity_space" />
+
+        <!-- 잠금 화면 관련 -->
+        <receiver android:name=".ScreenReceiver"></receiver>
+        <service android:name=".ScreenService"></service>
+        <activity android:name=".LockScreenActivity"></activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="" />

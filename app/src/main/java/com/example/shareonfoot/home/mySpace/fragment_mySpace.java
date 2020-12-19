@@ -24,8 +24,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +41,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.shareonfoot.ConstantDefine;
 import com.example.shareonfoot.ProgressCircleDialog;
 import com.example.shareonfoot.R;
+import com.example.shareonfoot.ScreenService;
 import com.example.shareonfoot.activity_login;
 import com.example.shareonfoot.home.activity_home;
 import com.example.shareonfoot.home.mySpace.Image_processing;
@@ -67,6 +70,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
 
     Toast toast;
     long backKeyPressedTime;
+    Switch switchOnOff;
 
     //int ADD_BOARD = 8080;
 
@@ -115,7 +119,6 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         return fragment;
     }
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -152,6 +155,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
         tv_nickname.setText(targetID);
 
         imageView=v.findViewById(R.id.iv_image);
+     //  잠금화면 기능 활성화
 
         toast = Toast.makeText(getContext(),"한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT);
 
@@ -159,7 +163,21 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
 
         //BtnOnClickListener onClickListener = new BtnOnClickListener();
         mContext = getContext();
+        switchOnOff = (Switch) v.findViewById(R.id.lockscreenOnOff);
 
+        switchOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    Intent intent = new Intent(activity.getApplicationContext(), ScreenService.class);
+                    activity.startService(intent);
+                } else {
+                    Intent intent = new Intent(activity.getApplicationContext(), ScreenService.class);
+                    activity.stopService(intent);
+                }
+
+            }
+        });
 
         m_ocrTextView = v.findViewById(R.id.tv_view);
         imageButton = v.findViewById(R.id.camera);
@@ -270,6 +288,7 @@ public class fragment_mySpace extends Fragment implements OnBackPressedListener 
             toast.cancel();
         }
     }
+
 
     @Override
     public void onResume() {

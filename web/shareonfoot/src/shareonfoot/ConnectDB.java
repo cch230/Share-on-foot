@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.xml.internal.bind.v2.runtime.Location;
+
 public class ConnectDB {
 	private static ConnectDB instance = new ConnectDB();
 
@@ -17,9 +19,9 @@ public class ConnectDB {
 
 	
 
-	String jdbcUrl = "jdbc:mysql://49.50.172.215:3307/shareonfoot"; // MySQL 占쏙옙占쏙옙
-	String dbId = "root"; // MySQL 占쏙옙占쏙옙
-	String dbPw = "Cch951753!"; // 占쏙옙橘占싫�
+	String jdbcUrl = "jdbc:mysql://49.50.172.215:3307/shareonfoot"; // MySQL ����
+	String dbId = "root"; // MySQL ����
+	String dbPw = "Cch951753!"; // ��й�ȣ
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	PreparedStatement pstmt2 = null;
@@ -29,11 +31,11 @@ public class ConnectDB {
 	String returns = "a";
 	String returns2 = "";
 
-	// 占쏙옙占쏙옙占싶븝옙占싱쏙옙占쏙옙 占쏙옙占쏙옙歐占� 占쏙옙占쏙옙 占쌘드가 占쏙옙占쏙옙獵占� 占쌨쇽옙占쏙옙
+	// �����ͺ��̽��� ����ϱ� ���� �ڵ尡 ����ִ� �޼���
 	private ConnectDB() {
 
 		try {
-			System.out.println("占쏙옙占쏙옙");
+			System.out.println("����");
 
 			Class.forName("com.mysql.jdbc.Driver");
 
@@ -43,11 +45,11 @@ public class ConnectDB {
 			
 		} catch (SQLException e) {
 
-			System.out.println("占쏙옙占쏙옙占싶븝옙占싱쏙옙 占쏙옙占써에 占쏙옙占쏙옙占쌩쏙옙占싹댐옙.");
+			System.out.println("�����ͺ��̽� ���ῡ �����߽��ϴ�.");
 			e.printStackTrace();
 
 		} catch (ClassNotFoundException e) {
-			System.out.println("클占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占싹댐옙.");
+			System.out.println("Ŭ������ �����ϴ�.");
 			e.printStackTrace();
 
 		}
@@ -79,7 +81,7 @@ public class ConnectDB {
 //			conn.close();
 //		} catch (SQLException e) {
 //
-//			System.out.println("占쏙옙회占쏙옙 占쏙옙占쏙옙占쌩쏙옙占싹댐옙.");
+//			System.out.println("��ȸ�� �����߽��ϴ�.");
 //			e.printStackTrace();
 //
 //		} finally {
@@ -144,12 +146,12 @@ public class ConnectDB {
 			
 			if (rs.next()) {
 				if (rs.getString("id").equals(id) && rs.getString("password").equals(password)) {
-					returns2 = "true";// 濡쒓렇�씤 媛��뒫
+					returns2 = "true";// 로그인 가능
 				} else {
-					returns2 = "false"; // 濡쒓렇�씤 �떎�뙣
+					returns2 = "false"; // 로그인 실패
 				}
 			} else {
-				returns2 = "noId"; // �븘�씠�뵒 �삉�뒗 鍮꾨�踰덊샇 議댁옱 X
+				returns2 = "noId"; // 아이디 또는 비밀번호 존재 X
 			}
 	
 		} catch (Exception e) {
