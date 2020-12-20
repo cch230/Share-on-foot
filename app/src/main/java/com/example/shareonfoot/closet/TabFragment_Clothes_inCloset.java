@@ -243,7 +243,7 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
                 }
                 // 서버에서 읽어오기 위한 스트림 객체
                 sendMsg = "identifier=" + tmp+ "&page=" + strings[0] ;
-                Log.i("qe",sendMsg);
+                Log.i("qe",tmp);
                 wr.write(sendMsg);
                 wr.flush();
                 wr.close();
@@ -316,7 +316,7 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
                         jname.add(star);
                         jname.add(adress);
                         jname.add(review);
-                        Log.i("teaq", idx);
+                        Log.i("teaq", name);
 
                         switch (pos) {
                             case 0: //모든 옷 조회
@@ -346,13 +346,7 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
                         }
                         jimage.add(image);
                         ClothesVO data = new ClothesVO();
-                        /*data.setidx(jidx.get(i));
-                        data.setname(jname.get(i));
-                        data.setcategory(jcategory.get(i));
-                        data.setstar(jstar.get(i));
-                        data.setadress(jadress.get(i));
-                        data.setreview(jreview.get(i));
-                        data.setimage(jimage.get(i));*/
+
                         data.setidx(idx);
                         data.setname(name);
                         data.setcategory(category);
@@ -361,18 +355,9 @@ public class   TabFragment_Clothes_inCloset extends Fragment {
                         data.setreview(review);
                         data.setimage(image);
                         clothesListAdapter.addItem(data);
+                        clothesListAdapter.notifyDataSetChanged();
+
                     }
-                      /*for (int j = 0; j <jname.size(); j++) {
-                          // 각 List의 값들을 data 객체에 set 해줍니다.
-                          Log.i("teaq", String.valueOf(jname.size())+"     1");
-
-
-                          clothesListAdapter.notifyDataSetChanged();
-
-                      }*/
-
-                    clothesListAdapter.notifyDataSetChanged();
-
                     //clothesList.clear();
                 } else {
                     Toast.makeText(getContext(), "가까운 곳 없습니다.", Toast.LENGTH_SHORT).show();

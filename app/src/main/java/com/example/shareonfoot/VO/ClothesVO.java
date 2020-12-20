@@ -85,7 +85,7 @@ public class ClothesVO implements Parcelable {
     public String getname() {
         return name;
     }
-    public void setname(String nane){this.name=name;}
+    public void setname(String name){this.name=name;}
 
     public String getcategory() {
         return category;

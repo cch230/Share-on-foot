@@ -13,44 +13,26 @@
         android:layout_marginRight="8dp" />
 
     <TextView
-        android:id="@+id/idx"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/image"
-        android:layout_alignParentRight="true"
-        android:textSize="17dp"
-        android:textStyle="bold" />
-
-    <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/image"
         android:layout_toRightOf="@+id/image"
-        android:textSize="17dp"
+        android:textSize="15dip"
+        android:layout_marginTop="1dip"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/category"
-        android:layout_width="fill_parent"
+        android:id="@+id/star"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/image"
-        android:textSize="15dip" />
 
+        android:textSize="14dip"
+        android:textStyle="bold" />
     <TextView
-        android:id="@+id/star"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/category"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@+id/image"
-        android:textColor="#666666"
-        android:textSize="13dip" />
-    <TextView
-        android:id="@+id/dst"
-        android:layout_width="fill_parent"
+        android:id="@+id/adress"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/star"
         android:layout_marginTop="5dp"
@@ -58,19 +40,39 @@
         android:textColor="#666666"
         android:textSize="13dip" />
     <TextView
-        android:id="@+id/adress"
-        android:layout_width="fill_parent"
+        android:id="@+id/category"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/dst"
+        android:layout_below="@id/adress"
+        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@+id/image"
+        android:textSize="14dip" />
+
+    <TextView
+        android:id="@+id/idx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/category"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/image"
+        android:textColor="@color/cri"
+        android:textSize="13dip" />
+<!--    <TextView
+        android:id="@+id/dst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/star"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/image"
         android:textColor="#666666"
-        android:textSize="13dip" />
+        android:textSize="13dip" />-->
+
     <TextView
         android:id="@+id/review"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/dst"
+        android:layout_below="@id/category"
+        android:layout_toRightOf="@+id/image"
         android:layout_marginTop="5dp"
         android:textColor="#666666"
         android:textSize="13dip" />

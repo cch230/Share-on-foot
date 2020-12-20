@@ -771,7 +771,7 @@ public class fragment_codi extends Fragment implements OnBackPressedListener, On
 
         //LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
         LatLng currentLatLng = new LatLng(37.341561, 126.7328088);
-        latLng =new LatLng(37.341561, 126.7328088);
+        latLng =currentLatLng;
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(currentLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));

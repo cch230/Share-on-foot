@@ -155,6 +155,7 @@ public class fragment_home extends Fragment implements OnBackPressedListener {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
                     finalPager_favorite.setCurrentItem(tab.getPosition());
+
                 }
 
                 @Override
