@@ -15,7 +15,7 @@
 ### 구현진 - UI/UX 디자인
 ## Representative email : piffinable.official@gmail.com
 
-### [Youtube](https://youtu.be/B8aklZ7BjXo)
+### 홍보영상 [Youtube](https://youtu.be/B8aklZ7BjXo)
 
 # 개발환경 (Development environment)
 환경|버전
