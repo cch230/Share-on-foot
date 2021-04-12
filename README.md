@@ -17,6 +17,8 @@
 
 ## 홍보영상 : [Youtube](https://youtu.be/B8aklZ7BjXo)
 
+## 일정관리 : [Notion](https://www.notion.so/puffinable/b92735dec5584b2d91ed8ac6c4737648)
+
 # 개발환경 (Development environment)
 환경|버전
 ---|---|
