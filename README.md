@@ -1,6 +1,7 @@
 # Share-on-foot   
 # 걸어서 나눔나눔
 <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/cch230/Share-on-foot" style="display: block; object-fit: cover; border-radius: 1px; width: 100%; pointer-events: auto;">
+
 ### “나눔으로 손님을, 걸음으로 누구든 기부를,  
 ### 지역 경제는 활력을 얻는 그날까지!”
 
