@@ -40,7 +40,8 @@
 
         <activity android:name=".codi.weather.PermissionActivity" />
         <activity android:name=".closet.activity_cloInfo" />
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
